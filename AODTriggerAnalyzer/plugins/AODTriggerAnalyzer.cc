@@ -54,11 +54,11 @@ class AODTriggerAnalyzer : public edm::EDAnalyzer {
       edm::InputTag photonFilterTag_;
 
       // L1 Configs
-      bool l1MuonOS_
-      bool l1MuonIso_
-      int l1MuonQltMin_
-      int l1MuonQltMax_
-      std::vector<double> int l1MuonPt_
+      bool l1MuonOS_;
+      bool l1MuonIso_;
+      int l1MuonQltMin_;
+      int l1MuonQltMax_;
+      std::vector<double> int l1MuonPt_;
 
 
 
@@ -75,14 +75,14 @@ AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
     recoPhotons_(consumes< reco::PhotonCollection >(iConfig.getParameter<edm::InputTag>("recoPhotonsLabel"))),
     triggerSummaryLabel_ (consumes<trigger::TriggerEvent>(iConfig.getParameter<edm::InputTag> ("triggerSummaryLabel"))),
     muonFilterTag_ (iConfig.getParameter<edm::InputTag> ("muonFilterTag")),
-    photonFilterTag_ (iConfig.getParameter<edm::InputTag> ("photonFilterTag"))
+    photonFilterTag_ (iConfig.getParameter<edm::InputTag> ("photonFilterTag")),
 
 
     // L1 Configs
-    l1MuonOS_ (iConfig.getParameter< bool > ("l1MuonOS"))
-    l1MuonIso_ (iConfig.getParameter< bool > ("l1MuonIso"))
-    l1MuonQltMin_ (iConfig.getParameter< int > ("l1MuonQltMin"))
-    l1MuonQltMax_ (iConfig.getParameter< int > ("l1MuonQltMax"))
+    l1MuonOS_ (iConfig.getParameter< bool > ("l1MuonOS")),
+    l1MuonIso_ (iConfig.getParameter< bool > ("l1MuonIso")),
+    l1MuonQltMin_ (iConfig.getParameter< int > ("l1MuonQltMin")),
+    l1MuonQltMax_ (iConfig.getParameter< int > ("l1MuonQltMax")),
     l1MuonPt_ (iConfig.getParameter< std::vector<double> > ("l1MuonPt"))
 
 {
