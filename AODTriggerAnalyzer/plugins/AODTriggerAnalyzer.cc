@@ -217,6 +217,8 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
 bool 
 AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Handle< BXVector<l1t::EGamma> > l1EGammas, const edm::Event &iEvent)
 {
+  bool l1Filter_ = Falsa;
+
   // L1 Muons
   std::vector<l1t::Muon> l1MuonsVec;
   for (int ibx = l1Muons->getFirstBX(); ibx <= l1Muons->getLastBX(); ++ibx) {
@@ -283,15 +285,35 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
 
   // does the actual filtering
 
+    // configName_ (iConfig.getParameter< std::string > ("configName")),
     // l1MuonN_ (iConfig.getParameter< int > ("l1MuonN")),
     // l1MuonOS_ (iConfig.getParameter< bool > ("l1MuonOS")),
     // l1MuonIso_ (iConfig.getParameter< bool > ("l1MuonIso")),
     // l1MuonQltMin_ (iConfig.getParameter< int > ("l1MuonQltMin")),
     // l1MuonQltMax_ (iConfig.getParameter< int > ("l1MuonQltMax")),
-    // l1MuonPt_ (iConfig.getParameter< std::vector<double> > ("l1MuonPt"))
+    // l1MuonPt_ (iConfig.getParameter< std::vector<double> > ("l1MuonPt")),
+    // l1EGammaIso_ (iConfig.getParameter< bool > ("l1EGammaIso")),
+    // l1EGammaPt_ (iConfig.getParameter< std::vector<double> > ("l1EGammaPt"))
 
+  // N muons
+  if (l1MuonsVec.size() >= 2 && l1MuonsVec.size() >= l1MuonN_) {
+    l1Filter_ = True;
+  } else {
+    return False;
+  }
 
-  return true;
+  l1t::Muon leadingMuon = l1MuonsVec.at(0);
+  l1t::Muon trailingMuon = l1MuonsVec.at(1);
+
+  // Muons OS
+  if (leadingMuon.charge() * trailingMuon.charge() < 1) {
+    l1Filter_ = True;
+  } else {
+    return False;
+  }
+
+  // return filtering result
+  return l1Filter_;
 }
 
 
