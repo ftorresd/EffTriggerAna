@@ -118,7 +118,7 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
 
     std::cout << "Configs: " << l1MuonOS_ << l1MuonIso_ << l1MuonQltMin_ << l1MuonQltMax_ << std::endl;
     for (std::vector<double>::const_iterator it = l1MuonPt_.begin(); it != l1MuonPt_.end(); it++ ){
-      std::cout << it << std::endl;
+      std::cout << *it << std::endl;
     }
 
 
