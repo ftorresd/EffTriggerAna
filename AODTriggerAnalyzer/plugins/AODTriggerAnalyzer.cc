@@ -311,7 +311,7 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
   } else {
     return false;
   }
-
+ 
   // return filtering result
   return l1Filter_;
 }
