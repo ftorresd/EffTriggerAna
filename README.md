@@ -4,5 +4,5 @@ Analyzer for Trigger Efficiency
 
 Clone: 
 ```
-git clone https://github.com/ftorresd/EffTriggerAna/invitations
+git clone git@github.com:ftorresd/EffTriggerAna.git
 ```
