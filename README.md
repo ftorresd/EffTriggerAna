@@ -1,6 +1,11 @@
 # EffTriggerAna
 Analyzer for Trigger Efficiency
 
+CMSSW:
+```
+cmsrel CMSSW_8_0_26_patch1
+```
+
 
 Clone: 
 ```
