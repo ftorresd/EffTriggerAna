@@ -55,7 +55,7 @@ class AODTriggerAnalyzer : public edm::EDAnalyzer {
 
       // L1 Configs
       std::string configName_;
-      int l1MuonN_;
+      unsigned l1MuonN_;
       bool l1MuonOS_;
       bool l1MuonIso_;
       int l1MuonQltMin_;
@@ -84,7 +84,7 @@ AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
 
     // L1 Configs    
     configName_ (iConfig.getParameter< std::string > ("configName")),
-    l1MuonN_ (iConfig.getParameter< int > ("l1MuonN")),
+    l1MuonN_ (iConfig.getParameter< unsigned > ("l1MuonN")),
     l1MuonOS_ (iConfig.getParameter< bool > ("l1MuonOS")),
     l1MuonIso_ (iConfig.getParameter< bool > ("l1MuonIso")),
     l1MuonQltMin_ (iConfig.getParameter< int > ("l1MuonQltMin")),
@@ -296,12 +296,10 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
     // l1EGammaPt_ (iConfig.getParameter< std::vector<double> > ("l1EGammaPt"))
 
   // N muons
-  if (l1MuonN_ >= 2) {
-    if (l1MuonsVec.size() >= l1MuonN_) {
-      l1Filter_ = true;
-    } else {
-      return false;
-    }
+  if (l1MuonsVec.size() >= 2 && l1MuonsVec.size() >= l1MuonN_) {
+    l1Filter_ = true;
+  } else {
+    return false;
   }
 
   l1t::Muon leadingMuon = l1MuonsVec.at(0);
@@ -313,7 +311,7 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
   } else {
     return false;
   }
- 
+
   // return filtering result
   return l1Filter_;
 }
