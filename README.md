@@ -2,7 +2,7 @@
 Analyzer for Trigger Efficiency
 
 
-Clone:
+Clone: 
 ```
 git clone https://github.com/ftorresd/EffTriggerAna/invitations
 ```
