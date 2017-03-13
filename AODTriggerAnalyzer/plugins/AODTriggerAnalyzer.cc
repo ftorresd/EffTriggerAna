@@ -91,7 +91,7 @@ AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
     l1MuonQltMax_ (iConfig.getParameter< int > ("l1MuonQltMax")),
     l1MuonPt_ (iConfig.getParameter< std::vector<double> > ("l1MuonPt")),
     l1EGammaIso_ (iConfig.getParameter< bool > ("l1EGammaIso")),
-    l1EGammaPt_ (iConfig.getParameter< std::vector<double> > ("l1EGammaPt")),
+    l1EGammaPt_ (iConfig.getParameter< std::vector<double> > ("l1EGammaPt"))
 
 {
   edm::Service<TFileService> fs;
