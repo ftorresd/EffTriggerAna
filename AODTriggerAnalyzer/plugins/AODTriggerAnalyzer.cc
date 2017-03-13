@@ -217,7 +217,7 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
 bool 
 AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Handle< BXVector<l1t::EGamma> > l1EGammas, const edm::Event &iEvent)
 {
-  bool l1Filter_ = Falsa;
+  bool l1Filter_ = false;
 
   // L1 Muons
   std::vector<l1t::Muon> l1MuonsVec;
@@ -297,9 +297,9 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
 
   // N muons
   if (l1MuonsVec.size() >= 2 && l1MuonsVec.size() >= l1MuonN_) {
-    l1Filter_ = True;
+    l1Filter_ = true;
   } else {
-    return False;
+    return false;
   }
 
   l1t::Muon leadingMuon = l1MuonsVec.at(0);
@@ -307,9 +307,9 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
 
   // Muons OS
   if (leadingMuon.charge() * trailingMuon.charge() < 1) {
-    l1Filter_ = True;
+    l1Filter_ = true;
   } else {
-    return False;
+    return false;
   }
 
   // return filtering result
