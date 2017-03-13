@@ -15,17 +15,22 @@ process.TFileService = cms.Service ('TFileService',
     fileName = cms.string ('efficiency.root')
 )
 
-process.demo1 = cms.EDAnalyzer("AODTriggerAnalyzer",
+process.effana1 = cms.EDAnalyzer("AODTriggerAnalyzer",
+    configName = cms.string("effana"),
     bits = cms.InputTag("TriggerResults","","HLT"),
     # L1 Labels
     l1MuonsLabel = cms.InputTag("gmtStage2Digis:Muon"),
     l1EGammasLabel = cms.InputTag("caloStage2Digis:EGamma"),
-    # L1 Configs
+    # L1 Configs - Muons
+    l1MuonN = cms.int(2),
     l1MuonOS = cms.bool(True),
-    l1MuonIso = cms.bool(True),
+    l1MuonIso = cms.bool(False),
     l1MuonQltMin = cms.int32(0),
     l1MuonQltMax = cms.int32(99999),
-    l1MuonPt = cms.vdouble(1.2, 3, 4.5e-100),
+    l1MuonPt = cms.vdouble(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80),
+    # L1 Configs - EGammas
+    l1EGammaIso = cms.bool(False),
+    l1EGammaPt = cms.vdouble(3),
     # RECO Labels
     recoMuonsLabel = cms.InputTag("muons"),
     recoPhotonsLabel = cms.InputTag("photons"),
@@ -37,5 +42,5 @@ process.demo1 = cms.EDAnalyzer("AODTriggerAnalyzer",
 
 
 
-process.p = cms.Path(process.demo1)
+process.p = cms.Path(process.effana1)
 # process.p = cms.Path(process.demo1 + process.demo2)

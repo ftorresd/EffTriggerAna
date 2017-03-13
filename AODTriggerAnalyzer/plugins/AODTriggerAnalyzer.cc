@@ -54,11 +54,15 @@ class AODTriggerAnalyzer : public edm::EDAnalyzer {
       edm::InputTag photonFilterTag_;
 
       // L1 Configs
+      std::string configName_;
+      int l1MuonN_;
       bool l1MuonOS_;
       bool l1MuonIso_;
       int l1MuonQltMin_;
       int l1MuonQltMax_;
       std::vector<double> l1MuonPt_;
+      bool l1EGammaIso_;
+      std::vector<double> l1EGammaPt_;
 
 
 
@@ -78,12 +82,16 @@ AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
     photonFilterTag_ (iConfig.getParameter<edm::InputTag> ("photonFilterTag")),
 
 
-    // L1 Configs
+    // L1 Configs    
+    configName_ (iConfig.getParameter< std::string > ("configName")),
+    l1MuonN_ (iConfig.getParameter< int > ("l1MuonN")),
     l1MuonOS_ (iConfig.getParameter< bool > ("l1MuonOS")),
     l1MuonIso_ (iConfig.getParameter< bool > ("l1MuonIso")),
     l1MuonQltMin_ (iConfig.getParameter< int > ("l1MuonQltMin")),
     l1MuonQltMax_ (iConfig.getParameter< int > ("l1MuonQltMax")),
-    l1MuonPt_ (iConfig.getParameter< std::vector<double> > ("l1MuonPt"))
+    l1MuonPt_ (iConfig.getParameter< std::vector<double> > ("l1MuonPt")),
+    l1EGammaIso_ (iConfig.getParameter< bool > ("l1EGammaIso")),
+    l1EGammaPt_ (iConfig.getParameter< std::vector<double> > ("l1EGammaPt")),
 
 {
   edm::Service<TFileService> fs;
@@ -272,6 +280,16 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
   std::sort(l1EGammasVec.begin(),l1EGammasVec.end(), [](const l1t::EGamma &a, const l1t::EGamma &b){
     return a.pt() > b.pt();
   });
+
+  // does the actual filtering
+
+    // l1MuonN_ (iConfig.getParameter< int > ("l1MuonN")),
+    // l1MuonOS_ (iConfig.getParameter< bool > ("l1MuonOS")),
+    // l1MuonIso_ (iConfig.getParameter< bool > ("l1MuonIso")),
+    // l1MuonQltMin_ (iConfig.getParameter< int > ("l1MuonQltMin")),
+    // l1MuonQltMax_ (iConfig.getParameter< int > ("l1MuonQltMax")),
+    // l1MuonPt_ (iConfig.getParameter< std::vector<double> > ("l1MuonPt"))
+
 
   return true;
 }
