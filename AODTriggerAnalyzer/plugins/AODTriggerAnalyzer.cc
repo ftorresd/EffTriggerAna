@@ -297,7 +297,7 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
 
   // N muons
   if (l1MuonN_ >= 2) {
-    if (l1MuonsVec.size() >= 2 && l1MuonsVec.size() >= l1MuonN_) {
+    if (l1MuonsVec.size() >= l1MuonN_) {
       l1Filter_ = true;
     } else {
       return false;
