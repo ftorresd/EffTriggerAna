@@ -296,10 +296,12 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
     // l1EGammaPt_ (iConfig.getParameter< std::vector<double> > ("l1EGammaPt"))
 
   // N muons
-  if (l1MuonsVec.size() >= 2 && l1MuonsVec.size() >= l1MuonN_) {
-    l1Filter_ = true;
-  } else {
-    return false;
+  if (l1MuonN_ >= 2) {
+    if (l1MuonsVec.size() >= 2 && l1MuonsVec.size() >= l1MuonN_) {
+      l1Filter_ = true;
+    } else {
+      return false;
+    }
   }
 
   l1t::Muon leadingMuon = l1MuonsVec.at(0);
