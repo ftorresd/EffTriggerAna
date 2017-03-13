@@ -53,6 +53,13 @@ class AODTriggerAnalyzer : public edm::EDAnalyzer {
       edm::InputTag muonFilterTag_;
       edm::InputTag photonFilterTag_;
 
+      // L1 Configs
+      bool l1MuonOS_
+      bool l1MuonIso_
+      int l1MuonQltMin_
+      int l1MuonQltMax_
+      std::vector<double> int l1MuonPt_
+
 
 
 
@@ -70,8 +77,14 @@ AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
     muonFilterTag_ (iConfig.getParameter<edm::InputTag> ("muonFilterTag")),
     photonFilterTag_ (iConfig.getParameter<edm::InputTag> ("photonFilterTag"))
 
-    // triggerObjects_(consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter<edm::InputTag>("objects"))),
-    // triggerPrescales_(consumes<pat::PackedTriggerPrescales>(iConfig.getParameter<edm::InputTag>("prescales")))
+
+    // L1 Configs
+    l1MuonOS_ (iConfig.getParameter< bool > ("l1MuonOS"))
+    l1MuonIso_ (iConfig.getParameter< bool > ("l1MuonIso"))
+    l1MuonQltMin_ (iConfig.getParameter< int > ("l1MuonQltMin"))
+    l1MuonQltMax_ (iConfig.getParameter< int > ("l1MuonQltMax"))
+    l1MuonPt_ (iConfig.getParameter< std::vector<double> > ("l1MuonPt"))
+
 {
   edm::Service<TFileService> fs;
   // TH1D* effHist =  fs->make<TH1D>(TString(histograms_[i].getParameter<string>("variable")),TString(histograms_[i].getParameter<string>("variable")),int(histograms_[i].getParameter<int>("nBins")),histograms_[i].getParameter<double>("lBin"),histograms_[i].getParameter<double>("hBin"));     
@@ -101,6 +114,10 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
     iEvent.getByToken(recoPhotons_, recoPhotons);
     // iEvent.getByToken(triggerObjects_, triggerObjects);
     // iEvent.getByToken(triggerPrescales_, triggerPrescales);
+
+
+    std::cout << "Configs: " << l1MuonOS_ << l1MuonIso_ << l1MuonQltMin_ << l1MuonQltMax_ << l1MuonPt_ << std::endl;
+
 
 
     // L1 Test

@@ -17,24 +17,25 @@ process.TFileService = cms.Service ('TFileService',
 
 process.demo1 = cms.EDAnalyzer("AODTriggerAnalyzer",
     bits = cms.InputTag("TriggerResults","","HLT"),
+    # L1 Labels
     l1MuonsLabel = cms.InputTag("gmtStage2Digis:Muon"),
     l1EGammasLabel = cms.InputTag("caloStage2Digis:EGamma"),
+    # L1 Configs
+    l1MuonOS = cms.bool(True),
+    l1MuonIso = cms.bool(True),
+    l1MuonQltMin = cms.int32(0),
+    l1MuonQltMax = cms.int32(99999),
+    l1MuonPt = cms.vdouble(1.2, 3, 4.5e-100),
+    # RECO Labels
     recoMuonsLabel = cms.InputTag("muons"),
     recoPhotonsLabel = cms.InputTag("photons"),
+    #HLT Labels
     triggerSummaryLabel = cms.InputTag("hltTriggerSummaryAOD","","HLT"),
     muonFilterTag = cms.InputTag ("hltL3crIsoL1sMu20L1f0L2f10QL3f22QL3trkIsoFiltered0p09","","HLT"),
     photonFilterTag = cms.InputTag ("hltL3crIsoL1sMu20L1f0L2f10QL3f22QL3trkIsoFiltered0p09","","HLT"),
 )
 
-process.demo2 = cms.EDAnalyzer("AODTriggerAnalyzer",
-    bits = cms.InputTag("TriggerResults","","HLT"),
-    l1MuonsLabel = cms.InputTag("gmtStage2Digis:Muon"),
-    l1EGammasLabel = cms.InputTag("caloStage2Digis:EGamma"),
-    recoMuonsLabel = cms.InputTag("muons"),
-    recoPhotonsLabel = cms.InputTag("photons"),
-    triggerSummaryLabel = cms.InputTag("hltTriggerSummaryAOD","","HLT"),
-    muonFilterTag = cms.InputTag ("hltL3crIsoL1sMu20L1f0L2f10QL3f22QL3trkIsoFiltered0p09","","HLT"),
-    photonFilterTag = cms.InputTag ("hltL3crIsoL1sMu20L1f0L2f10QL3f22QL3trkIsoFiltered0p09","","HLT"),
-)
 
-process.p = cms.Path(process.demo1 + process.demo2)
+
+process.p = cms.Path(process.demo1)
+# process.p = cms.Path(process.demo1 + process.demo2)
