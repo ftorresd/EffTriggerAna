@@ -169,7 +169,7 @@ AODTriggerAnalyzer::filterFinder(edm::EDGetTokenT<trigger::TriggerEvent> trigger
           filterObjects.push_back(foundObject);
         }
     }
-  std::cout<<filterObjects.size()<<endl; 
+  // std::cout<<filterObjects.size()<<endl; 
   return filterObjects;
 }
 
@@ -179,14 +179,14 @@ AODTriggerAnalyzer::hltFilter(trigger::TriggerObjectCollection muonL3Objects, tr
   // L3 Muons
   for (trigger::TriggerObjectCollection::const_iterator it = muonL3Objects.begin(); it != muonL3Objects.end(); it++) {
     if(it->pt() >= 0 ) {
-      std::cout << "HLT Muon: " << it->pt() << std::endl;
+      // std::cout << "HLT Muon: " << it->pt() << std::endl;
     }
   }  
 
 // L3 Photons
   for (trigger::TriggerObjectCollection::const_iterator it = photonL3Objects.begin(); it != photonL3Objects.end(); it++) {
     if(it->pt() >= 0 ) {
-      std::cout << "HLT Photon: " << it->pt() << std::endl;
+      // std::cout << "HLT Photon: " << it->pt() << std::endl;
     }
   } 
   return true;
@@ -199,14 +199,14 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
   // Reco Muons
   for (reco::MuonCollection::const_iterator it = recoMuons->begin(); it != recoMuons->end(); it++) {
     if(it->pt() >= 0 ) {
-      std::cout << "Reco Muon: " << it->pt() << std::endl;
+      // std::cout << "Reco Muon: " << it->pt() << std::endl;
     }
   }  
 
 // Reco Photons
   for (reco::PhotonCollection::const_iterator it = recoPhotons ->begin(); it != recoPhotons->end(); it++) {
     if(it->pt() >= 0 ) {
-      std::cout << "Reco Photon: " << it->pt() << std::endl;
+      // std::cout << "Reco Photon: " << it->pt() << std::endl;
     }
   } 
   return true;
