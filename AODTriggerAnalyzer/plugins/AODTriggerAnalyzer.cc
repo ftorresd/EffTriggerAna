@@ -311,7 +311,8 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
   } else {
     return false;
   }
-
+  
+  std::cout << leadingMuon.hwIso() << std::endl;
   // Muons Iso
   if (leadingMuon.hwIso() == l1MuonIso_ && trailingMuon.hwIso() == l1MuonIso_) {
     l1Filter_ = true;
