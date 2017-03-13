@@ -235,10 +235,12 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
       }
     }
   }
-  bool sortMuonsReverse(l1t::Muon &a, l1t::Muon &b) { 
-    return a.pt() > b.pt(); 
-  }
-  std::sort(l1MuonsVec.begin(),l1MuonsVec.end(),sortMuonsReverse())
+  // bool sortL1MuonsReverse(l1t::Muon &a, l1t::Muon &b) { 
+  //   return a.pt() > b.pt(); 
+  // }
+  std::sort(l1MuonsVec.begin(),l1MuonsVec.end(), [](const l1t::Muon &a, const l1t::Muon &b){
+    return a.pt() > b.pt();
+})
 
 
   // L1 EGammas
