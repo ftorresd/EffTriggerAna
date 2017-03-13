@@ -210,10 +210,7 @@ bool
 AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Handle< BXVector<l1t::EGamma> > l1EGammas, const edm::Event &iEvent)
 {
   // L1 Muons
-
-  
   std::vector<l1t::Muon> l1MuonsVec;
-
   for (int ibx = l1Muons->getFirstBX(); ibx <= l1Muons->getLastBX(); ++ibx) {
     for (BXVector<l1t::Muon>::const_iterator it=l1Muons->begin(); it!=l1Muons->end(); it++){
       if (it->pt() >= 0){
@@ -238,6 +235,11 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
       }
     }
   }
+  bool sortMuonsReverse(l1t::Muon &a, l1t::Muon &b) { 
+    return a.pt() > b.pt(); 
+  }
+  std::sort(l1MuonsVec.begin(),l1MuonsVec.end(),sortMuonsReverse())
+
 
   // L1 EGammas
   for (int ibx = l1EGammas->getFirstBX(); ibx <= l1EGammas->getLastBX(); ++ibx) {
