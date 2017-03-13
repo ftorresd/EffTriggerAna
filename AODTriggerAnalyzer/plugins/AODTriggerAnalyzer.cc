@@ -116,7 +116,10 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
     // iEvent.getByToken(triggerPrescales_, triggerPrescales);
 
 
-    std::cout << "Configs: " << l1MuonOS_ << l1MuonIso_ << l1MuonQltMin_ << l1MuonQltMax_ << l1MuonPt_ << std::endl;
+    std::cout << "Configs: " << l1MuonOS_ << l1MuonIso_ << l1MuonQltMin_ << l1MuonQltMax_ << std::endl;
+    for (std::vector<double> i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
+      std::cout << i << std::endl;
+    }
 
 
 
