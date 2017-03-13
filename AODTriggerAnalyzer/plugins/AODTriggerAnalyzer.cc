@@ -116,10 +116,10 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
     // iEvent.getByToken(triggerPrescales_, triggerPrescales);
 
 
-    std::cout << "Configs: " << l1MuonOS_ << l1MuonIso_ << l1MuonQltMin_ << l1MuonQltMax_ << std::endl;
-    for (std::vector<double>::const_iterator it = l1MuonPt_.begin(); it != l1MuonPt_.end(); it++ ){
-      std::cout << *it << std::endl; 
-    }
+    // std::cout << "Configs: " << l1MuonOS_ << l1MuonIso_ << l1MuonQltMin_ << l1MuonQltMax_ << std::endl;
+    // for (std::vector<double>::const_iterator it = l1MuonPt_.begin(); it != l1MuonPt_.end(); it++ ){
+    //   std::cout << *it << std::endl; 
+    // }
 
 
 
@@ -210,9 +210,14 @@ bool
 AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Handle< BXVector<l1t::EGamma> > l1EGammas, const edm::Event &iEvent)
 {
   // L1 Muons
+
+  
+  std::vector<l1t::Muon> l1MuonsVec;
+
   for (int ibx = l1Muons->getFirstBX(); ibx <= l1Muons->getLastBX(); ++ibx) {
     for (BXVector<l1t::Muon>::const_iterator it=l1Muons->begin(); it!=l1Muons->end(); it++){
       if (it->pt() >= 0){
+        l1MuonsVec.push_back(it)
         std::cout << "L1 Muon: " << it->pt() << std::endl;
         // l1upgrade_.muonEt .push_back(it->et());
         // l1upgrade_.muonEta.push_back(it->eta());
