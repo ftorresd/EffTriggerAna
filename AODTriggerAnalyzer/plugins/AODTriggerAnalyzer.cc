@@ -58,7 +58,7 @@ class AODTriggerAnalyzer : public edm::EDAnalyzer {
       bool l1MuonIso_;
       int l1MuonQltMin_;
       int l1MuonQltMax_;
-      std::vector<double> int l1MuonPt_;
+      std::vector<double> l1MuonPt_;
 
 
 
