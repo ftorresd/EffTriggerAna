@@ -22,7 +22,7 @@ process.effana1 = cms.EDAnalyzer("AODTriggerAnalyzer",
     l1MuonsLabel = cms.InputTag("gmtStage2Digis:Muon"),
     l1EGammasLabel = cms.InputTag("caloStage2Digis:EGamma"),
     # L1 Configs - Muons
-    l1MuonN = cms.int32(2),
+    l1MuonN = cms.uint32(2),
     l1MuonOS = cms.bool(True),
     l1MuonIso = cms.bool(False),
     l1MuonQltMin = cms.int32(0),
