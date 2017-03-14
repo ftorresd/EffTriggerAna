@@ -306,19 +306,31 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
   l1t::Muon trailingMuon = l1MuonsVec.at(1);
 
   // Muons OS
-  if (leadingMuon.charge() * trailingMuon.charge() < 1) {
+  if (l1MuonOS_ == true && (leadingMuon.charge() * trailingMuon.charge() < 0) ) {
+    l1Filter_ = true;
+  } else if (l1MuonOS_ == false && (leadingMuon.charge() * trailingMuon.charge() > 0) ) {
     l1Filter_ = true;
   } else {
-    return false;
+    return false
   }
-  
-  std::cout << leadingMuon.hwIso() << std::endl;
+
   // Muons Iso
-  if (leadingMuon.hwIso() == l1MuonIso_ && trailingMuon.hwIso() == l1MuonIso_) {
+  if ( (l1MuonIso_ == true && leadingMuon.hwIso() == 1) && (l1MuonIso_ == true && trailingMuon.hwIso() == 1) ) {
+    l1Filter_ = true;
+  } else if ( (l1MuonIso_ == false && leadingMuon.hwIso() != 1) && (l1MuonIso_ == false && trailingMuon.hwIso() != 1) ) {
+    l1Filter_ = true;
+  } else {
+    return false
+  }
+
+  // Muon Qlt
+  if ((leadingMuon.hwQual() >= l1MuonQltMin_ && leadingMuon.hwQual() <= l1MuonQltMax_) && (trailingMuon.hwQual() >= l1MuonQltMin_ && trailingMuon.hwQual() <= l1MuonQltMax_) ) {
     l1Filter_ = true;
   } else {
     return false;
   }
+
+
 
   // return filtering result
   return l1Filter_;
