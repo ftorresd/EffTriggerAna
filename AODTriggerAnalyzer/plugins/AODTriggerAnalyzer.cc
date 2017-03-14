@@ -54,7 +54,7 @@ class AODTriggerAnalyzer : public edm::EDAnalyzer {
 
 	private:
 		virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
-                bool verbose; 
+		bool verbose; 
 		edm::EDGetTokenT< edm::TriggerResults > triggerBits_;
 		edm::EDGetTokenT< BXVector<l1t::Muon> > l1Muons_;
 		edm::EDGetTokenT< BXVector<l1t::EGamma> > l1EGammas_;
@@ -84,7 +84,7 @@ class AODTriggerAnalyzer : public edm::EDAnalyzer {
 };
 
 AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
-        verbose (iConfig.getParameter< bool > ("Verbose")),
+	verbose (iConfig.getParameter< bool > ("Verbose")),
 	triggerBits_(consumes< edm::TriggerResults >(iConfig.getParameter<edm::InputTag>("bits"))),
 	l1Muons_(consumes< BXVector<l1t::Muon> >(iConfig.getParameter<edm::InputTag>("l1MuonsLabel"))),
 	l1EGammas_(consumes< BXVector<l1t::EGamma> >(iConfig.getParameter<edm::InputTag>("l1EGammasLabel"))),
@@ -141,14 +141,14 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
 
 	if (verbose) std::cout << "Configs: " << l1MuonOS_ << l1MuonIso_ << l1MuonQltMin_ << l1MuonQltMax_ << std::endl;
 	for (std::vector<double>::const_iterator it = l1MuonPt_.begin(); it != l1MuonPt_.end(); it++ ){
-	if (verbose) std::cout << *it << std::endl; 
+		if (verbose) std::cout << *it << std::endl; 
 	}
 
 
 
 	// L1 Test
 	bool l1Test = l1Filter(l1Muons, l1EGammas, iEvent);
-	 if (verbose) std::cout << "l1Test: " << l1Test << std::endl;
+	if (verbose) std::cout << "l1Test: " << l1Test << std::endl;
 
 	// Define L3 Objects
 	trigger::TriggerObjectCollection muonL3Objects = filterFinder(triggerSummaryLabel_, muonFilterTag_, iEvent);
@@ -156,11 +156,11 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
 
 	// HLT Test
 	bool hltTest = hltFilter(muonL3Objects, photonL3Objects, iEvent);
-	 if (verbose) std::cout << "hltTest: " << hltTest << std::endl;
+	if (verbose) std::cout << "hltTest: " << hltTest << std::endl;
 
 	// RECO Test
 	bool recoTest = recoFilter(recoMuons, recoPhotons, iEvent);
-	 if (verbose) std::cout << "recoTest: " << recoTest << std::endl;
+	if (verbose) std::cout << "recoTest: " << recoTest << std::endl;
 
 }
 
@@ -194,14 +194,14 @@ AODTriggerAnalyzer::hltFilter(trigger::TriggerObjectCollection muonL3Objects, tr
 	// L3 Muons
 	for (trigger::TriggerObjectCollection::const_iterator it = muonL3Objects.begin(); it != muonL3Objects.end(); it++) {
 		if(it->pt() >= 0 ) {
-			 if (verbose) std::cout << "HLT Muon: " << it->pt() << std::endl;
+			if (verbose) std::cout << "HLT Muon: " << it->pt() << std::endl;
 		}
 	}  
 
 	// L3 Photons
 	for (trigger::TriggerObjectCollection::const_iterator it = photonL3Objects.begin(); it != photonL3Objects.end(); it++) {
 		if(it->pt() >= 0 ) {
-			 if (verbose) std::cout << "HLT Photon: " << it->pt() << std::endl;
+			if (verbose) std::cout << "HLT Photon: " << it->pt() << std::endl;
 		}
 	} 
 	return true;
@@ -218,45 +218,43 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
 	for (reco::MuonCollection::const_iterator it = recoMuons->begin(); it != recoMuons->end(); it++) {
 
 		TLorentzVector muon_tmp = TLorentzVector(it->px(), it->py(), it->pz(), it->energy());  
-
-		if (it->pt()<minMuPt && std::abs(it->eta())<maxMuEta){  
-			if ((it->isTrackerMuon()) || (it->isGlobalMuon())){
-
-
-				myLeptons.push_back(muon_tmp);
-
-				if(verbose) cout<<"Muon "<<it->pt()<<endl;
+		if (it->isPFMuon()){
+			if (it->isTrackerMuon() || it->isGlobalMuon()){
+				if (it->pt()<minMuPt && std::abs(it->eta())<maxMuEta){  
+					myLeptons.push_back(muon_tmp);
+					if(verbose) cout<<"Muon "<<it->pt()<<endl;
+				}//eta and pt muon
 			}//muon type selection
-		}//muon selection
+		}//PF muon
 	}// Muon loop
 
 	sort(myLeptons.begin(), myLeptons.end(), P4SortCondition);
-         if(verbose) std::cout<<" myLeptons.size() all  " << myLeptons.size() << std::endl;
+	if(verbose) std::cout<<" myLeptons.size() all  " << myLeptons.size() << std::endl;
 	// dimuon selection
 	if (myLeptons.size() == 2 && myLeptons.size() !=0 ) {
-         std::cout<<" Multiplicity of muons:  " << myLeptons.size() << std::endl;
-	TLorentzVector l1 = myLeptons[0];
-	TLorentzVector l2 = myLeptons[1];
-         std::cout<< "Lepton 1 pt, eta, phi = " << l1.Pt() << l1.PseudoRapidity() << l1.Phi() << std::endl;
-          std::cout<< "Lepton 2 pt, eta, phi = " << l2.Pt() << l2.PseudoRapidity() << l2.Phi() << std::endl;
-	//Invariant mass of muons
-	double Mll = (l1+l2).M();
-        std::cout<< "Mll " << Mll <<std::endl;
+		std::cout<<" Multiplicity of muons:  " << myLeptons.size() << std::endl;
+		TLorentzVector l1 = myLeptons[0];
+		TLorentzVector l2 = myLeptons[1];
+		std::cout<< "Lepton 1 pt, eta, phi = " << l1.Pt() << l1.PseudoRapidity() << l1.Phi() << std::endl;
+		std::cout<< "Lepton 2 pt, eta, phi = " << l2.Pt() << l2.PseudoRapidity() << l2.Phi() << std::endl;
+		//Invariant mass of muons
+		double Mll = (l1+l2).M();
+		std::cout<< "Mll " << Mll <<std::endl;
 
-	//double Mll_pt
-	if (l1.Pt() > muonLeadPt || l2.Pt() > muonTrailPt ) {
+		//double Mll_pt
+		if (l1.Pt() > muonLeadPt || l2.Pt() > muonTrailPt ) {
 
-	// ***
-	//   // jpsi peak
-	//     // ***
-	//
-	if (Mll > 2.6 && Mll < 3.9){
- 
-         std::cout<<" Invariant Mass in JPsi peak " << Mll << std::endl;
-        }// Z selection
-  }//lead and trail muon pT cut
+			// ***
+			//   // jpsi peak
+			//     // ***
+			//
+			if (Mll > 2.95 && Mll < 3.25){
 
-} 
+				std::cout<<" Invariant Mass in JPsi peak " << Mll << std::endl;
+			}// Z selection
+		}//lead and trail muon pT cut
+
+	} 
 
 	// Reco Photons
 	for (reco::PhotonCollection::const_iterator it = recoPhotons ->begin(); it != recoPhotons->end(); it++) {
@@ -276,7 +274,7 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
 	for (int ibx = l1Muons->getFirstBX(); ibx <= l1Muons->getLastBX(); ++ibx) {
 		for (BXVector<l1t::Muon>::const_iterator it=l1Muons->begin(); it!=l1Muons->end(); it++){
 			if (it->pt() >= 0){
-				 if (verbose) std::cout << "L1 Muon: " << it->pt() << std::endl;
+				if (verbose) std::cout << "L1 Muon: " << it->pt() << std::endl;
 				// l1upgrade_.muonEt .push_back(it->et());
 				// l1upgrade_.muonEta.push_back(it->eta());
 				// l1upgrade_.muonPhi.push_back(it->phi());
@@ -301,7 +299,7 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
 	for (int ibx = l1EGammas->getFirstBX(); ibx <= l1EGammas->getLastBX(); ++ibx) {
 		for (BXVector<l1t::EGamma>::const_iterator it=l1EGammas->begin(); it!=l1EGammas->end(); it++){
 			if (it->pt() >= 0){
-				 if (verbose) std::cout << "L1 EGamma: " << it->pt() << std::endl;
+				if (verbose) std::cout << "L1 EGamma: " << it->pt() << std::endl;
 				// l1upgrade_.egEt .push_back(it->pt());
 				// l1upgrade_.egEta.push_back(it->eta());
 				// l1upgrade_.egPhi.push_back(it->phi());
