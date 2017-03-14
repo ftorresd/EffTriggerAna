@@ -100,7 +100,8 @@ AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
   // TH1D* effHist =  fs->make<TH1D>(TString(histograms_[i].getParameter<string>("variable")),TString(histograms_[i].getParameter<string>("variable")),int(histograms_[i].getParameter<int>("nBins")),histograms_[i].getParameter<double>("lBin"),histograms_[i].getParameter<double>("hBin"));     
   // TH1D* tmpMatchedHist = fs->make<TH1D>(TString(histograms_[i].getParameter<string>("variable") + "_filterMatched"),TString(histograms_[i].getParameter<string>("variable") + "_filterMatched"),int(histograms_[i].getParameter<int>("nBins")),histograms_[i].getParameter<double>("lBin"),histograms_[i].getParameter<double>("hBin"));
   // TH1D* tmpEffHist = fs->make<TH1D>(TString(histograms_[i].getParameter<string>("variable") + "_filterEff"),TString(histograms_[i].getParameter<string>("variable") + "_filterEff"),int(histograms_[i].getParameter<int>("nBins")),histograms_[i].getParameter<double>("lBin"),histograms_[i].getParameter<double>("hBin"));
-  // TH1F * h_pt = fs->make<TH1F>( "pt"  , "p_{t}", 100,  0., 100. );
+  std::map<std::string, TH1D> nEvtsHistos;
+  TH1D * h_pt = fs->make<TH1F>( "pt"  , "p_{t}", 100,  0., 100. );
   // TTree * h_ptt = fs->make<TTree>();
 }
 
@@ -148,14 +149,10 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
     std::cout << "recoTest: " << recoTest << std::endl;
 
     // L1 Test    
-    // std::vector<double> l1MuonPt_;
-    // std::vector<double> l1EGammaPt_;
     for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
-      // std::cout << *i << std::endl; 
       for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
-        // std::cout << *j << std::endl; 
         bool l1Test = l1Filter(l1Muons, l1EGammas, *i, *j, iEvent);
-        std::cout << "l1Test: " << l1Test << std::endl;
+        // std::cout << "l1Test: " << l1Test << std::endl;
       }
     }
 
