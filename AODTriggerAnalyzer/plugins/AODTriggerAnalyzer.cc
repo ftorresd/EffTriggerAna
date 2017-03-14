@@ -106,7 +106,7 @@ AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
   nEvtsHistosMap["h_HLTRECO_"+configName_] = fs->make<TH1D>( ("h_HLTRECO_"+configName_).c_str() , ("h_HLTRECO_"+configName_+";  Pt (GeV); NEvts").c_str(), 80, 0., 80.);
   for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
     for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
-      std::string histoNameSufix = configName_+"_"+std::to_string(*i)+"_"+std::to_string(*i);
+      std::string histoNameSufix = configName_+"_"+std::to_string((int) *i)+"_"+std::to_string((int) *j);
       nEvtsHistosMap["h_L1_"+histoNameSufix] = fs->make<TH1D>( ("h_L1_"+histoNameSufix).c_str() , ("h_L1_"+histoNameSufix+";  Pt (GeV); NEvts").c_str(), 80, 0., 80.);
     }
   }
