@@ -100,10 +100,10 @@ AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
   edm::Service<TFileService> fs;
   
   // Define Histos
-  std::map<std::string, TH1D> nEvtsHistosMap;
+  std::map<std::string, TH1D*> nEvtsHistosMap;
   for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
     for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
-      std::string histoNameSufix = configName_+"_"+std::to_string(*i)+"_"+std::to_string(*i)
+      std::string histoNameSufix = configName_+"_"+std::to_string(*i)+"_"+std::to_string(*i);
       nEvtsHistosMap["h_L1"+histoNameSufix] = fs->make<TH1D>( "h_L1"+histoNameSufix , "h_L1"+histoNameSufix+";  Pt (GeV); NEvts", 80, 0., 80.);
       nEvtsHistosMap["h_HLT"+histoNameSufix] = fs->make<TH1D>( "h_HLT"+histoNameSufix , "h_HLT"+histoNameSufix+";  Pt (GeV); NEvts", 80, 0., 80.);
       nEvtsHistosMap["h_RECO"+histoNameSufix] = fs->make<TH1D>( "h_RECO"+histoNameSufix , "h_RECO"+histoNameSufix+";  Pt (GeV); NEvts", 80, 0., 80.);
