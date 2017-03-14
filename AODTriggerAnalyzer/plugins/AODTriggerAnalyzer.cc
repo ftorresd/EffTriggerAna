@@ -110,7 +110,7 @@ AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
       nEvtsHistosMap["h_L1_"+histoNameSufix] = fs->make<TH1D>( ("h_L1_"+histoNameSufix).c_str() , ("h_L1_"+histoNameSufix+";  Pt (GeV); NEvts").c_str(), 80, 0., 80.);
     }
   }
-  TVectorD * v_teste = fs->make<TVectorD>(1);
+  int * v_teste = fs->make<int>();
 }
 
 void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
