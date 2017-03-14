@@ -333,14 +333,28 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
     return false;
   }
 
+   // Muon Pt
+  if (leadingMuon.pt() >= muonPtCut && trailingMuon.pt() >= muonPtCut) {
+    l1Filter_ = true;
+  } else {
+    return false;
+  }
 
-  // EGamma Iso
+
+  // EGamma
   if (l1EGammaN_ != 0) {
     if (l1EGammasVec.size() >= l1EGammaN_) {
       l1t::EGamma leadingEGamma = l1EGammasVec.at(0);
+      // EGamma Iso
       if (l1EGammaIso_ == true && leadingEGamma.hwIso() == 1) {
         l1Filter_ = true;
       } else if (l1EGammaIso_ == false && leadingEGamma.hwIso() != 1) {
+        l1Filter_ = true;
+      } else {
+        return false;
+      }
+      // EGamma Pt
+      if (leadingEGamma.pt() >= egammaPtCut) {
         l1Filter_ = true;
       } else {
         return false;
