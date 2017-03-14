@@ -260,6 +260,7 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
   for (int ibx = l1EGammas->getFirstBX(); ibx <= l1EGammas->getLastBX(); ++ibx) {
     for (BXVector<l1t::EGamma>::const_iterator it=l1EGammas->begin(); it!=l1EGammas->end(); it++){
       if (it->pt() >= 0){
+        l1EGammasVec.push_back(*it);
         // std::cout << "L1 EGamma: " << it->pt() << std::endl;
         // l1upgrade_.egEt .push_back(it->pt());
         // l1upgrade_.egEta.push_back(it->eta());
