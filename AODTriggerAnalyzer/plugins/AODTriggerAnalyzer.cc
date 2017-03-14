@@ -132,18 +132,6 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
     // }
 
 
-
-    // L1 Test
-    // std::vector<double> l1MuonPt_;
-    // std::vector<double> l1EGammaPt_;
-    for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
-      std::cout << *i << std::endl; 
-      for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); it++ ){
-        std::cout << *j << std::endl; 
-      }
-    }
-
-
     bool l1Test = l1Filter(l1Muons, l1EGammas, 0.0, 0.0, iEvent);
     std::cout << "l1Test: " << l1Test << std::endl;
 
@@ -158,6 +146,19 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
     // RECO Test
     bool recoTest = recoFilter(recoMuons, recoPhotons, iEvent);
     std::cout << "recoTest: " << recoTest << std::endl;
+
+    // L1 Test    
+    // std::vector<double> l1MuonPt_;
+    // std::vector<double> l1EGammaPt_;
+    for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
+      // std::cout << *i << std::endl; 
+      for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
+        // std::cout << *j << std::endl; 
+        bool l1Test = l1Filter(l1Muons, l1EGammas, *i, *j, iEvent);
+        std::cout << "l1Test: " << l1Test << std::endl;
+      }
+    }
+
 
 }
 
