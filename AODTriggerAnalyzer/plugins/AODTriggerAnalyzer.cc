@@ -112,7 +112,7 @@ AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
   }
   // TH1D * h_pt = fs->make<TH1D>( "pt"  , "p_{t}", 100,  0., 100. );
   std::string histoNameSufix = configName_+"_"+std::to_string(20)+"_"+std::to_string(*i);
-  h_pt = fs->make<TH1D>( "h_L1"+histoNameSufix+";  Pt (GeV); NEvts", 80, 0., 80.);
+  h_pt = fs->make<TH1D>( ("h_L1"+histoNameSufix).c_str() , ("h_L1"+histoNameSufix+";  Pt (GeV); NEvts").c_str(), 80, 0., 80.);
 }
 
 void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
