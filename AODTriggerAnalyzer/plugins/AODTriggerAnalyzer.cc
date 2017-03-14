@@ -61,6 +61,7 @@ class AODTriggerAnalyzer : public edm::EDAnalyzer {
       int l1MuonQltMin_;
       int l1MuonQltMax_;
       std::vector<double> l1MuonPt_;
+      unsigned l1EGammaN_;
       bool l1EGammaIso_;
       std::vector<double> l1EGammaPt_;
 
@@ -90,6 +91,7 @@ AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
     l1MuonQltMin_ (iConfig.getParameter< int > ("l1MuonQltMin")),
     l1MuonQltMax_ (iConfig.getParameter< int > ("l1MuonQltMax")),
     l1MuonPt_ (iConfig.getParameter< std::vector<double> > ("l1MuonPt")),
+    l1EGammaN_ (iConfig.getParameter< unsigned > ("l1EGammaN")),
     l1EGammaIso_ (iConfig.getParameter< bool > ("l1EGammaIso")),
     l1EGammaPt_ (iConfig.getParameter< std::vector<double> > ("l1EGammaPt"))
 
@@ -332,19 +334,22 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
 
 
   // EGamma Iso
-  if (l1EGammasVec.size() < 1) {
-    return false;
-  }
-
-  l1t::EGamma leadingEGamma = l1EGammasVec.at(0);
-  
-  if (l1EGammaIso_ == true && leadingEGamma.hwIso() == 1) {
-    l1Filter_ = true;
-  } else if (l1EGammaIso_ == false && leadingEGamma.hwIso() != 1) {
-    l1Filter_ = true;
+  if (l1EGammasVec.size() >= l1EGammaN_) {
+    l1t::EGamma leadingEGamma = l1EGammasVec.at(0);
+    if (l1EGammaIso_ == true && leadingEGamma.hwIso() == 1) {
+      l1Filter_ = true;
+    } else if (l1EGammaIso_ == false && leadingEGamma.hwIso() != 1) {
+      l1Filter_ = true;
+    } else {
+      return false;
+    }
   } else {
     return false;
   }
+
+
+  
+
 
   // return filtering result
   return l1Filter_;
