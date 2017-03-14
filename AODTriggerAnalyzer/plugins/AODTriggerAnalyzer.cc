@@ -311,7 +311,7 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
   } else if (l1MuonOS_ == false && (leadingMuon.charge() * trailingMuon.charge() > 0) ) {
     l1Filter_ = true;
   } else {
-    return false
+    return false;
   }
 
   // Muons Iso
@@ -320,7 +320,7 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
   } else if ( (l1MuonIso_ == false && leadingMuon.hwIso() != 1) && (l1MuonIso_ == false && trailingMuon.hwIso() != 1) ) {
     l1Filter_ = true;
   } else {
-    return false
+    return false;
   }
 
   // Muon Qlt
