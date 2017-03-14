@@ -336,7 +336,7 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
     return false;
   }
 
-  l1t::Muon leadingEGamma = l1EGammasVec.at(0);
+  l1t::EGamma leadingEGamma = l1EGammasVec.at(0);
   
   if (l1EGammaIso_ == true && leadingEGamma.hwIso() == 1) {
     l1Filter_ = true;
