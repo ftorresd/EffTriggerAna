@@ -103,14 +103,16 @@ AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
   std::map<std::string, TH1D*> nEvtsHistosMap;
   for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
     for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
-      std::string histoNameSufix = configName_+"_"+std::to_string(*i)+"_"+std::to_string(*i);
-      nEvtsHistosMap["h_L1"+histoNameSufix] = fs->make<TH1D>( "h_L1"+histoNameSufix , "h_L1"+histoNameSufix+";  Pt (GeV); NEvts", 80, 0., 80.);
-      nEvtsHistosMap["h_HLT"+histoNameSufix] = fs->make<TH1D>( "h_HLT"+histoNameSufix , "h_HLT"+histoNameSufix+";  Pt (GeV); NEvts", 80, 0., 80.);
-      nEvtsHistosMap["h_RECO"+histoNameSufix] = fs->make<TH1D>( "h_RECO"+histoNameSufix , "h_RECO"+histoNameSufix+";  Pt (GeV); NEvts", 80, 0., 80.);
-      nEvtsHistosMap["h_HLTRECO"+histoNameSufix] = fs->make<TH1D>( "h_HLTRECO"+histoNameSufix , "h_HLTRECO"+histoNameSufix+";  Pt (GeV); NEvts", 80, 0., 80.);
+      // std::string histoNameSufix = configName_+"_"+std::to_string(*i)+"_"+std::to_string(*i);
+      // nEvtsHistosMap["h_L1"+histoNameSufix] = fs->make<TH1D>( "h_L1"+histoNameSufix , "h_L1"+histoNameSufix+";  Pt (GeV); NEvts", 80, 0., 80.);
+      // nEvtsHistosMap["h_HLT"+histoNameSufix] = fs->make<TH1D>( "h_HLT"+histoNameSufix , "h_HLT"+histoNameSufix+";  Pt (GeV); NEvts", 80, 0., 80.);
+      // nEvtsHistosMap["h_RECO"+histoNameSufix] = fs->make<TH1D>( "h_RECO"+histoNameSufix , "h_RECO"+histoNameSufix+";  Pt (GeV); NEvts", 80, 0., 80.);
+      // nEvtsHistosMap["h_HLTRECO"+histoNameSufix] = fs->make<TH1D>( "h_HLTRECO"+histoNameSufix , "h_HLTRECO"+histoNameSufix+";  Pt (GeV); NEvts", 80, 0., 80.);
     }
   }
   // TH1D * h_pt = fs->make<TH1D>( "pt"  , "p_{t}", 100,  0., 100. );
+  std::string histoNameSufix = configName_+"_"+std::to_string(20)+"_"+std::to_string(30);
+  h_pt = fs->make<TH1D>( "h_L1"+histoNameSufix , "h_L1"+histoNameSufix+";  Pt (GeV); NEvts", 80, 0., 80.);
 }
 
 void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
