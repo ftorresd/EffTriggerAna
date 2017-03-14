@@ -233,11 +233,12 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
 	sort(myLeptons.begin(), myLeptons.end(), P4SortCondition);
          if(verbose) std::cout<<" myLeptons.size() all  " << myLeptons.size() << std::endl;
 	// dimuon selection
-	if (myLeptons.size()<2) {
-         std::cout<<" myLeptons.size() " << myLeptons.size() << std::endl;
+	if (myLeptons.size() == 2 && myLeptons.size() !=0 ) {
+         std::cout<<" Multiplicity of muons:  " << myLeptons.size() << std::endl;
 	TLorentzVector l1 = myLeptons[0];
 	TLorentzVector l2 = myLeptons[1];
-
+         std::cout<< "Lepton 1 pt, eta, phi = " << l1.Pt() << l1.PseudoRapidity() << l1.Phi() << std::endl;
+          std::cout<< "Lepton 2 pt, eta, phi = " << l2.Pt() << l2.PseudoRapidity() << l2.Phi() << std::endl;
 	//Invariant mass of muons
 	double Mll = (l1+l2).M();
         std::cout<< "Mll " << Mll <<std::endl;
@@ -246,16 +247,16 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
 	if (l1.Pt() > muonLeadPt || l2.Pt() > muonTrailPt ) {
 
 	// ***
-	//   // Z peak
+	//   // jpsi peak
 	//     // ***
 	//
-	if (Mll < 60. || Mll > 120.){
-
-         std::cout<<" Invariant Mass in Z peak " << Mll << std::endl;
+	if (Mll > 2.6 && Mll < 3.9){
+ 
+         std::cout<<" Invariant Mass in JPsi peak " << Mll << std::endl;
         }// Z selection
   }//lead and trail muon pT cut
 
-}// dimuons
+} 
 
 	// Reco Photons
 	for (reco::PhotonCollection::const_iterator it = recoPhotons ->begin(); it != recoPhotons->end(); it++) {
