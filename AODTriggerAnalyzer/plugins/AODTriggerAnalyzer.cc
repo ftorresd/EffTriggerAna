@@ -334,17 +334,21 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
 
 
   // EGamma Iso
-  if (l1EGammasVec.size() >= l1EGammaN_) {
-    l1t::EGamma leadingEGamma = l1EGammasVec.at(0);
-    if (l1EGammaIso_ == true && leadingEGamma.hwIso() == 1) {
-      l1Filter_ = true;
-    } else if (l1EGammaIso_ == false && leadingEGamma.hwIso() != 1) {
-      l1Filter_ = true;
+  if (l1EGammaN_ != 0) {
+    if (l1EGammasVec.size() >= l1EGammaN_) {
+      l1t::EGamma leadingEGamma = l1EGammasVec.at(0);
+      if (l1EGammaIso_ == true && leadingEGamma.hwIso() == 1) {
+        l1Filter_ = true;
+      } else if (l1EGammaIso_ == false && leadingEGamma.hwIso() != 1) {
+        l1Filter_ = true;
+      } else {
+        return false;
+      }
     } else {
       return false;
     }
   } else {
-    return false;
+    l1Filter_ = true;
   }
 
 
