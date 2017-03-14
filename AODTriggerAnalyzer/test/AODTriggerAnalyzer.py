@@ -16,6 +16,7 @@ process.TFileService = cms.Service ('TFileService',
 )
 
 process.demo1 = cms.EDAnalyzer("AODTriggerAnalyzer",
+    Verbose = cms.bool(False),
     bits = cms.InputTag("TriggerResults","","HLT"),
     # L1 Labels
     l1MuonsLabel = cms.InputTag("gmtStage2Digis:Muon"),
@@ -29,6 +30,10 @@ process.demo1 = cms.EDAnalyzer("AODTriggerAnalyzer",
     # RECO Labels
     recoMuonsLabel = cms.InputTag("muons"),
     recoPhotonsLabel = cms.InputTag("photons"),
+    minMuPt = cms.untracked.double(2.0),
+    maxMuEta = cms.untracked.double(2.4),
+    minMuonLeadPt = cms.untracked.double(20.0),
+    minMuonTrailPt = cms.untracked.double(4.0), 
     #HLT Labels
     triggerSummaryLabel = cms.InputTag("hltTriggerSummaryAOD","","HLT"),
     muonFilterTag = cms.InputTag ("hltL3crIsoL1sMu20L1f0L2f10QL3f22QL3trkIsoFiltered0p09","","HLT"),

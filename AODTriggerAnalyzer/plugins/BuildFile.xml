@@ -4,4 +4,13 @@
 <!-- <use name="DataFormats/PatCandidates"/> -->
 <use name="PhysicsTools/UtilAlgos"/>
 <use name="FWCore/ServiceRegistry"/> 
+<use   name="DataFormats/Common"/>
+<use   name="DataFormats/Provenance"/>
+<use   name="DataFormats/PatCandidates"/>
+<use   name="DataFormats/VertexReco"/>
+<use   name="CommonTools/UtilAlgos"/>
+<use   name="CommonTools/Utils"/>
+<use name="root"/>
+
+
 <flags EDM_PLUGIN="1"/>
