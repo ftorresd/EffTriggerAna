@@ -16,8 +16,15 @@ process.TFileService = cms.Service ('TFileService',
 )
 
 process.effana1 = cms.EDAnalyzer("AODTriggerAnalyzer",
+    verbose = cms.bool(False),
     configName = cms.string("effana"),
     bits = cms.InputTag("TriggerResults","","HLT"),
+    # HLT Configs
+    minPhotonPt = cms.vdouble(12.0),
+    minLeadingMuPt = cms.vdouble(6.0),
+    minTrailMuPt  = cms.vdouble(4.0),                                                                                                                                                                                                                                
+    minDimuonMass = cms.vdouble(0.0),
+    maxDimuonMass = cms.vdouble(12.0),
     # L1 Labels
     l1MuonsLabel = cms.InputTag("gmtStage2Digis:Muon"),
     l1EGammasLabel = cms.InputTag("caloStage2Digis:EGamma"),

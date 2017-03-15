@@ -48,6 +48,7 @@ private:
   virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
   virtual void endJob() override;
 
+  bool verbose_; 
 
   edm::EDGetTokenT< edm::TriggerResults > triggerBits_;
   edm::EDGetTokenT< BXVector<l1t::Muon> > l1Muons_;
@@ -88,6 +89,7 @@ private:
 };
 
 AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
+verbose_ (iConfig.getParameter< bool > ("verbose")),
 triggerBits_(consumes< edm::TriggerResults >(iConfig.getParameter<edm::InputTag>("bits"))),
 l1Muons_(consumes< BXVector<l1t::Muon> >(iConfig.getParameter<edm::InputTag>("l1MuonsLabel"))),
 l1EGammas_(consumes< BXVector<l1t::EGamma> >(iConfig.getParameter<edm::InputTag>("l1EGammasLabel"))),
@@ -228,7 +230,7 @@ AODTriggerAnalyzer::hltFilter(trigger::TriggerObjectCollection muonL3Objects, tr
   double DoubleMuMass=-1.0;
   for (trigger::TriggerObjectCollection::const_iterator it = muonL3Objects.begin(); it != muonL3Objects.end(); it++) {
     if(it->pt() >= 0 ) {
-      if (verbose) std::cout << "HLT Muon: " << it->pt() << std::endl;
+      if (verbose_) std::cout << "HLT Muon: " << it->pt() << std::endl;
     }
     ptMuon.push_back(it->pt());
     etaMuon.push_back(it->eta());
@@ -238,7 +240,7 @@ AODTriggerAnalyzer::hltFilter(trigger::TriggerObjectCollection muonL3Objects, tr
      math::PtEtaPhiMLorentzVectorD* mu2 = new math::PtEtaPhiMLorentzVectorD(ptMuon[1],etaMuon[1],phiMuon[1],0.106);
      (*mu1)+=(*mu2);
      DoubleMuMass=(mu1->M());
-     if (verbose) std::cout << "HLT DoubleMuMass: " << DoubleMuMass << std::endl;
+     if (verbose_) std::cout << "HLT DoubleMuMass: " << DoubleMuMass << std::endl;
      if((mu1->Pt()<minLeadingMuPt_) && (mu2->Pt()< minTrailMuPt_)) continue ;
      if (DoubleMuMass < maxDimuonMass_ && minDimuonMass_ > DoubleMuMass)continue;
    }
@@ -249,7 +251,7 @@ AODTriggerAnalyzer::hltFilter(trigger::TriggerObjectCollection muonL3Objects, tr
  std::vector<float> ptPhoton, etaPhoton, phiPhoton;
  for (trigger::TriggerObjectCollection::const_iterator it = photonL3Objects.begin(); it != photonL3Objects.end(); it++) {
   if(it->pt() >= 0 ) {
-    if (verbose) std::cout << "HLT Photon: " << it->pt() << std::endl;
+    if (verbose_) std::cout << "HLT Photon: " << it->pt() << std::endl;
   }
   ptPhoton.push_back(it->pt());
   etaPhoton.push_back(it->eta());
