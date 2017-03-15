@@ -70,12 +70,8 @@ class AODTriggerAnalyzer : public edm::EDAnalyzer {
       bool l1EGammaIso_;
       std::vector<double> l1EGammaPt_;
 
-
       // Histos map
       std::map<std::string, TEfficiency*> nEvtsHistosMap;
-
-
-
 
       // edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerObjects_;
       // edm::EDGetTokenT<pat::PackedTriggerPrescales> triggerPrescales_;
