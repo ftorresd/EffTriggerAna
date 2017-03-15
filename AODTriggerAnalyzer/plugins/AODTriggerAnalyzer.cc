@@ -68,8 +68,8 @@ class AODTriggerAnalyzer : public edm::EDAnalyzer {
 		double minMuPt;
 		double maxMuEta;
 		double muonLeadPt, muonTrailPt;
-                double minJPsiMass ;
-                double maxJPsiMass ;
+		double minJPsiMass ;
+		double maxJPsiMass ;
 		bool recoFilter_ ; 
 		// L1 Configs
 		bool l1MuonOS_;
@@ -101,8 +101,8 @@ AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
 	maxMuEta (iConfig.getUntrackedParameter<double>("maxMuEta",2.4)), 
 	muonLeadPt (iConfig.getUntrackedParameter<double>("minMuonLeadPt",20.0)),
 	muonTrailPt (iConfig.getUntrackedParameter<double>("minMuonTrailPt",4.0)),
-        minJPsiMass (iConfig.getUntrackedParameter<double>("minJPsiMass",2.95)),
-        maxJPsiMass (iConfig.getUntrackedParameter<double>("maxJPsiMass",3.25)),
+	minJPsiMass (iConfig.getUntrackedParameter<double>("minJPsiMass",2.95)),
+	maxJPsiMass (iConfig.getUntrackedParameter<double>("maxJPsiMass",3.25)),
 
 
 	// L1 Configs
@@ -248,13 +248,13 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
 		std::cout<<" Multiplicity of muons:  " << myLeptons.size() << std::endl;
 		reco::Muon leadingMuon = myLeptons[0];
 		reco::Muon trailingMuon = myLeptons[1];
-               //Dimuons  selection
-               if ((leadingMuon.charge() != trailingMuon.charge())) {
-                } else {return false;}
+		//Dimuons  selection
+		if ((leadingMuon.charge() != trailingMuon.charge())) {
+		} else {return false;}
 
-    
-                std::cout<< "Leading Muon pt, eta, phi, charge = " << leadingMuon.pt() << " "<< leadingMuon.eta() << " "<< leadingMuon.phi() << " " << leadingMuon.charge() << std::endl;
-                std::cout<< "Trailing Muon  pt, eta, phi,charge = " << trailingMuon.pt() << " " << trailingMuon.eta() << " " << trailingMuon.phi() << " " << trailingMuon.charge()<< std::endl;
+
+		std::cout<< "Leading Muon pt, eta, phi, charge = " << leadingMuon.pt() << " "<< leadingMuon.eta() << " "<< leadingMuon.phi() << " " << leadingMuon.charge() << std::endl;
+		std::cout<< "Trailing Muon  pt, eta, phi,charge = " << trailingMuon.pt() << " " << trailingMuon.eta() << " " << trailingMuon.phi() << " " << trailingMuon.charge()<< std::endl;
 
 		//Invariant mass of muons
 		double Mll = (leadingMuon.p4() + trailingMuon.p4()).mass();
@@ -262,30 +262,56 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
 		//double Mll_pt
 		if (leadingMuon.pt() > muonLeadPt || trailingMuon.pt() > muonTrailPt ) {
 
-		// ***
-		//   // jpsi peak
-		//     // ***
-		//
+			// ***
+			//   // jpsi peak
+			//     // ***
+			//
 			if (Mll > minJPsiMass && Mll < maxJPsiMass){
-		            nJpsi++;                           
-			    std::cout<<" Invariant Mass in JPsi peak " << Mll << std::endl;
+				nJpsi++;                           
+				std::cout<<" Invariant Mass in JPsi peak " << Mll << std::endl;
 			}// jpsi selection
 		}//lead and trail muon pT cut
 
-	} else {return false;}//
 
-
-	// Reco Photons
-	for (reco::PhotonCollection::const_iterator it = recoPhotons ->begin(); it != recoPhotons->end(); it++) {
-		if(it->pt() >= 0 ) {
-
-			std::cout << "Reco Photon: " << it->pt() << std::endl;
+		// Reco Photons
+		for (reco::PhotonCollection::const_iterator photon = recoPhotons ->begin(); photon != recoPhotons->end(); photon++) {
+			if(photon->pt() > 0.0 && photon->isPhoton()) {
+				myPhotons.push_back(*photon);                       
+				std::cout << "Reco Photon: " << photon->pt() << std::endl;
+			}
 		}
-	} 
+
+		std::sort(myPhotons.begin(),myPhotons.end(), [](const reco::Photon &a, const reco::Photon &b){
+				return a.pt() > b.pt();
+				});
+
+		if (  myPhotons.size() == 1 && myPhotons.size() != 0 ){
+			std::cout<<" Multiplicity of photons:  " << myPhotons.size() << std::endl;
+
+			reco::Photon Gamma = myPhotons[0];		     
+			DeltaR<reco::Muon, reco::Photon> deltaR;
+			double drleadMuPhoton = deltaR(leadingMuon,Gamma);
+			double drTrailPhoton = deltaR(trailingMuon,Gamma);
+			std::cout<< " drleadMuPhoton " << drleadMuPhoton << " drTrailPhoton " << drTrailPhoton <<std::endl; 
+
+			if (drleadMuPhoton > 1.0 && drTrailPhoton > 1.0){
+			
+			double Mllg = (leadingMuon.p4() + trailingMuon.p4() + Gamma.p4()).mass(); 
+			std::cout<< "Invariant Mass Mllg " << Mllg <<std::endl;	
+
+
+			}// deltaR cuts	
+
+		} else {return false;}//photon selection
+
+
+	} else {return false;}//dimuons selection
+
+	////////////////// 
 	return true;
-}
+}//end RecoFilter
 
-
+///////////////////////////////////////////////////////////////
 
 	bool 
 AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Handle< BXVector<l1t::EGamma> > l1EGammas, const edm::Event &iEvent)
