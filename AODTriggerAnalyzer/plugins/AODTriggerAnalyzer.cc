@@ -33,76 +33,88 @@
 
 
 class AODTriggerAnalyzer : public edm::EDAnalyzer {
-   public:
-      explicit AODTriggerAnalyzer(const edm::ParameterSet&);
-      trigger::TriggerObjectCollection filterFinder(edm::EDGetTokenT<trigger::TriggerEvent> triggerSummaryLabel, edm::InputTag filterTag, const edm::Event &iEvent);
-      bool l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Handle< BXVector<l1t::EGamma> > l1EGammas, double muonPtCut, double egammaPtCut, const edm::Event &iEvent);
-      bool recoFilter(edm::Handle< reco::MuonCollection > recoMuons, edm::Handle< reco::PhotonCollection > recoPhotons, const edm::Event &iEvent);
-      bool hltFilter(trigger::TriggerObjectCollection muonL3Objects, trigger::TriggerObjectCollection photonL3Objects, const edm::Event &iEvent);
+public:
+  explicit AODTriggerAnalyzer(const edm::ParameterSet&);
+  trigger::TriggerObjectCollection filterFinder(edm::EDGetTokenT<trigger::TriggerEvent> triggerSummaryLabel, edm::InputTag filterTag, const edm::Event &iEvent);
+  bool l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Handle< BXVector<l1t::EGamma> > l1EGammas, double muonPtCut, double egammaPtCut, const edm::Event &iEvent);
+  bool recoFilter(edm::Handle< reco::MuonCollection > recoMuons, edm::Handle< reco::PhotonCollection > recoPhotons, const edm::Event &iEvent);
+  bool hltFilter(trigger::TriggerObjectCollection muonL3Objects, trigger::TriggerObjectCollection photonL3Objects, const edm::Event &iEvent);
 
-      ~AODTriggerAnalyzer() {}
-
-      
-
-   private:
-      virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
-      virtual void endJob() override;
+  ~AODTriggerAnalyzer() {}
 
 
-      edm::EDGetTokenT< edm::TriggerResults > triggerBits_;
-      edm::EDGetTokenT< BXVector<l1t::Muon> > l1Muons_;
-      edm::EDGetTokenT< BXVector<l1t::EGamma> > l1EGammas_;
-      edm::EDGetTokenT< reco::MuonCollection > recoMuons_;
-      edm::EDGetTokenT< reco::PhotonCollection > recoPhotons_;
-      edm::EDGetTokenT< trigger::TriggerEvent > triggerSummaryLabel_;
-      edm::InputTag muonFilterTag_;
-      edm::InputTag photonFilterTag_;
 
-      // L1 Configs
-      std::string configName_;
-      unsigned l1MuonN_;
-      bool l1MuonOS_;
-      bool l1MuonIso_;
-      int l1MuonQltMin_;
-      int l1MuonQltMax_;
-      std::vector<double> l1MuonPt_;
-      unsigned l1EGammaN_;
-      bool l1EGammaIso_;
-      std::vector<double> l1EGammaPt_;
+private:
+  virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+  virtual void endJob() override;
 
-      // Histos map
-      int nEvts;
-      int nEvtsRECO;
-      int nEvtsHLT;
-      int nEvtsHLTRECO;
-      std::map<std::string, TH1D*> nEvtsHistosMap;
 
-      // edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerObjects_;
-      // edm::EDGetTokenT<pat::PackedTriggerPrescales> triggerPrescales_;
+  edm::EDGetTokenT< edm::TriggerResults > triggerBits_;
+  edm::EDGetTokenT< BXVector<l1t::Muon> > l1Muons_;
+  edm::EDGetTokenT< BXVector<l1t::EGamma> > l1EGammas_;
+  edm::EDGetTokenT< reco::MuonCollection > recoMuons_;
+  edm::EDGetTokenT< reco::PhotonCollection > recoPhotons_;
+  edm::EDGetTokenT< trigger::TriggerEvent > triggerSummaryLabel_;
+  edm::InputTag muonFilterTag_;
+  edm::InputTag photonFilterTag_;
+
+  //HLT Configs
+  double minPhotonPt_; 
+  double minLeadingMuPt_; 
+  double minTrailMuPt_;                                                                                                                                                                                                                                   
+  double minDimuonMass_;  
+  double maxDimuonMass_;  
+
+  // L1 Configs
+  std::string configName_;
+  unsigned l1MuonN_;
+  bool l1MuonOS_;
+  bool l1MuonIso_;
+  int l1MuonQltMin_;
+  int l1MuonQltMax_;
+  std::vector<double> l1MuonPt_;
+  unsigned l1EGammaN_;
+  bool l1EGammaIso_;
+  std::vector<double> l1EGammaPt_;
+
+  // Histos map
+  int nEvts;
+  int nEvtsRECO;
+  int nEvtsHLT;
+  int nEvtsHLTRECO;
+  std::map<std::string, TH1D*> nEvtsHistosMap;
+
+
 };
 
 AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
-    triggerBits_(consumes< edm::TriggerResults >(iConfig.getParameter<edm::InputTag>("bits"))),
-    l1Muons_(consumes< BXVector<l1t::Muon> >(iConfig.getParameter<edm::InputTag>("l1MuonsLabel"))),
-    l1EGammas_(consumes< BXVector<l1t::EGamma> >(iConfig.getParameter<edm::InputTag>("l1EGammasLabel"))),
-    recoMuons_(consumes< reco::MuonCollection >(iConfig.getParameter<edm::InputTag>("recoMuonsLabel"))),
-    recoPhotons_(consumes< reco::PhotonCollection >(iConfig.getParameter<edm::InputTag>("recoPhotonsLabel"))),
-    triggerSummaryLabel_ (consumes<trigger::TriggerEvent>(iConfig.getParameter<edm::InputTag> ("triggerSummaryLabel"))),
-    muonFilterTag_ (iConfig.getParameter<edm::InputTag> ("muonFilterTag")),
-    photonFilterTag_ (iConfig.getParameter<edm::InputTag> ("photonFilterTag")),
+triggerBits_(consumes< edm::TriggerResults >(iConfig.getParameter<edm::InputTag>("bits"))),
+l1Muons_(consumes< BXVector<l1t::Muon> >(iConfig.getParameter<edm::InputTag>("l1MuonsLabel"))),
+l1EGammas_(consumes< BXVector<l1t::EGamma> >(iConfig.getParameter<edm::InputTag>("l1EGammasLabel"))),
+recoMuons_(consumes< reco::MuonCollection >(iConfig.getParameter<edm::InputTag>("recoMuonsLabel"))),
+recoPhotons_(consumes< reco::PhotonCollection >(iConfig.getParameter<edm::InputTag>("recoPhotonsLabel"))),
+triggerSummaryLabel_ (consumes<trigger::TriggerEvent>(iConfig.getParameter<edm::InputTag> ("triggerSummaryLabel"))),
+muonFilterTag_ (iConfig.getParameter<edm::InputTag> ("muonFilterTag")),
+photonFilterTag_ (iConfig.getParameter<edm::InputTag> ("photonFilterTag")),
 
+// HLT Configs
+minPhotonPt_ (iConfig.getUntrackedParameter<double>("minPhotonPt",12.0)),
+minLeadingMuPt_ (iConfig.getUntrackedParameter<double>("minLeadingMuPt",6.0)),
+minTrailMuPt_   (iConfig.getUntrackedParameter<double>("minTrailMuPt",4.0)),                                                                                                                                                                                                                                 
+minDimuonMass_  (iConfig.getUntrackedParameter<double>("minDimuonMass",0.0)),
+maxDimuonMass_  (iConfig.getUntrackedParameter<double>("maxDimuonMass",12.0)),
 
-    // L1 Configs    
-    configName_ (iConfig.getParameter< std::string > ("configName")),
-    l1MuonN_ (iConfig.getParameter< unsigned > ("l1MuonN")),
-    l1MuonOS_ (iConfig.getParameter< bool > ("l1MuonOS")),
-    l1MuonIso_ (iConfig.getParameter< bool > ("l1MuonIso")),
-    l1MuonQltMin_ (iConfig.getParameter< int > ("l1MuonQltMin")),
-    l1MuonQltMax_ (iConfig.getParameter< int > ("l1MuonQltMax")),
-    l1MuonPt_ (iConfig.getParameter< std::vector<double> > ("l1MuonPt")),
-    l1EGammaN_ (iConfig.getParameter< unsigned > ("l1EGammaN")),
-    l1EGammaIso_ (iConfig.getParameter< bool > ("l1EGammaIso")),
-    l1EGammaPt_ (iConfig.getParameter< std::vector<double> > ("l1EGammaPt"))
+// L1 Configs    
+configName_ (iConfig.getParameter< std::string > ("configName")),
+l1MuonN_ (iConfig.getParameter< unsigned > ("l1MuonN")),
+l1MuonOS_ (iConfig.getParameter< bool > ("l1MuonOS")),
+l1MuonIso_ (iConfig.getParameter< bool > ("l1MuonIso")),
+l1MuonQltMin_ (iConfig.getParameter< int > ("l1MuonQltMin")),
+l1MuonQltMax_ (iConfig.getParameter< int > ("l1MuonQltMax")),
+l1MuonPt_ (iConfig.getParameter< std::vector<double> > ("l1MuonPt")),
+l1EGammaN_ (iConfig.getParameter< unsigned > ("l1EGammaN")),
+l1EGammaIso_ (iConfig.getParameter< bool > ("l1EGammaIso")),
+l1EGammaPt_ (iConfig.getParameter< std::vector<double> > ("l1EGammaPt"))
 
 {
   // Histos File
@@ -136,52 +148,52 @@ AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
 
 void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
-    edm::Handle< edm::TriggerResults > triggerBits;
-    edm::Handle< BXVector<l1t::Muon> > l1Muons;
-    edm::Handle< BXVector<l1t::EGamma> > l1EGammas;
-    edm::Handle< reco::MuonCollection > recoMuons;
-    edm::Handle< reco::PhotonCollection > recoPhotons;
+  edm::Handle< edm::TriggerResults > triggerBits;
+  edm::Handle< BXVector<l1t::Muon> > l1Muons;
+  edm::Handle< BXVector<l1t::EGamma> > l1EGammas;
+  edm::Handle< reco::MuonCollection > recoMuons;
+  edm::Handle< reco::PhotonCollection > recoPhotons;
 
-    iEvent.getByToken(triggerBits_, triggerBits);
-    iEvent.getByToken(l1Muons_, l1Muons);
-    iEvent.getByToken(l1EGammas_, l1EGammas);
-    iEvent.getByToken(recoMuons_, recoMuons);
-    iEvent.getByToken(recoPhotons_, recoPhotons);
+  iEvent.getByToken(triggerBits_, triggerBits);
+  iEvent.getByToken(l1Muons_, l1Muons);
+  iEvent.getByToken(l1EGammas_, l1EGammas);
+  iEvent.getByToken(recoMuons_, recoMuons);
+  iEvent.getByToken(recoPhotons_, recoPhotons);
 
     // Define L3 Objects
-    trigger::TriggerObjectCollection muonL3Objects = filterFinder(triggerSummaryLabel_, muonFilterTag_, iEvent);
-    trigger::TriggerObjectCollection photonL3Objects = filterFinder(triggerSummaryLabel_, photonFilterTag_, iEvent);
+  trigger::TriggerObjectCollection muonL3Objects = filterFinder(triggerSummaryLabel_, muonFilterTag_, iEvent);
+  trigger::TriggerObjectCollection photonL3Objects = filterFinder(triggerSummaryLabel_, photonFilterTag_, iEvent);
 
     // HLT Test
-    bool hltTest = hltFilter(muonL3Objects, photonL3Objects, iEvent);
+  bool hltTest = hltFilter(muonL3Objects, photonL3Objects, iEvent);
     // std::cout << "hltTest: " << hltTest << std::endl;
 
     // RECO Test
-    bool recoTest = recoFilter(recoMuons, recoPhotons, iEvent);
+  bool recoTest = recoFilter(recoMuons, recoPhotons, iEvent);
     // std::cout << "recoTest: " << recoTest << std::endl;
 
-    nEvts++;
-    if (recoTest == true) nEvtsRECO++;
-    if (hltTest == true) nEvtsHLT++;
-    if (hltTest == true && recoTest == true) nEvtsHLTRECO++;
+  nEvts++;
+  if (recoTest == true) nEvtsRECO++;
+  if (hltTest == true) nEvtsHLT++;
+  if (hltTest == true && recoTest == true) nEvtsHLTRECO++;
 
-    for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
-      for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
-        bool l1Test = l1Filter(l1Muons, l1EGammas, *i, *j, iEvent);
+  for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
+    for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
+      bool l1Test = l1Filter(l1Muons, l1EGammas, *i, *j, iEvent);
         // EG histos
-        std::string histoNameSufix = configName_+"_EG_"+std::to_string((int) *j);
-        if (l1Test == true) nEvtsHistosMap["h_L1_"+histoNameSufix]->Fill(*i);
-        if (recoTest == true && l1Test == true) nEvtsHistosMap["h_L1RECO_"+histoNameSufix]->Fill(*i);
-        if (hltTest == true && l1Test == true) nEvtsHistosMap["h_L1HLT_"+histoNameSufix]->Fill(*i);
-        if (hltTest == true && recoTest == true && l1Test == true) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Fill(*i);
+      std::string histoNameSufix = configName_+"_EG_"+std::to_string((int) *j);
+      if (l1Test == true) nEvtsHistosMap["h_L1_"+histoNameSufix]->Fill(*i);
+      if (recoTest == true && l1Test == true) nEvtsHistosMap["h_L1RECO_"+histoNameSufix]->Fill(*i);
+      if (hltTest == true && l1Test == true) nEvtsHistosMap["h_L1HLT_"+histoNameSufix]->Fill(*i);
+      if (hltTest == true && recoTest == true && l1Test == true) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Fill(*i);
         // mu histos
-        histoNameSufix = configName_+"_DoubleMu_"+std::to_string((int) *i);
-        if (l1Test == true) nEvtsHistosMap["h_L1_"+histoNameSufix]->Fill(*j);
-        if (recoTest == true && l1Test == true) nEvtsHistosMap["h_L1RECO_"+histoNameSufix]->Fill(*j);
-        if (hltTest == true && l1Test == true) nEvtsHistosMap["h_L1HLT_"+histoNameSufix]->Fill(*j);
-        if (hltTest == true && recoTest == true && l1Test == true) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Fill(*j);
-      }
+      histoNameSufix = configName_+"_DoubleMu_"+std::to_string((int) *i);
+      if (l1Test == true) nEvtsHistosMap["h_L1_"+histoNameSufix]->Fill(*j);
+      if (recoTest == true && l1Test == true) nEvtsHistosMap["h_L1RECO_"+histoNameSufix]->Fill(*j);
+      if (hltTest == true && l1Test == true) nEvtsHistosMap["h_L1HLT_"+histoNameSufix]->Fill(*j);
+      if (hltTest == true && recoTest == true && l1Test == true) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Fill(*j);
     }
+  }
 }
 
 //find the filters
@@ -196,14 +208,14 @@ AODTriggerAnalyzer::filterFinder(edm::EDGetTokenT<trigger::TriggerEvent> trigger
   size_t filterIndex = (*triggerSummary).filterIndex(filterTag);
   trigger::TriggerObjectCollection filterObjects;
   if(filterIndex < (*triggerSummary).sizeFilters())
-    { 
-      const trigger::Keys &keysObjects = (*triggerSummary).filterKeys(filterIndex);
-      for(size_t j = 0; j < keysObjects.size(); j++)
-        {
-          trigger::TriggerObject foundObject = (allTriggerObjects)[keysObjects[j]];
-          filterObjects.push_back(foundObject);
-        }
+  { 
+    const trigger::Keys &keysObjects = (*triggerSummary).filterKeys(filterIndex);
+    for(size_t j = 0; j < keysObjects.size(); j++)
+    {
+      trigger::TriggerObject foundObject = (allTriggerObjects)[keysObjects[j]];
+      filterObjects.push_back(foundObject);
     }
+  }
   // std::cout<<filterObjects.size()<<endl; 
   return filterObjects;
 }
@@ -212,19 +224,54 @@ bool
 AODTriggerAnalyzer::hltFilter(trigger::TriggerObjectCollection muonL3Objects, trigger::TriggerObjectCollection photonL3Objects, const edm::Event &iEvent)
 {
   // L3 Muons
+  std::vector<float> ptMuon, etaMuon, phiMuon;
+  double DoubleMuMass=-1.0;
   for (trigger::TriggerObjectCollection::const_iterator it = muonL3Objects.begin(); it != muonL3Objects.end(); it++) {
     if(it->pt() >= 0 ) {
-      // std::cout << "HLT Muon: " << it->pt() << std::endl;
+      if (verbose) std::cout << "HLT Muon: " << it->pt() << std::endl;
     }
-  }  
+    ptMuon.push_back(it->pt());
+    etaMuon.push_back(it->eta());
+    phiMuon.push_back(it->phi());
+    if (ptMuon.size()>1) {
+     math::PtEtaPhiMLorentzVectorD* mu1 = new math::PtEtaPhiMLorentzVectorD(ptMuon[0],etaMuon[0],phiMuon[0],0.106);
+     math::PtEtaPhiMLorentzVectorD* mu2 = new math::PtEtaPhiMLorentzVectorD(ptMuon[1],etaMuon[1],phiMuon[1],0.106);
+     (*mu1)+=(*mu2);
+     DoubleMuMass=(mu1->M());
+     if (verbose) std::cout << "HLT DoubleMuMass: " << DoubleMuMass << std::endl;
+     if((mu1->Pt()<minLeadingMuPt_) && (mu2->Pt()< minTrailMuPt_)) continue ;
+     if (DoubleMuMass < maxDimuonMass_ && minDimuonMass_ > DoubleMuMass)continue;
+   }
+ }
+
 
 // L3 Photons
-  for (trigger::TriggerObjectCollection::const_iterator it = photonL3Objects.begin(); it != photonL3Objects.end(); it++) {
-    if(it->pt() >= 0 ) {
-      // std::cout << "HLT Photon: " << it->pt() << std::endl;
-    }
-  } 
-  return true;
+ std::vector<float> ptPhoton, etaPhoton, phiPhoton;
+ for (trigger::TriggerObjectCollection::const_iterator it = photonL3Objects.begin(); it != photonL3Objects.end(); it++) {
+  if(it->pt() >= 0 ) {
+    if (verbose) std::cout << "HLT Photon: " << it->pt() << std::endl;
+  }
+  ptPhoton.push_back(it->pt());
+  etaPhoton.push_back(it->eta());
+  phiPhoton.push_back(it->phi());
+  if(it->pt() < minPhotonPt_ )continue;
+} 
+return true;
+
+//   // L3 Muons
+//   for (trigger::TriggerObjectCollection::const_iterator it = muonL3Objects.begin(); it != muonL3Objects.end(); it++) {
+//     if(it->pt() >= 0 ) {
+//       // std::cout << "HLT Muon: " << it->pt() << std::endl;
+//     }
+//   }  
+
+// // L3 Photons
+//   for (trigger::TriggerObjectCollection::const_iterator it = photonL3Objects.begin(); it != photonL3Objects.end(); it++) {
+//     if(it->pt() >= 0 ) {
+//       // std::cout << "HLT Photon: " << it->pt() << std::endl;
+//     }
+//   } 
+//   return true;
 }
 
 
