@@ -46,7 +46,7 @@ class AODTriggerAnalyzer : public edm::EDAnalyzer {
 
    private:
       virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
-      virtual void endJob() override;
+      // virtual void endJob() override;
 
 
       edm::EDGetTokenT< edm::TriggerResults > triggerBits_;
@@ -104,6 +104,11 @@ AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
   // Histos File
   edm::Service<TFileService> fs;
   
+
+  // Define Evts count
+  // int nEvtsRECO = 0;
+  // int nEvtsHLT = 0;
+  // int nEvtsHLTRECO = 0;
   // Define Histos
   std::map<std::string, TEfficiency*> nEvtsHistosMap;
   // nEvtsHistosMap["h_HLT"+configName_] = fs->make<TH1D>( ("h_HLT").c_str() , ("h_HLT;  ; NEvts").c_str(), 1, 0., 1.);
@@ -113,9 +118,12 @@ AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
     for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
       std::string histoNameSufix = configName_+"_"+std::to_string((int) *i)+"_"+std::to_string((int) *j);
       nEvtsHistosMap["h_L1_"+histoNameSufix] = fs->make<TEfficiency>( ("h_L1_"+histoNameSufix).c_str() , ("h_L1_"+histoNameSufix+";  Pt (GeV); Eff").c_str(), 80, 0., 80.);
+      nEvtsHistosMap["h_L1RECO_"+histoNameSufix] = fs->make<TEfficiency>( ("h_L1RECO_"+histoNameSufix).c_str() , ("h_L1RECO_"+histoNameSufix+";  Pt (GeV); Eff").c_str(), 80, 0., 80.);
+      nEvtsHistosMap["h_L1HLT_"+histoNameSufix] = fs->make<TEfficiency>( ("h_L1HLT_"+histoNameSufix).c_str() , ("h_L1HLT_"+histoNameSufix+";  Pt (GeV); Eff").c_str(), 80, 0., 80.);
+      nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix] = fs->make<TEfficiency>( ("h_L1HLTRECO_"+histoNameSufix).c_str() , ("h_L1HLTRECO_"+histoNameSufix+";  Pt (GeV); Eff").c_str(), 80, 0., 80.);
     }
   }
-  TEfficiency * v_teste1 = fs->make<TEfficiency>("eff","my efficiency;x;#epsilon",20,0,10);
+  // TEfficiency * v_teste1 = fs->make<TEfficiency>("eff","my efficiency;x;#epsilon",20,0,10);
   // TVectorD * v_teste2 = fs->make<TVectorD>(1);
 }
 
@@ -396,11 +404,11 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
   return l1Filter_;
 }
 
-// ------------ method called once each job just after ending the event loop  ------------
-void 
-AODTriggerAnalyzer::endJob() 
-{
-}
+// // ------------ method called once each job just after ending the event loop  ------------
+// void 
+// AODTriggerAnalyzer::endJob() 
+// {
+// }
 
 //define this as a plug-in
 DEFINE_FWK_MODULE(AODTriggerAnalyzer);
