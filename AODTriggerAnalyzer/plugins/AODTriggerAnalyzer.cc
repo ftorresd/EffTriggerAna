@@ -244,10 +244,10 @@ AODTriggerAnalyzer::hltFilter(trigger::TriggerObjectCollection muonL3Objects, tr
     math::PtEtaPhiMLorentzVectorD* mu1 = new math::PtEtaPhiMLorentzVectorD(leadingMuon.pt(),leadingMuon.eta(),leadingMuon.phi(),0.106);
     math::PtEtaPhiMLorentzVectorD* mu2 = new math::PtEtaPhiMLorentzVectorD(trailingMuon.pt(),trailingMuon.eta(),trailingMuon.phi(),0.106);
 
-    double DoubleMuMass=( (*mu1+*mu2)->M() );
+    double DoubleMuMass = ( (*mu1+*mu2).M() );
     if (verbose_) std::cout << "HLT DoubleMuMass: " << DoubleMuMass << std::endl;
-    if ((mu1->Pt() >= minLeadingMuPt_) && (mu2->Pt() >= minTrailMuPt_) ) hltFilter_ = true else return false ;
-    if (DoubleMuMass < maxDimuonMass_ && minDimuonMass_ < DoubleMuMass)  hltFilter_ = true else return false ;
+    if ((mu1->Pt() >= minLeadingMuPt_) && (mu2->Pt() >= minTrailMuPt_) ) hltFilter_ = true; else return false ;
+    if (DoubleMuMass < maxDimuonMass_ && minDimuonMass_ < DoubleMuMass)  hltFilter_ = true; else return false ;
   } else {
     return false;
   }
@@ -263,7 +263,7 @@ AODTriggerAnalyzer::hltFilter(trigger::TriggerObjectCollection muonL3Objects, tr
     // etaPhoton.push_back(it->eta());
     // phiPhoton.push_back(it->phi());
     // if(it->pt() < minPhotonPt_ )continue;
-    hltPhotonsVec.push_back(*it)
+    hltPhotonsVec.push_back(*it);
   }
 
   std::sort(hltPhotonsVec.begin(),hltPhotonsVec.end(), [](const trigger::TriggerObject &a, const trigger::TriggerObject &b){
@@ -271,9 +271,9 @@ AODTriggerAnalyzer::hltFilter(trigger::TriggerObjectCollection muonL3Objects, tr
   });
 
   if (hltPhotonsVec.size() >= 1) {
-    if(hltPhotonsVec.at(0).pt() >= minPhotonPt_ ) hltFilter_ = true else return false ;
+    if(hltPhotonsVec.at(0).pt() >= minPhotonPt_ ) hltFilter_ = true; else return false ;
   } else {
-    return false
+    return false;
   }
 
 
