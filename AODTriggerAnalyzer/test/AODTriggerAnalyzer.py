@@ -30,10 +30,13 @@ process.demo1 = cms.EDAnalyzer("AODTriggerAnalyzer",
     # RECO Labels
     recoMuonsLabel = cms.InputTag("muons"),
     recoPhotonsLabel = cms.InputTag("photons"),
-    minMuPt = cms.untracked.double(2.0),
+    minMuPt = cms.untracked.double(2.0),# in GeV
     maxMuEta = cms.untracked.double(2.4),
-    minMuonLeadPt = cms.untracked.double(20.0),
-    minMuonTrailPt = cms.untracked.double(4.0), 
+    minMuonLeadPt = cms.untracked.double(20.0),# in GeV
+    minMuonTrailPt = cms.untracked.double(4.0), # in GeV
+    GammaMinPtCut = cms.untracked.double(0.1),# in GeV
+    DeltaRLeadMuPhotonSel = cms.untracked.double(1.0),# deltaR>DeltaRLeadMuPhotonSel
+    DeltaRTrailPhotonSel  = cms.untracked.double(1.0),# deltaR>DeltaRTrailPhotonSel	
     minJPsiMass = cms.untracked.double(2.95),# in GeV
     maxJPsiMass = cms.untracked.double(3.25),# in GeV
     #HLT Labels
