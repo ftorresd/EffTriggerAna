@@ -71,6 +71,10 @@ class AODTriggerAnalyzer : public edm::EDAnalyzer {
       std::vector<double> l1EGammaPt_;
 
 
+      // Histos map
+      std::map<std::string, TEfficiency*> nEvtsHistosMap;
+
+
 
 
       // edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerObjects_;
@@ -110,7 +114,6 @@ AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
   // int nEvtsHLT = 0;
   // int nEvtsHLTRECO = 0;
   // Define Histos
-  std::map<std::string, TEfficiency*> nEvtsHistosMap;
   // nEvtsHistosMap["h_HLT"+configName_] = fs->make<TH1D>( ("h_HLT").c_str() , ("h_HLT;  ; NEvts").c_str(), 1, 0., 1.);
   // nEvtsHistosMap["h_RECO"+configName_] = fs->make<TH1D>( ("h_RECO").c_str() , ("h_RECO;  ; NEvts").c_str(), 1, 0., 1.);
   // nEvtsHistosMap["h_HLTRECO"+configName_] = fs->make<TH1D>( ("h_HLTRECO_").c_str() , ("h_HLTRECO;  ; NEvts").c_str(), 1, 0., 1.);
