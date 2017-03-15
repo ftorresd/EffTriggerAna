@@ -28,8 +28,8 @@
 #include "DataFormats/HLTReco/interface/TriggerObject.h"
 #include "DataFormats/HLTReco/interface/TriggerEvent.h"
 
-#include "DataFormats/Math/interface/LorentzVector.h"
-#include "TLorentzVector.h"
+//#include "DataFormats/Math/interface/LorentzVector.h"
+//#include "TLorentzVector.h"
 
 #include <map>
 #include <string>
@@ -46,7 +46,7 @@ class AODTriggerAnalyzer : public edm::EDAnalyzer {
 		bool l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Handle< BXVector<l1t::EGamma> > l1EGammas, const edm::Event &iEvent);
 		bool recoFilter(edm::Handle< reco::MuonCollection > recoMuons, edm::Handle< reco::PhotonCollection > recoPhotons, const edm::Event &iEvent);
 		bool hltFilter(trigger::TriggerObjectCollection muonL3Objects, trigger::TriggerObjectCollection photonL3Objects, const edm::Event &iEvent);
-		static bool P4SortCondition(const TLorentzVector& p1, const TLorentzVector& p2) {return (p1.Pt() > p2.Pt());}
+		//static bool P4SortCondition(const TLorentzVector& p1, const TLorentzVector& p2) {return (p1.Pt() > p2.Pt());}
 
 		~AODTriggerAnalyzer() {}
 
@@ -68,7 +68,9 @@ class AODTriggerAnalyzer : public edm::EDAnalyzer {
 		double minMuPt;
 		double maxMuEta;
 		double muonLeadPt, muonTrailPt;
-
+                double minJPsiMass ;
+                double maxJPsiMass ;
+		bool recoFilter_ ; 
 		// L1 Configs
 		bool l1MuonOS_;
 		bool l1MuonIso_;
@@ -99,6 +101,8 @@ AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
 	maxMuEta (iConfig.getUntrackedParameter<double>("maxMuEta",2.4)), 
 	muonLeadPt (iConfig.getUntrackedParameter<double>("minMuonLeadPt",20.0)),
 	muonTrailPt (iConfig.getUntrackedParameter<double>("minMuonTrailPt",4.0)),
+        minJPsiMass (iConfig.getUntrackedParameter<double>("minJPsiMass",2.95)),
+        maxJPsiMass (iConfig.getUntrackedParameter<double>("maxJPsiMass",3.25)),
 
 
 	// L1 Configs
@@ -211,54 +215,70 @@ AODTriggerAnalyzer::hltFilter(trigger::TriggerObjectCollection muonL3Objects, tr
 	bool 
 AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, edm::Handle< reco::PhotonCollection > recoPhotons, const edm::Event &iEvent)
 {
+	//       recoFilter_ = false;
 
-	vector<TLorentzVector> myLeptons, myPhotons; 
-
+	int nDimuon=0, nJpsi=0; //,//nPhoton=0,nZJpsiGamma=0;       
+	//vector<TLorentzVector> myLeptons, myPhotons; 
+	std::vector<reco::Muon> myLeptons;
+	std::vector<reco::Photon> myPhotons; 
 	// Reco Muons
-	for (reco::MuonCollection::const_iterator it = recoMuons->begin(); it != recoMuons->end(); it++) {
-
-		TLorentzVector muon_tmp = TLorentzVector(it->px(), it->py(), it->pz(), it->energy());  
-		if (it->isPFMuon()){
-			if (it->isTrackerMuon() || it->isGlobalMuon()){
-				if (it->pt()<minMuPt && std::abs(it->eta())<maxMuEta){  
-					myLeptons.push_back(muon_tmp);
-					if(verbose) cout<<"Muon "<<it->pt()<<endl;
-				}//eta and pt muon
-			}//muon type selection
-		}//PF muon
+	for (reco::MuonCollection::const_iterator muon = recoMuons->begin(); muon != recoMuons->end(); muon++) {
+		if (muon->isPFMuon()){
+			if (muon->isTrackerMuon() || muon->isGlobalMuon()){
+				if (verbose) std::cout << muon->charge() << std::endl;
+				if (muon->pt()<minMuPt && std::abs(muon->eta())<maxMuEta){
+					myLeptons.push_back(*muon);
+					if(verbose) cout<<"Muon "<<muon->pt()<<endl;
+				} //else {return false;}  //eta and pt muon
+			} //else {return false;} //muon type selection
+		} //else {return false;} //PF muon
 	}// Muon loop
 
-	sort(myLeptons.begin(), myLeptons.end(), P4SortCondition);
+	std::sort(myLeptons.begin(),myLeptons.end(), [](const reco::Muon &a, const reco::Muon &b){
+			return a.pt() > b.pt();
+			});
+
+
+
 	if(verbose) std::cout<<" myLeptons.size() all  " << myLeptons.size() << std::endl;
-	// dimuon selection
-	if (myLeptons.size() == 2 && myLeptons.size() !=0 ) {
+	// bimuon selection
+	if (myLeptons.size() == 2 && myLeptons.size() !=0) {
+		//recoFilter_ = true;
+		nDimuon++;
 		std::cout<<" Multiplicity of muons:  " << myLeptons.size() << std::endl;
-		TLorentzVector l1 = myLeptons[0];
-		TLorentzVector l2 = myLeptons[1];
-		std::cout<< "Lepton 1 pt, eta, phi = " << l1.Pt() << l1.PseudoRapidity() << l1.Phi() << std::endl;
-		std::cout<< "Lepton 2 pt, eta, phi = " << l2.Pt() << l2.PseudoRapidity() << l2.Phi() << std::endl;
+		reco::Muon leadingMuon = myLeptons[0];
+		reco::Muon trailingMuon = myLeptons[1];
+               //Dimuons  selection
+               if ((leadingMuon.charge() != trailingMuon.charge())) {
+                } else {return false;}
+
+    
+                std::cout<< "Leading Muon pt, eta, phi, charge = " << leadingMuon.pt() << " "<< leadingMuon.eta() << " "<< leadingMuon.phi() << " " << leadingMuon.charge() << std::endl;
+                std::cout<< "Trailing Muon  pt, eta, phi,charge = " << trailingMuon.pt() << " " << trailingMuon.eta() << " " << trailingMuon.phi() << " " << trailingMuon.charge()<< std::endl;
+
 		//Invariant mass of muons
-		double Mll = (l1+l2).M();
+		double Mll = (leadingMuon.p4() + trailingMuon.p4()).mass();
 		std::cout<< "Mll " << Mll <<std::endl;
-
 		//double Mll_pt
-		if (l1.Pt() > muonLeadPt || l2.Pt() > muonTrailPt ) {
+		if (leadingMuon.pt() > muonLeadPt || trailingMuon.pt() > muonTrailPt ) {
 
-			// ***
-			//   // jpsi peak
-			//     // ***
-			//
-			if (Mll > 2.95 && Mll < 3.25){
-
-				std::cout<<" Invariant Mass in JPsi peak " << Mll << std::endl;
-			}// Z selection
+		// ***
+		//   // jpsi peak
+		//     // ***
+		//
+			if (Mll > minJPsiMass && Mll < maxJPsiMass){
+		            nJpsi++;                           
+			    std::cout<<" Invariant Mass in JPsi peak " << Mll << std::endl;
+			}// jpsi selection
 		}//lead and trail muon pT cut
 
-	} 
+	} else {return false;}//
+
 
 	// Reco Photons
 	for (reco::PhotonCollection::const_iterator it = recoPhotons ->begin(); it != recoPhotons->end(); it++) {
 		if(it->pt() >= 0 ) {
+
 			std::cout << "Reco Photon: " << it->pt() << std::endl;
 		}
 	} 

@@ -34,6 +34,8 @@ process.demo1 = cms.EDAnalyzer("AODTriggerAnalyzer",
     maxMuEta = cms.untracked.double(2.4),
     minMuonLeadPt = cms.untracked.double(20.0),
     minMuonTrailPt = cms.untracked.double(4.0), 
+    minJPsiMass = cms.untracked.double(2.95),# in GeV
+    maxJPsiMass = cms.untracked.double(3.25),# in GeV
     #HLT Labels
     triggerSummaryLabel = cms.InputTag("hltTriggerSummaryAOD","","HLT"),
     muonFilterTag = cms.InputTag ("hltL3crIsoL1sMu20L1f0L2f10QL3f22QL3trkIsoFiltered0p09","","HLT"),
