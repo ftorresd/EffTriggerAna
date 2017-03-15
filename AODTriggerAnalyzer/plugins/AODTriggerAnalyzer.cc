@@ -411,7 +411,7 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
       return false;
     }
   } else {
-    std::cout << "Vetor vazio" << std::endl;
+    // std::cout << "Vetor vazio" << std::endl;
     l1Filter_ = true;
   }
 
