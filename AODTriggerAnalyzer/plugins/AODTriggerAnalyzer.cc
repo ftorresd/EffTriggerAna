@@ -387,7 +387,10 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
   // EGamma
   if (l1EGammaN_ != 0) {
     if (l1EGammasVec.size() >= l1EGammaN_) {
+      std::cout << "Temos um photon!" << std:endl;
       l1t::EGamma leadingEGamma = l1EGammasVec.at(0);
+      std::cout << leadingEGamma.pt() << std:endl;
+      std::cout << leadingEGamma.hwIso() << std:endl;
       // EGamma Iso
       if (l1EGammaIso_ == true && leadingEGamma.hwIso() == 1) {
         l1Filter_ = true;
@@ -398,14 +401,17 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
       }
       // EGamma Pt
       if (leadingEGamma.pt() >= egammaPtCut) {
+        std::cout << "Passou no corte de Pt!" << std:endl;
         l1Filter_ = true;
       } else {
         return false;
       }
     } else {
+      std::cout << "Não Temos um photon!" << std:endl;
       return false;
     }
   } else {
+    std::cout << "Vetor vazio" << std:endl;
     l1Filter_ = true;
   }
 
