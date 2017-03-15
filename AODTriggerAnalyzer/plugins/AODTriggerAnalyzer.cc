@@ -240,9 +240,10 @@ AODTriggerAnalyzer::hltFilter(trigger::TriggerObjectCollection muonL3Objects, tr
 			if (verbose) std::cout << "HLT Photon: " << it->pt() << std::endl;
 		}
 		ptPhoton.push_back(it->pt());
-        etaPhoton.push_back(it->eta());
-        phiPhoton.push_back(it->phi());
-        if(it->pt() < minPhotonPt )continue;
+                etaPhoton.push_back(it->eta());
+                phiPhoton.push_back(it->phi());
+                if(ptPhoton.size()= 0) continue;
+                if(ptPhoton < minPhotonPt )continue;
 	} 
 	return true;
 }
