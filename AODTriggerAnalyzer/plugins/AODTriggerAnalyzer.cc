@@ -46,6 +46,8 @@ class AODTriggerAnalyzer : public edm::EDAnalyzer {
 
    private:
       virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+      virtual void endJob() override;
+
 
       edm::EDGetTokenT< edm::TriggerResults > triggerBits_;
       edm::EDGetTokenT< BXVector<l1t::Muon> > l1Muons_;
@@ -103,18 +105,18 @@ AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
   edm::Service<TFileService> fs;
   
   // Define Histos
-  std::map<std::string, TH1D*> nEvtsHistosMap;
+  std::map<std::string, TEfficiency*> nEvtsHistosMap;
   // nEvtsHistosMap["h_HLT"+configName_] = fs->make<TH1D>( ("h_HLT").c_str() , ("h_HLT;  ; NEvts").c_str(), 1, 0., 1.);
   // nEvtsHistosMap["h_RECO"+configName_] = fs->make<TH1D>( ("h_RECO").c_str() , ("h_RECO;  ; NEvts").c_str(), 1, 0., 1.);
   // nEvtsHistosMap["h_HLTRECO"+configName_] = fs->make<TH1D>( ("h_HLTRECO_").c_str() , ("h_HLTRECO;  ; NEvts").c_str(), 1, 0., 1.);
   for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
     for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
       std::string histoNameSufix = configName_+"_"+std::to_string((int) *i)+"_"+std::to_string((int) *j);
-      nEvtsHistosMap["h_L1_"+histoNameSufix] = fs->make<TH1D>( ("h_L1_"+histoNameSufix).c_str() , ("h_L1_"+histoNameSufix+";  Pt (GeV); NEvts").c_str(), 80, 0., 80.);
+      nEvtsHistosMap["h_L1_"+histoNameSufix] = fs->make<TEfficiency>( ("h_L1_"+histoNameSufix).c_str() , ("h_L1_"+histoNameSufix+";  Pt (GeV); Eff").c_str(), 80, 0., 80.);
     }
   }
   TEfficiency * v_teste1 = fs->make<TEfficiency>("eff","my efficiency;x;#epsilon",20,0,10);
-  TVectorD * v_teste2 = fs->make<TVectorD>(1);
+  // TVectorD * v_teste2 = fs->make<TVectorD>(1);
 }
 
 void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
@@ -394,7 +396,11 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
   return l1Filter_;
 }
 
-
+// ------------ method called once each job just after ending the event loop  ------------
+void 
+AODTriggerAnalyzer::endJob() 
+{
+}
 
 //define this as a plug-in
 DEFINE_FWK_MODULE(AODTriggerAnalyzer);
