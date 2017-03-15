@@ -28,7 +28,7 @@
 #include "DataFormats/HLTReco/interface/TriggerObject.h"
 #include "DataFormats/HLTReco/interface/TriggerEvent.h"
 
-#include "TEfficiency.h"
+// #include "TEfficiency.h"
 #include "TVectorD.h"
 
 
@@ -71,7 +71,7 @@ class AODTriggerAnalyzer : public edm::EDAnalyzer {
       std::vector<double> l1EGammaPt_;
 
       // Histos map
-      std::map<std::string, TEfficiency*> nEvtsHistosMap;
+      std::map<std::string, TH1D*> nEvtsHistosMap;
 
       // edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerObjects_;
       // edm::EDGetTokenT<pat::PackedTriggerPrescales> triggerPrescales_;
@@ -106,9 +106,10 @@ AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
   
 
   // Define Evts count
-  // int nEvtsRECO = 0;
-  // int nEvtsHLT = 0;
-  // int nEvtsHLTRECO = 0;
+  int nEvts = 0;
+  int nEvtsRECO = 0;
+  int nEvtsHLT = 0;
+  int nEvtsHLTRECO = 0;
   // Define Histos
   // nEvtsHistosMap["h_HLT"+configName_] = fs->make<TH1D>( ("h_HLT").c_str() , ("h_HLT;  ; NEvts").c_str(), 1, 0., 1.);
   // nEvtsHistosMap["h_RECO"+configName_] = fs->make<TH1D>( ("h_RECO").c_str() , ("h_RECO;  ; NEvts").c_str(), 1, 0., 1.);
@@ -116,10 +117,10 @@ AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
   // for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
   for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
     std::string histoNameSufix = configName_+"_EG_"+std::to_string((int) *j);
-    nEvtsHistosMap["h_L1_"+histoNameSufix] = fs->make<TEfficiency>( ("h_L1_"+histoNameSufix).c_str() , ("h_L1_"+histoNameSufix+";  Pt (GeV); Eff").c_str(), 80, 0., 80.);
-    nEvtsHistosMap["h_L1RECO_"+histoNameSufix] = fs->make<TEfficiency>( ("h_L1RECO_"+histoNameSufix).c_str() , ("h_L1RECO_"+histoNameSufix+";  Pt (GeV); Eff").c_str(), 80, 0., 80.);
-    nEvtsHistosMap["h_L1HLT_"+histoNameSufix] = fs->make<TEfficiency>( ("h_L1HLT_"+histoNameSufix).c_str() , ("h_L1HLT_"+histoNameSufix+";  Pt (GeV); Eff").c_str(), 80, 0., 80.);
-    nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix] = fs->make<TEfficiency>( ("h_L1HLTRECO_"+histoNameSufix).c_str() , ("h_L1HLTRECO_"+histoNameSufix+";  Pt (GeV); Eff").c_str(), 80, 0., 80.);
+    nEvtsHistosMap["h_L1_"+histoNameSufix] = fs->make<TH1D>( ("h_L1_"+histoNameSufix).c_str() , ("h_L1_"+histoNameSufix+";  Pt (GeV); Eff").c_str(), 80, 0., 80.);
+    nEvtsHistosMap["h_L1RECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1RECO_"+histoNameSufix).c_str() , ("h_L1RECO_"+histoNameSufix+";  Pt (GeV); Eff").c_str(), 80, 0., 80.);
+    nEvtsHistosMap["h_L1HLT_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLT_"+histoNameSufix).c_str() , ("h_L1HLT_"+histoNameSufix+";  Pt (GeV); Eff").c_str(), 80, 0., 80.);
+    nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLTRECO_"+histoNameSufix).c_str() , ("h_L1HLTRECO_"+histoNameSufix+";  Pt (GeV); Eff").c_str(), 80, 0., 80.);
   }
   // }
   // TEfficiency * v_teste1 = fs->make<TEfficiency>("eff","my efficiency;x;#epsilon",20,0,10);
@@ -176,16 +177,21 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
         // std::cout << "l1Test: " << l1Test << std::endl;
     //   }
     // }
+    
 
+    if (true) nEvts++;
+    if (recoTest == true) nEvtsRECO++;
+    if (hltTest == true) nEvtsHLT++;
+    if (hltTest == true && recoTest == true) nEvtsHLTRECO++;
 
     for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
       for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
         bool l1Test = l1Filter(l1Muons, l1EGammas, *i, *j, iEvent);
         std::string histoNameSufix = configName_+"_EG_"+std::to_string((int) *j);
-        nEvtsHistosMap["h_L1_"+histoNameSufix]->Fill(l1Test,*i);
-        if (recoTest == true) nEvtsHistosMap["h_L1RECO_"+histoNameSufix]->Fill(l1Test,*i);
-        if (hltTest == true) nEvtsHistosMap["h_L1HLT_"+histoNameSufix]->Fill(l1Test,*i);
-        if (hltTest == true && recoTest == true) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Fill(l1Test,*i);
+        if (true) nEvtsHistosMap["h_L1_"+histoNameSufix]->Fill(*i);
+        if (recoTest == true) nEvtsHistosMap["h_L1RECO_"+histoNameSufix]->Fill(*i);
+        if (hltTest == true) nEvtsHistosMap["h_L1HLT_"+histoNameSufix]->Fill(*i);
+        if (hltTest == true && recoTest == true) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Fill(*i);
       }
     }
 
