@@ -46,7 +46,7 @@ class AODTriggerAnalyzer : public edm::EDAnalyzer {
 
    private:
       virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
-      // virtual void endJob() override;
+      virtual void endJob() override;
 
 
       edm::EDGetTokenT< edm::TriggerResults > triggerBits_;
@@ -71,6 +71,10 @@ class AODTriggerAnalyzer : public edm::EDAnalyzer {
       std::vector<double> l1EGammaPt_;
 
       // Histos map
+      int nEvts;
+      int nEvtsRECO;
+      int nEvtsHLT;
+      int nEvtsHLTRECO;
       std::map<std::string, TH1D*> nEvtsHistosMap;
 
       // edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerObjects_;
@@ -106,10 +110,10 @@ AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
   
 
   // Define Evts count
-  int nEvts = 0;
-  int nEvtsRECO = 0;
-  int nEvtsHLT = 0;
-  int nEvtsHLTRECO = 0;
+  nEvts = 0;
+  nEvtsRECO = 0;
+  nEvtsHLT = 0;
+  nEvtsHLTRECO = 0;
   // Define Histos
   // nEvtsHistosMap["h_HLT"+configName_] = fs->make<TH1D>( ("h_HLT").c_str() , ("h_HLT;  ; NEvts").c_str(), 1, 0., 1.);
   // nEvtsHistosMap["h_RECO"+configName_] = fs->make<TH1D>( ("h_RECO").c_str() , ("h_RECO;  ; NEvts").c_str(), 1, 0., 1.);
@@ -429,11 +433,12 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
   return l1Filter_;
 }
 
-// // ------------ method called once each job just after ending the event loop  ------------
-// void 
-// AODTriggerAnalyzer::endJob() 
-// {
-// }
+// ------------ method called once each job just after ending the event loop  ------------
+void 
+AODTriggerAnalyzer::endJob() 
+{
+  std::cout << "passei por aqui" << std::endl;
+}
 
 //define this as a plug-in
 DEFINE_FWK_MODULE(AODTriggerAnalyzer);
