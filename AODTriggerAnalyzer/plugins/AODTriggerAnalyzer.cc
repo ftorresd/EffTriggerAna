@@ -100,11 +100,11 @@ muonFilterTag_ (iConfig.getParameter<edm::InputTag> ("muonFilterTag")),
 photonFilterTag_ (iConfig.getParameter<edm::InputTag> ("photonFilterTag")),
 
 // HLT Configs
-minPhotonPt_ (iConfig.getParameter<double>("minPhotonPt",12.0)),
-minLeadingMuPt_ (iConfig.getParameter<double>("minLeadingMuPt",6.0)),
-minTrailMuPt_   (iConfig.getParameter<double>("minTrailMuPt",4.0)),                                                                                                                                                                                                                                 
-minDimuonMass_  (iConfig.getParameter<double>("minDimuonMass",0.0)),
-maxDimuonMass_  (iConfig.getParameter<double>("maxDimuonMass",12.0)),
+minPhotonPt_ (iConfig.getParameter<double>("minPhotonPt")),
+minLeadingMuPt_ (iConfig.getParameter<double>("minLeadingMuPt")),
+minTrailMuPt_   (iConfig.getParameter<double>("minTrailMuPt")),                                                                                                                                                                                                                                 
+minDimuonMass_  (iConfig.getParameter<double>("minDimuonMass")),
+maxDimuonMass_  (iConfig.getParameter<double>("maxDimuonMass")),
 
 // L1 Configs    
 configName_ (iConfig.getParameter< std::string > ("configName")),
