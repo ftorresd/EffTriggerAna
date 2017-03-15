@@ -69,6 +69,13 @@ class AODTriggerAnalyzer : public edm::EDAnalyzer {
 		double maxMuEta;
 		double muonLeadPt, muonTrailPt;
 
+        //HLT Configs
+        double minPhotonPt; 
+        double minLeadingMuPt; 
+        double minTrailMuPt;                                                                                                                                                                                                                                   
+        double minDimuonMass;  
+        double maxDimuonMass;  
+
 		// L1 Configs
 		bool l1MuonOS_;
 		bool l1MuonIso_;
@@ -99,7 +106,13 @@ AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
 	maxMuEta (iConfig.getUntrackedParameter<double>("maxMuEta",2.4)), 
 	muonLeadPt (iConfig.getUntrackedParameter<double>("minMuonLeadPt",20.0)),
 	muonTrailPt (iConfig.getUntrackedParameter<double>("minMuonTrailPt",4.0)),
-
+ 
+    // HLT Configs
+    minPhotonPt (iConfig.getUntrackedParameter<double>("minPhotonPt",12.0)),
+    minLeadingMuPt (iConfig.getUntrackedParameter<double>("minLeadingMuPt",6.0)),
+    minTrailMuPt   (iConfig.getUntrackedParameter<double>("minTrailMuPt",4.0)),                                                                                                                                                                                                                                 
+    minDimuonMass  (iConfig.getUntrackedParameter<double>("minDimuonMass",0.0)),
+    maxDimuonMass  (iConfig.getUntrackedParameter<double>("maxDimuonMass",12.0)),
 
 	// L1 Configs
 	l1MuonOS_ (iConfig.getParameter< bool > ("l1MuonOS")),
@@ -154,6 +167,10 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
 	trigger::TriggerObjectCollection muonL3Objects = filterFinder(triggerSummaryLabel_, muonFilterTag_, iEvent);
 	trigger::TriggerObjectCollection photonL3Objects = filterFinder(triggerSummaryLabel_, photonFilterTag_, iEvent);
 
+        //trigger::TriggerObjectCollection allTriggerObjects = triggerSummary->getObjects();
+        //trigger::TriggerObjectCollection hltMuons = selectTriggerObjects(allTriggerObjects, *triggerSummary, hltCuts);
+
+
 	// HLT Test
 	bool hltTest = hltFilter(muonL3Objects, photonL3Objects, iEvent);
 	if (verbose) std::cout << "hltTest: " << hltTest << std::endl;
@@ -192,17 +209,40 @@ AODTriggerAnalyzer::filterFinder(edm::EDGetTokenT<trigger::TriggerEvent> trigger
 AODTriggerAnalyzer::hltFilter(trigger::TriggerObjectCollection muonL3Objects, trigger::TriggerObjectCollection photonL3Objects, const edm::Event &iEvent)
 {
 	// L3 Muons
+	std::vector<float> ptMuon, etaMuon, phiMuon;
+    double DoubleMuMass=-1.0;
 	for (trigger::TriggerObjectCollection::const_iterator it = muonL3Objects.begin(); it != muonL3Objects.end(); it++) {
 		if(it->pt() >= 0 ) {
 			if (verbose) std::cout << "HLT Muon: " << it->pt() << std::endl;
 		}
-	}  
+         ptMuon.push_back(it->pt());
+         etaMuon.push_back(it->eta());
+         phiMuon.push_back(it->phi());
+         if (ptMuon.size()>1) {
+             math::PtEtaPhiMLorentzVectorD* mu1 = new math::PtEtaPhiMLorentzVectorD(ptMuon[0],etaMuon[0],phiMuon[0],0.106);
+             math::PtEtaPhiMLorentzVectorD* mu2 = new math::PtEtaPhiMLorentzVectorD(ptMuon[1],etaMuon[1],phiMuon[1],0.106);
+             (*mu1)+=(*mu2);
+             DoubleMuMass=(mu1->M());
+             if (verbose) std::cout << "HLT DoubleMuMass: " << DoubleMuMass << std::endl;
+             if((mu1->Pt()<minLeadingMuPt) && (mu2->Pt()< minTrailMuPt)) continue ;
+             if (DoubleMuMass < minDimuonMass && minDimuonMass > maxDimuonMass)continue;
+          
+                 
+            }
+             
+        }
+	  
 
 	// L3 Photons
+	std::vector<float> ptPhoton, etaPhoton, phiPhoton;
 	for (trigger::TriggerObjectCollection::const_iterator it = photonL3Objects.begin(); it != photonL3Objects.end(); it++) {
 		if(it->pt() >= 0 ) {
 			if (verbose) std::cout << "HLT Photon: " << it->pt() << std::endl;
 		}
+		ptPhoton.push_back(it->pt());
+        etaPhoton.push_back(it->eta());
+        phiPhoton.push_back(it->phi());
+        if(it->pt() < minPhotonPt )continue;
 	} 
 	return true;
 }
