@@ -225,55 +225,59 @@ AODTriggerAnalyzer::filterFinder(edm::EDGetTokenT<trigger::TriggerEvent> trigger
 bool 
 AODTriggerAnalyzer::hltFilter(trigger::TriggerObjectCollection muonL3Objects, trigger::TriggerObjectCollection photonL3Objects, const edm::Event &iEvent)
 {
-  // L3 Muons
-  std::vector<float> ptMuon, etaMuon, phiMuon;
-  double DoubleMuMass=-1.0;
-  for (trigger::TriggerObjectCollection::const_iterator it = muonL3Objects.begin(); it != muonL3Objects.end(); it++) {
-    if(it->pt() >= 0 ) {
-      if (verbose_) std::cout << "HLT Muon: " << it->pt() << std::endl;
-    }
-    ptMuon.push_back(it->pt());
-    etaMuon.push_back(it->eta());
-    phiMuon.push_back(it->phi());
-    if (ptMuon.size()>1) {
-     math::PtEtaPhiMLorentzVectorD* mu1 = new math::PtEtaPhiMLorentzVectorD(ptMuon[0],etaMuon[0],phiMuon[0],0.106);
-     math::PtEtaPhiMLorentzVectorD* mu2 = new math::PtEtaPhiMLorentzVectorD(ptMuon[1],etaMuon[1],phiMuon[1],0.106);
-     (*mu1)+=(*mu2);
-     DoubleMuMass=(mu1->M());
-     if (verbose_) std::cout << "HLT DoubleMuMass: " << DoubleMuMass << std::endl;
-     if((mu1->Pt()<minLeadingMuPt_) && (mu2->Pt()< minTrailMuPt_)) continue ;
-     if (DoubleMuMass < maxDimuonMass_ && minDimuonMass_ > DoubleMuMass)continue;
-   }
- }
 
+  bool hltFilter_ = false;
+
+  // L3 Muons
+  std::vector<trigger::TriggerObject> hltMuonsVec;
+  for (trigger::TriggerObjectCollection::const_iterator it = muonL3Objects.begin(); it != muonL3Objects.end(); it++) {
+    hltMuonsVec.push_back(*it);
+  }
+
+  std::sort(hltMuonsVec.begin(),hltMuonsVec.end(), [](const trigger::TriggerObject &a, const trigger::TriggerObject &b){
+    return a.pt() > b.pt();
+  });
+
+  if (hltMuonsVec.size() >= 2) {
+    trigger::TriggerObject leadingMuon = hltMuonsVec.at(0);
+    trigger::TriggerObject trailingMuon = hltMuonsVec.at(1);
+    math::PtEtaPhiMLorentzVectorD* mu1 = new math::PtEtaPhiMLorentzVectorD(leadingMuon.pt(),leadingMuon.eta(),leadingMuon.phi(),0.106);
+    math::PtEtaPhiMLorentzVectorD* mu2 = new math::PtEtaPhiMLorentzVectorD(trailingMuon.pt(),trailingMuon.eta(),trailingMuon.phi(),0.106);
+
+    double DoubleMuMass=( (*mu1+*mu2)->M() );
+    if (verbose_) std::cout << "HLT DoubleMuMass: " << DoubleMuMass << std::endl;
+    if ((mu1->Pt() >= minLeadingMuPt_) && (mu2->Pt() >= minTrailMuPt_) ) hltFilter_ = true else return false ;
+    if (DoubleMuMass < maxDimuonMass_ && minDimuonMass_ < DoubleMuMass)  hltFilter_ = true else return false ;
+  } else {
+    return false;
+  }
 
 // L3 Photons
- std::vector<float> ptPhoton, etaPhoton, phiPhoton;
- for (trigger::TriggerObjectCollection::const_iterator it = photonL3Objects.begin(); it != photonL3Objects.end(); it++) {
-  if(it->pt() >= 0 ) {
-    if (verbose_) std::cout << "HLT Photon: " << it->pt() << std::endl;
+  std::vector<trigger::TriggerObject> hltPhotonsVec;
+  // std::vector<float> ptPhoton, etaPhoton, phiPhoton;
+  for (trigger::TriggerObjectCollection::const_iterator it = photonL3Objects.begin(); it != photonL3Objects.end(); it++) {
+    // if(it->pt() >= 0 ) {
+    //   if (verbose_) std::cout << "HLT Photon: " << it->pt() << std::endl;
+    // }
+    // ptPhoton.push_back(it->pt());
+    // etaPhoton.push_back(it->eta());
+    // phiPhoton.push_back(it->phi());
+    // if(it->pt() < minPhotonPt_ )continue;
+    hltPhotonsVec.push_back(*it)
   }
-  ptPhoton.push_back(it->pt());
-  etaPhoton.push_back(it->eta());
-  phiPhoton.push_back(it->phi());
-  if(it->pt() < minPhotonPt_ )continue;
-} 
-return true;
 
-//   // L3 Muons
-//   for (trigger::TriggerObjectCollection::const_iterator it = muonL3Objects.begin(); it != muonL3Objects.end(); it++) {
-//     if(it->pt() >= 0 ) {
-//       // std::cout << "HLT Muon: " << it->pt() << std::endl;
-//     }
-//   }  
+  std::sort(hltPhotonsVec.begin(),hltPhotonsVec.end(), [](const trigger::TriggerObject &a, const trigger::TriggerObject &b){
+    return a.pt() > b.pt();
+  });
 
-// // L3 Photons
-//   for (trigger::TriggerObjectCollection::const_iterator it = photonL3Objects.begin(); it != photonL3Objects.end(); it++) {
-//     if(it->pt() >= 0 ) {
-//       // std::cout << "HLT Photon: " << it->pt() << std::endl;
-//     }
-//   } 
-//   return true;
+  if (hltPhotonsVec.size() >= 1) {
+    if(hltPhotonsVec.at(0).pt() >= minPhotonPt_ ) hltFilter_ = true else return false ;
+  } else {
+    return false
+  }
+
+
+  return hltFilter_;
 }
 
 
