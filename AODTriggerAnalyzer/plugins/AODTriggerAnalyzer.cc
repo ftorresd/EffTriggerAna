@@ -118,14 +118,21 @@ AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
   // nEvtsHistosMap["h_HLT"+configName_] = fs->make<TH1D>( ("h_HLT").c_str() , ("h_HLT;  ; NEvts").c_str(), 1, 0., 1.);
   // nEvtsHistosMap["h_RECO"+configName_] = fs->make<TH1D>( ("h_RECO").c_str() , ("h_RECO;  ; NEvts").c_str(), 1, 0., 1.);
   // nEvtsHistosMap["h_HLTRECO"+configName_] = fs->make<TH1D>( ("h_HLTRECO_").c_str() , ("h_HLTRECO;  ; NEvts").c_str(), 1, 0., 1.);
-  // for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
   TH1D::SetDefaultSumw2 ();  
+  // for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
   for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
     std::string histoNameSufix = configName_+"_EG_"+std::to_string((int) *j);
     nEvtsHistosMap["h_L1_"+histoNameSufix] = fs->make<TH1D>( ("h_L1_"+histoNameSufix).c_str() , ("h_L1_"+histoNameSufix+";  Pt (GeV); Eff").c_str(), 80, 0., 80.);
     nEvtsHistosMap["h_L1RECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1RECO_"+histoNameSufix).c_str() , ("h_L1RECO_"+histoNameSufix+";  Pt (GeV); Eff").c_str(), 80, 0., 80.);
     nEvtsHistosMap["h_L1HLT_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLT_"+histoNameSufix).c_str() , ("h_L1HLT_"+histoNameSufix+";  Pt (GeV); Eff").c_str(), 80, 0., 80.);
     nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLTRECO_"+histoNameSufix).c_str() , ("h_L1HLTRECO_"+histoNameSufix+";  Pt (GeV); Eff").c_str(), 80, 0., 80.);
+  }
+  for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
+    std::string histoNameSufix = configName_+"_DoubleMu_"+std::to_string((int) *i);
+    nEvtsHistosMap["h_L1_"+histoNameSufix] = fs->make<TH1D>( ("h_L1_"+histoNameSufix).c_str() , ("h_L1_"+histoNameSufix+";  Pt (GeV); Eff").c_str(), 30, 0., 30.);
+    nEvtsHistosMap["h_L1RECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1RECO_"+histoNameSufix).c_str() , ("h_L1RECO_"+histoNameSufix+";  Pt (GeV); Eff").c_str(), 30, 0., 30.);
+    nEvtsHistosMap["h_L1HLT_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLT_"+histoNameSufix).c_str() , ("h_L1HLT_"+histoNameSufix+";  Pt (GeV); Eff").c_str(), 30, 0., 30.);
+    nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLTRECO_"+histoNameSufix).c_str() , ("h_L1HLTRECO_"+histoNameSufix+";  Pt (GeV); Eff").c_str(), 30, 0., 30.);
   }
   // }
   // TEfficiency * v_teste1 = fs->make<TEfficiency>("eff","my efficiency;x;#epsilon",20,0,10);
@@ -192,17 +199,20 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
     for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
       for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
         bool l1Test = l1Filter(l1Muons, l1EGammas, *i, *j, iEvent);
+        // EG histos
         std::string histoNameSufix = configName_+"_EG_"+std::to_string((int) *j);
         if (l1Test == true) nEvtsHistosMap["h_L1_"+histoNameSufix]->Fill(*i);
         if (recoTest == true && l1Test == true) nEvtsHistosMap["h_L1RECO_"+histoNameSufix]->Fill(*i);
         if (hltTest == true && l1Test == true) nEvtsHistosMap["h_L1HLT_"+histoNameSufix]->Fill(*i);
         if (hltTest == true && recoTest == true && l1Test == true) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Fill(*i);
+        // mu histos
+        histoNameSufix = configName_+"_DoubleMu_"+std::to_string((int) *i);
+        if (l1Test == true) nEvtsHistosMap["h_L1_"+histoNameSufix]->Fill(*j);
+        if (recoTest == true && l1Test == true) nEvtsHistosMap["h_L1RECO_"+histoNameSufix]->Fill(*j);
+        if (hltTest == true && l1Test == true) nEvtsHistosMap["h_L1HLT_"+histoNameSufix]->Fill(*j);
+        if (hltTest == true && recoTest == true && l1Test == true) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Fill(*j);
       }
     }
-
-
-
-
 }
 
 //find the filters
@@ -438,6 +448,7 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
 void 
 AODTriggerAnalyzer::endJob() 
 {
+  // eg histos
   // for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
   for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ) {
     std::string histoNameSufix = configName_+"_EG_"+std::to_string((int) *j);
@@ -447,6 +458,14 @@ AODTriggerAnalyzer::endJob()
     if (nEvtsHLTRECO != 0) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Scale(1.0/nEvtsHLTRECO);
   }
   // }
+  // mu histos
+  for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
+    std::string histoNameSufix = configName_+"_DoubleMu_"+std::to_string((int) *i);
+    if (nEvts != 0) nEvtsHistosMap["h_L1_"+histoNameSufix]->Scale(1.0/nEvts);
+    if (nEvtsRECO != 0) nEvtsHistosMap["h_L1RECO_"+histoNameSufix]->Scale(1.0/nEvtsRECO);
+    if (nEvtsHLT != 0) nEvtsHistosMap["h_L1HLT_"+histoNameSufix]->Scale(1.0/nEvtsHLT);
+    if (nEvtsHLTRECO != 0) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Scale(1.0/nEvtsHLTRECO);
+  }
 }
 
 //define this as a plug-in
