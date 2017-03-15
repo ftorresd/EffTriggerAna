@@ -159,7 +159,7 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
 
 
     bool l1Test = l1Filter(l1Muons, l1EGammas, 0.0, 0.0, iEvent);
-    std::cout << "l1Test: " << l1Test << std::endl;
+    // std::cout << "l1Test: " << l1Test << std::endl;
 
     // Define L3 Objects
     trigger::TriggerObjectCollection muonL3Objects = filterFinder(triggerSummaryLabel_, muonFilterTag_, iEvent);
