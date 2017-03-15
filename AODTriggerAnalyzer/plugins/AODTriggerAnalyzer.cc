@@ -174,12 +174,12 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
     // std::cout << "recoTest: " << recoTest << std::endl;
 
     // L1 Test    
-    for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
-      for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
+    // for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
+    //   for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
         // bool l1Test = l1Filter(l1Muons, l1EGammas, *i, *j, iEvent);
         // std::cout << "l1Test: " << l1Test << std::endl;
-      }
-    }
+    //   }
+    // }
 
 
     for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
