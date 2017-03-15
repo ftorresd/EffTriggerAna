@@ -164,11 +164,11 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
 
     // HLT Test
     bool hltTest = hltFilter(muonL3Objects, photonL3Objects, iEvent);
-    std::cout << "hltTest: " << hltTest << std::endl;
+    // std::cout << "hltTest: " << hltTest << std::endl;
 
     // RECO Test
     bool recoTest = recoFilter(recoMuons, recoPhotons, iEvent);
-    std::cout << "recoTest: " << recoTest << std::endl;
+    // std::cout << "recoTest: " << recoTest << std::endl;
 
     // L1 Test    
     for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
@@ -177,6 +177,20 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
         // std::cout << "l1Test: " << l1Test << std::endl;
       }
     }
+
+
+    for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
+      for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
+        bool l1Test = l1Filter(l1Muons, l1EGammas, *i, *j, iEvent);
+        std::string histoNameSufix = configName_+"_"+std::to_string((int) *i)+"_"+std::to_string((int) *j);
+        nEvtsHistosMap["h_L1_"+histoNameSufix]->Fill(l1Test,*i);
+        if (recoTest == true) nEvtsHistosMap["h_L1RECO_"+histoNameSufix]->Fill(l1Test,*i);
+        if (hltTest == true) nEvtsHistosMap["h_L1HLT_"+histoNameSufix]->Fill(l1Test,*i);
+        if (hltTest == true && recoTest == true) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Fill(l1Test,*i);
+      }
+    }
+
+
 
 
 }
