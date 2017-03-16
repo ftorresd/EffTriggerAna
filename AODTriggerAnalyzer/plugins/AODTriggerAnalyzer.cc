@@ -409,6 +409,7 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
   bool l1Filter_ = false;
 
   // L1 Muons
+  // ref: https://github.com/cms-sw/cmssw/blob/master/L1Trigger/L1TNtuples/src/L1AnalysisL1Upgrade.cc
   std::vector<l1t::Muon> l1MuonsVec;
   for (int ibx = l1Muons->getFirstBX(); ibx <= l1Muons->getLastBX(); ++ibx) {
     for (BXVector<l1t::Muon>::const_iterator it=l1Muons->begin(); it!=l1Muons->end(); it++){
@@ -443,20 +444,22 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
 
 
   // L1 EGammas
+  // ref: https://github.com/cms-sw/cmssw/blob/master/L1Trigger/L1TNtuples/src/L1AnalysisL1Upgrade.cc
   std::vector<l1t::EGamma> l1EGammasVec;
   for (int ibx = l1EGammas->getFirstBX(); ibx <= l1EGammas->getLastBX(); ++ibx) {
     for (BXVector<l1t::EGamma>::const_iterator it=l1EGammas->begin(); it!=l1EGammas->end(); it++){
       if (it->pt() >= 0){
         l1EGammasVec.push_back(*it);
+        std::cout << "EGamaa Iso: " << it->hwIso() << std::endl;
         // std::cout << "L1 EGamma: " << it->pt() << std::endl;
-        // l1upgrade_.egEt .push_back(it->pt());
+        // l1upgrade_.egEt.push_back(it->pt());
         // l1upgrade_.egEta.push_back(it->eta());
         // l1upgrade_.egPhi.push_back(it->phi());
-        // l1upgrade_.egIEt .push_back(it->hwPt());
+        // l1upgrade_.egIEt.push_back(it->hwPt());
         // l1upgrade_.egIEta.push_back(it->hwEta());
         // l1upgrade_.egIPhi.push_back(it->hwPhi());
         // l1upgrade_.egIso.push_back(it->hwIso());
-        // l1upgrade_.egBx .push_back(ibx);
+        // l1upgrade_.egBx.push_back(ibx);
         // l1upgrade_.egTowerIPhi.push_back(it->towerIPhi());
         // l1upgrade_.egTowerIEta.push_back(it->towerIEta());
         // l1upgrade_.egRawEt.push_back(it->rawEt());
@@ -497,21 +500,17 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
   l1t::Muon trailingMuon = l1MuonsVec.at(1);
 
   // Muons OS
-  if (l1MuonOS_ == true && (leadingMuon.charge() != trailingMuon.charge()) ) {
-    l1Filter_ = true;
-  } else if (l1MuonOS_ == false && (leadingMuon.charge() == trailingMuon.charge()) ) {
-    l1Filter_ = true;
+  if (l1MuonOS_ == true && (leadingMuon.charge() == trailingMuon.charge()) ) {
+    return false
   } else {
-    return false;
+    l1Filter_ = true;
   }
 
   // Muons Iso
-  if ( (l1MuonIso_ == true && leadingMuon.hwIso() == 1) && (l1MuonIso_ == true && trailingMuon.hwIso() == 1) ) {
-    l1Filter_ = true;
-  } else if ( (l1MuonIso_ == false && leadingMuon.hwIso() != 1) && (l1MuonIso_ == false && trailingMuon.hwIso() != 1) ) {
-    l1Filter_ = true;
-  } else {
+  if (l1MuonIso_ == true && leadingMuon.hwIso() != 1 && trailingMuon.hwIso() != 1) {
     return false;
+  } else {
+    l1Filter_ = true;
   }
 
   // Muon Qlt
@@ -536,12 +535,11 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
       // std::cout << leadingEGamma.pt() << std::endl;
       // std::cout << leadingEGamma.hwIso() << std::endl;
       // EGamma Iso
-      if (l1EGammaIso_ == true && leadingEGamma.hwIso() == 1) {
+      if (l1EGammaIso_ == true && leadingEGamma.hwIso() != 1) {
+        // l1Filter_ = true;
+        return false
+      } else  {
         l1Filter_ = true;
-      } else if (l1EGammaIso_ == false && leadingEGamma.hwIso() != 1) {
-        l1Filter_ = true;
-      } else {
-        return false;
       }
       // EGamma Pt
       if (leadingEGamma.pt() >= egammaPtCut) {
