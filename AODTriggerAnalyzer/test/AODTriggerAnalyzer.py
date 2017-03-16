@@ -16,7 +16,7 @@ process.TFileService = cms.Service ('TFileService',
 )
 
 process.Zerobias = cms.EDAnalyzer("AODTriggerAnalyzer",
-    verbose = cms.bool(True),
+    verbose = cms.bool(False),
     configName = cms.string("Zerobias"),
     bits = cms.InputTag("TriggerResults","","HLT"),
     # HLT Configs
