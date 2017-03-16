@@ -200,13 +200,13 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
   for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
     for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
       bool l1Test = l1Filter(l1Muons, l1EGammas, *i, *j, iEvent);
-        // EG histos
+      // EG histos
       std::string histoNameSufix = configName_+"_EG_"+std::to_string((int) *j);
       if (l1Test == true) nEvtsHistosMap["h_L1_"+histoNameSufix]->Fill(*i);
       if (recoTest == true && l1Test == true) nEvtsHistosMap["h_L1RECO_"+histoNameSufix]->Fill(*i);
       if (hltTest == true && l1Test == true) nEvtsHistosMap["h_L1HLT_"+histoNameSufix]->Fill(*i);
       if (hltTest == true && recoTest == true && l1Test == true) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Fill(*i);
-        // mu histos
+      // DoubleMu histos
       histoNameSufix = configName_+"_DoubleMu_"+std::to_string((int) *i);
       if (l1Test == true) nEvtsHistosMap["h_L1_"+histoNameSufix]->Fill(*j);
       if (recoTest == true && l1Test == true) nEvtsHistosMap["h_L1RECO_"+histoNameSufix]->Fill(*j);
@@ -519,7 +519,7 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
     return false;
   }
 
-   // Muon Pt
+  // Muon Pt
   if (leadingMuon.pt() >= muonPtCut && trailingMuon.pt() >= muonPtCut) {
     l1Filter_ = true;
   } else {
@@ -555,6 +555,7 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
   } else {
     // std::cout << "Vetor vazio" << std::endl;
     l1Filter_ = true;
+    // return false;
   }
 
   // return filtering result
