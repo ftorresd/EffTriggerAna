@@ -484,6 +484,8 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
   // l1EGammaIso_
   // l1EGammaPt_
 
+  if (configName_ == "Zerobias") return true;
+
   // N muons
   if (l1MuonsVec.size() >= 2 && l1MuonsVec.size() >= l1MuonN_) {
     l1Filter_ = true;
@@ -495,9 +497,9 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
   l1t::Muon trailingMuon = l1MuonsVec.at(1);
 
   // Muons OS
-  if (l1MuonOS_ == true && (leadingMuon.charge() * trailingMuon.charge() < 0) ) {
+  if (l1MuonOS_ == true && (leadingMuon.charge() != trailingMuon.charge()) ) {
     l1Filter_ = true;
-  } else if (l1MuonOS_ == false && (leadingMuon.charge() * trailingMuon.charge() > 0) ) {
+  } else if (l1MuonOS_ == false && (leadingMuon.charge() == trailingMuon.charge()) ) {
     l1Filter_ = true;
   } else {
     return false;

@@ -1,6 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 
-process = cms.Process("EffAna")
+process = cms.Process("L1EffAna")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
@@ -15,9 +15,9 @@ process.TFileService = cms.Service ('TFileService',
     fileName = cms.string ('efficiency.root')
 )
 
-process.effana1 = cms.EDAnalyzer("AODTriggerAnalyzer",
-    verbose = cms.bool(True),
-    configName = cms.string("effana1"),
+process.zerobias = cms.EDAnalyzer("AODTriggerAnalyzer",
+    verbose = cms.bool(False),
+    configName = cms.string("Zerobias"),
     bits = cms.InputTag("TriggerResults","","HLT"),
     # HLT Configs
     minPhotonPt = cms.double(12.0),
@@ -58,11 +58,17 @@ process.effana1 = cms.EDAnalyzer("AODTriggerAnalyzer",
     photonFilterTag = cms.InputTag ("hltL3crIsoL1sMu20L1f0L2f10QL3f22QL3trkIsoFiltered0p09","","HLT"),
 )
 
-process.effana2 = process.effana1.clone(
+process.effana1 = process.Zerobias.clone(
     configName = cms.string("effana2"),
+    # L1 Configs - Muons
+    l1MuonN = cms.uint32(2),
+    l1MuonOS = cms.bool(True),
+    l1MuonIso = cms.bool(False),
+    # L1 Configs - EGammas
     l1EGammaN = cms.uint32(0),
-)
+    l1EGammaIso = cms.bool(False),
+    )
 
 
-process.p = cms.Path(process.effana1 + process.effana2)
+process.p = cms.Path(process.Zerobias + process.effana1)
 # process.p = cms.Path(process.demo1 + process.demo2)
