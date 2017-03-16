@@ -15,7 +15,7 @@ process.TFileService = cms.Service ('TFileService',
     fileName = cms.string ('efficiency.root')
 )
 
-process.zerobias = cms.EDAnalyzer("AODTriggerAnalyzer",
+process.Zerobias = cms.EDAnalyzer("AODTriggerAnalyzer",
     verbose = cms.bool(False),
     configName = cms.string("Zerobias"),
     bits = cms.InputTag("TriggerResults","","HLT"),
