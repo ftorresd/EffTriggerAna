@@ -58,7 +58,7 @@ process.effana1 = cms.EDAnalyzer("AODTriggerAnalyzer",
     photonFilterTag = cms.InputTag ("hltL3crIsoL1sMu20L1f0L2f10QL3f22QL3trkIsoFiltered0p09","","HLT"),
 )
 
-process.effana2 = process.effana1
+process.effana2 = process.effana1.clone
 process.effana2.configName.configName = cms.string("effana2")
 process.effana2.configName.l1EGammaN = cms.uint32(0)
 
