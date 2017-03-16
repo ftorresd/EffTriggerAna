@@ -274,7 +274,7 @@ AODTriggerAnalyzer::hltFilter(trigger::TriggerObjectCollection muonL3Objects, tr
   std::vector<trigger::TriggerObject> hltPhotonsVec;
    // std::vector<float> ptPhoton, etaPhoton, phiPhoton;
   std::cout << "### Photon ###" << std::endl;
-  std::cout << "### HLT_Photon_Size: " << photonL3Objects->size() << std::endl;
+  std::cout << "### HLT_Photon_Size: " << photonL3Objects.size() << std::endl;
   for (trigger::TriggerObjectCollection::const_iterator it = photonL3Objects.begin(); it != photonL3Objects.end(); it++) {
     // if(it->pt() >= 0 ) {
     //   if (verbose_) std::cout << "HLT Photon: " << it->pt() << std::endl;
