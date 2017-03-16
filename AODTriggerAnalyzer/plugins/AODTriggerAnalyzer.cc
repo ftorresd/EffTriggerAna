@@ -327,23 +327,23 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
   if (myLeptons.size() == 2 && myLeptons.size() !=0) {
     //recoFilter_ = true;
     nDimuon++;
-    std::cout<<"  Muons Multiplicity:  " << myLeptons.size() << std::endl; 
-    std::cout<<" Dimuons Multiplicity:  " << nDimuon << std::endl;
+    if(verbose_) std::cout<<"  Muons Multiplicity:  " << myLeptons.size() << std::endl; 
+    if(verbose_) std::cout<<" Dimuons Multiplicity:  " << nDimuon << std::endl;
     reco::Muon leadingMuon = myLeptons[0];
     reco::Muon trailingMuon = myLeptons[1];
     //Dimuons  selection
     if ((leadingMuon.charge() != trailingMuon.charge())) {
     } else {return false;}
 
-    std::cout<< "Leading Muon pt, eta, phi, charge = " << leadingMuon.pt() << " "<< leadingMuon.eta() << " "<< leadingMuon.phi() << " " << leadingMuon.charge() << std::endl;
-    std::cout<< "Trailing Muon  pt, eta, phi,charge = " << trailingMuon.pt() << " " << trailingMuon.eta() << " " << trailingMuon.phi() << " " << trailingMuon.charge()<< std::endl;
+    if(verbose_) std::cout<< "Leading Muon pt, eta, phi, charge = " << leadingMuon.pt() << " "<< leadingMuon.eta() << " "<< leadingMuon.phi() << " " << leadingMuon.charge() << std::endl;
+    if(verbose_) std::cout<< "Trailing Muon  pt, eta, phi,charge = " << trailingMuon.pt() << " " << trailingMuon.eta() << " " << trailingMuon.phi() << " " << trailingMuon.charge()<< std::endl;
 
     //Invariant mass of dimuons
     double Mll = (leadingMuon.p4() + trailingMuon.p4()).mass();
     double MllpT = (leadingMuon.p4() + trailingMuon.p4()).pt();
     double Mlleta = (leadingMuon.p4() + trailingMuon.p4()).eta();
     double Mllphi = (leadingMuon.p4() + trailingMuon.p4()).phi();
-    std::cout<< "Dimuons Invariant Mass Mll, pT, eta, phi: " << Mll << " " << MllpT << " " << Mlleta << " " << Mllphi << std::endl;
+    if(verbose_) std::cout<< "Dimuons Invariant Mass Mll, pT, eta, phi: " << Mll << " " << MllpT << " " << Mlleta << " " << Mllphi << std::endl;
     if (leadingMuon.pt() > muonLeadPt_ || trailingMuon.pt() > muonTrailPt_ ) {
 
       // ***
@@ -352,8 +352,8 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
       //
       if (Mll > minJPsiMass_ && Mll < maxJPsiMass_){
         nJpsi++;                           
-        std::cout<<" Invariant Mass in JPsi peak, pT, eta, phi " << Mll << " " << MllpT << " " << Mlleta << " " << Mllphi << std::endl;
-        std::cout<<" Jpsi Multiplicity:  " <<  nJpsi << std::endl;
+        if(verbose_) std::cout<<" Invariant Mass in JPsi peak, pT, eta, phi " << Mll << " " << MllpT << " " << Mlleta << " " << Mllphi << std::endl;
+        if(verbose_) std::cout<<" Jpsi Multiplicity:  " <<  nJpsi << std::endl;
       }// jpsi selection
     }//lead and trail muon pT cut
 
@@ -372,19 +372,20 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
 
     if (  myPhotons.size() == 1 && myPhotons.size() != 0 ){
       nPhoton++;
-      std::cout<<" Photon Multiplicity:  " <<  nPhoton << std::endl;
+      if(verbose_) std::cout<<" Photon Multiplicity:  " <<  nPhoton << std::endl;
       reco::Photon Gamma = myPhotons[0];         
       DeltaR<reco::Muon, reco::Photon> deltaR;
       double drLeadMuPhoton = deltaR(leadingMuon,Gamma);
       double drTrailPhoton = deltaR(trailingMuon,Gamma);
-      std::cout << " photon: pT, eta, phi " << Gamma.pt() << " "<< Gamma.eta() << " " << Gamma.phi() <<std::endl;                         std::cout<< " DeltaR(LeadMu,Photon) " << drLeadMuPhoton << " DeltaR(TrailMu,Photon) " << drTrailPhoton <<std::endl;
+      if(verbose_) std::cout << " photon: pT, eta, phi " << Gamma.pt() << " "<< Gamma.eta() << " " << Gamma.phi() <<std::endl;                         
+      if(verbose_) std::cout<< " DeltaR(LeadMu,Photon) " << drLeadMuPhoton << " DeltaR(TrailMu,Photon) " << drTrailPhoton <<std::endl;
       if (drLeadMuPhoton > drLeadMuPhotonSel_ && drTrailPhoton > drTrailPhotonSel_){
 
         double Mllg = (leadingMuon.p4() + trailingMuon.p4() + Gamma.p4()).mass();
         double MllgpT = (leadingMuon.p4() + trailingMuon.p4() + Gamma.p4()).pt();
         double Mllgeta = (leadingMuon.p4() + trailingMuon.p4() + Gamma.p4()).eta();
         double Mllgphi = (leadingMuon.p4() + trailingMuon.p4() + Gamma.p4()).phi();    
-        std::cout<< "Invariant Mass Mllg, pT, eta, phi: " << Mllg << " " << MllgpT << " " << Mllgeta << " " << Mllgphi << std::endl;  
+        if(verbose_) std::cout<< "Invariant Mass Mllg, pT, eta, phi: " << Mllg << " " << MllgpT << " " << Mllgeta << " " << Mllgphi << std::endl;  
 
 
       }// deltaR cuts 
