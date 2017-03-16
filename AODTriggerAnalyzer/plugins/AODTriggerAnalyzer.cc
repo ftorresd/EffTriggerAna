@@ -311,7 +311,7 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
     if (muon->isPFMuon()){
       if (muon->isTrackerMuon() || muon->isGlobalMuon()){
         // if (verbose_) std::cout << muon->charge() << std::endl;
-        if (muon->pt() < minMuPt_ && std::abs(muon->eta()) < maxMuEta_){
+        if (muon->pt() > minMuPt_ && std::abs(muon->eta()) < maxMuEta_){
           myLeptons.push_back(*muon);
           // if(verbose_) cout<<"REcoMuon "<<muon->pt()<<endl;
         }  //eta and pt muon
