@@ -43,15 +43,15 @@ process.effana1 = cms.EDAnalyzer("AODTriggerAnalyzer",
     recoMuonsLabel = cms.InputTag("muons"),
     recoPhotonsLabel = cms.InputTag("photons"),
     # RECO Configs
-    minMuPt = cms.untracked.double(2.0),# in GeV
-    maxMuEta = cms.untracked.double(2.4),
-    minMuonLeadPt = cms.untracked.double(20.0),# in GeV
-    minMuonTrailPt = cms.untracked.double(4.0), # in GeV
-    GammaMinPtCut = cms.untracked.double(0.1),# in GeV
-    DeltaRLeadMuPhotonSel = cms.untracked.double(1.0),# deltaR>DeltaRLeadMuPhotonSel
-    DeltaRTrailPhotonSel  = cms.untracked.double(1.0),# deltaR>DeltaRTrailPhotonSel 
-    minJPsiMass = cms.untracked.double(2.95),# in GeV
-    maxJPsiMass = cms.untracked.double(3.25),# in GeV    
+    minMuPt = cms.double(2.0),# in GeV
+    maxMuEta = cms.double(2.4),
+    minMuonLeadPt = cms.double(20.0),# in GeV
+    minMuonTrailPt = cms.double(4.0), # in GeV
+    GammaMinPtCut = cms.double(0.1),# in GeV
+    DeltaRLeadMuPhotonSel = cms.double(1.0),# deltaR>DeltaRLeadMuPhotonSel
+    DeltaRTrailPhotonSel  = cms.double(1.0),# deltaR>DeltaRTrailPhotonSel 
+    minJPsiMass = cms.double(2.95),# in GeV
+    maxJPsiMass = cms.double(3.25),# in GeV    
     #HLT Labels
     triggerSummaryLabel = cms.InputTag("hltTriggerSummaryAOD","","HLT"),
     muonFilterTag = cms.InputTag ("hltL3crIsoL1sMu20L1f0L2f10QL3f22QL3trkIsoFiltered0p09","","HLT"),
