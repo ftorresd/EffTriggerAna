@@ -266,12 +266,12 @@ AODTriggerAnalyzer::hltFilter(trigger::TriggerObjectCollection muonL3Objects, tr
     hltPhotonsVec.push_back(*it);
   }
 
-  std::sort(hltPhotonsVec.begin(),hltPhotonsVec.end(), [](const trigger::TriggerObject &a, const trigger::TriggerObject &b){
+  std::sort(hltPhotonsVec.begin(), hltPhotonsVec.end(), [](const trigger::TriggerObject &a, const trigger::TriggerObject &b){
     return a.pt() > b.pt();
   });
 
   if (hltPhotonsVec.size() >= 1) {
-    if(hltPhotonsVec.at(0).pt() >= minPhotonPt_ ) hltFilter_ = true; else return false ;
+    if ( hltPhotonsVec.at(0).pt() >= minPhotonPt_ ) hltFilter_ = true; else return false ;
   } else {
     return false;
   }
@@ -284,21 +284,101 @@ AODTriggerAnalyzer::hltFilter(trigger::TriggerObjectCollection muonL3Objects, tr
 bool 
 AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, edm::Handle< reco::PhotonCollection > recoPhotons, const edm::Event &iEvent)
 {
+  int nDimuon=0, nJpsi=0, nPhoton=0;       
+  std::vector<reco::Muon> myLeptons;
+  std::vector<reco::Photon> myPhotons; 
   // Reco Muons
-  for (reco::MuonCollection::const_iterator it = recoMuons->begin(); it != recoMuons->end(); it++) {
-    if(it->pt() >= 0 ) {
-      // std::cout << "Reco Muon: " << it->pt() << std::endl;
-    }
-  }  
+  for (reco::MuonCollection::const_iterator muon = recoMuons->begin(); muon != recoMuons->end(); muon++) {
+    if (muon->isPFMuon()){
+      if (muon->isTrackerMuon() || muon->isGlobalMuon()){
+        if (verbose) std::cout << muon->charge() << std::endl;
+        if (muon->pt()<minMuPt && std::abs(muon->eta())<maxMuEta){
+          myLeptons.push_back(*muon);
+          if(verbose) cout<<"Muon "<<muon->pt()<<endl;
+        }  //eta and pt muon
+      }  //muon type selection
+    }  //PF muon
+  }// Muon loop
 
-// Reco Photons
-  for (reco::PhotonCollection::const_iterator it = recoPhotons ->begin(); it != recoPhotons->end(); it++) {
-    if(it->pt() >= 0 ) {
-      // std::cout << "Reco Photon: " << it->pt() << std::endl;
+  std::sort(myLeptons.begin(),myLeptons.end(), [](const reco::Muon &a, const reco::Muon &b){
+    return a.pt() > b.pt();
+  });
+
+  if(verbose) std::cout<<" myLeptons.size() all  " << myLeptons.size() << std::endl;
+  // bimuon selection
+  if (myLeptons.size() == 2 && myLeptons.size() !=0) {
+    //recoFilter_ = true;
+    nDimuon++;
+    std::cout<<"  Muons Multiplicity:  " << myLeptons.size() << std::endl; 
+    std::cout<<" Dimuons Multiplicity:  " << nDimuon << std::endl;
+    reco::Muon leadingMuon = myLeptons[0];
+    reco::Muon trailingMuon = myLeptons[1];
+    //Dimuons  selection
+    if ((leadingMuon.charge() != trailingMuon.charge())) {
+    } else {return false;}
+
+    std::cout<< "Leading Muon pt, eta, phi, charge = " << leadingMuon.pt() << " "<< leadingMuon.eta() << " "<< leadingMuon.phi() << " " << leadingMuon.charge() << std::endl;
+    std::cout<< "Trailing Muon  pt, eta, phi,charge = " << trailingMuon.pt() << " " << trailingMuon.eta() << " " << trailingMuon.phi() << " " << trailingMuon.charge()<< std::endl;
+
+    //Invariant mass of dimuons
+    double Mll = (leadingMuon.p4() + trailingMuon.p4()).mass();
+    double MllpT = (leadingMuon.p4() + trailingMuon.p4()).pt();
+    double Mlleta = (leadingMuon.p4() + trailingMuon.p4()).eta();
+    double Mllphi = (leadingMuon.p4() + trailingMuon.p4()).phi();
+    std::cout<< "Dimuons Invariant Mass Mll, pT, eta, phi: " << Mll << " " << MllpT << " " << Mlleta << " " << Mllphi << std::endl;
+    if (leadingMuon.pt() > muonLeadPt || trailingMuon.pt() > muonTrailPt ) {
+
+      // ***
+      //   // jpsi peak
+      //     // ***
+      //
+      if (Mll > minJPsiMass && Mll < maxJPsiMass){
+        nJpsi++;                           
+        std::cout<<" Invariant Mass in JPsi peak, pT, eta, phi " << Mll << " " << MllpT << " " << Mlleta << " " << Mllphi << std::endl;
+        std::cout<<" Jpsi Multiplicity:  " <<  nJpsi << std::endl;
+      }// jpsi selection
+    }//lead and trail muon pT cut
+
+
+    // Reco Photons
+    for (reco::PhotonCollection::const_iterator photon = recoPhotons ->begin(); photon != recoPhotons->end(); photon++) {
+      if(photon->pt() > GammaMinPtCut && photon->isPhoton()) {
+        myPhotons.push_back(*photon);                       
+        if(verbose) std::cout << "Reco Photon: " << photon->pt() << std::endl;
+      }
     }
-  } 
+
+    std::sort(myPhotons.begin(),myPhotons.end(), [](const reco::Photon &a, const reco::Photon &b){
+      return a.pt() > b.pt();
+    });
+
+    if (  myPhotons.size() == 1 && myPhotons.size() != 0 ){
+      nPhoton++;
+      std::cout<<" Photon Multiplicity:  " <<  nPhoton << std::endl;
+      reco::Photon Gamma = myPhotons[0];         
+      DeltaR<reco::Muon, reco::Photon> deltaR;
+      double drLeadMuPhoton = deltaR(leadingMuon,Gamma);
+      double drTrailPhoton = deltaR(trailingMuon,Gamma);
+      std::cout << " photon: pT, eta, phi " << Gamma.pt() << " "<< Gamma.eta() << " " << Gamma.phi() <<std::endl;                         std::cout<< " DeltaR(LeadMu,Photon) " << drLeadMuPhoton << " DeltaR(TrailMu,Photon) " << drTrailPhoton <<std::endl;
+      if (drLeadMuPhoton > drLeadMuPhotonSel && drTrailPhoton > drTrailPhotonSel){
+
+        double Mllg = (leadingMuon.p4() + trailingMuon.p4() + Gamma.p4()).mass();
+        double MllgpT = (leadingMuon.p4() + trailingMuon.p4() + Gamma.p4()).pt();
+        double Mllgeta = (leadingMuon.p4() + trailingMuon.p4() + Gamma.p4()).eta();
+        double Mllgphi = (leadingMuon.p4() + trailingMuon.p4() + Gamma.p4()).phi();    
+        std::cout<< "Invariant Mass Mllg, pT, eta, phi: " << Mllg << " " << MllgpT << " " << Mllgeta << " " << Mllgphi << std::endl;  
+
+
+      }// deltaR cuts 
+
+    } else {return false;}//photon selection
+
+
+  } else {return false;}//dimuons selection
+
+  ////////////////// 
   return true;
-}
+}//end RecoFilter
 
 
 
