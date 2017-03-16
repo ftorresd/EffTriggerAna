@@ -64,5 +64,5 @@ process.effana2 = process.effana1.clone(
 )
 
 
-process.p = cms.Path(process.effana1)
+process.p = cms.Path(process.effana1 + process.effana2)
 # process.p = cms.Path(process.demo1 + process.demo2)
