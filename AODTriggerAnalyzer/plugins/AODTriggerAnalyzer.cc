@@ -501,7 +501,7 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
 
   // Muons OS
   if (l1MuonOS_ == true && (leadingMuon.charge() == trailingMuon.charge()) ) {
-    return false
+    return false;
   } else {
     l1Filter_ = true;
   }
@@ -537,7 +537,7 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
       // EGamma Iso
       if (l1EGammaIso_ == true && leadingEGamma.hwIso() != 1) {
         // l1Filter_ = true;
-        return false
+        return false;
       } else  {
         l1Filter_ = true;
       }
