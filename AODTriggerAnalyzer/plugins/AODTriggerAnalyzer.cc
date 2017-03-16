@@ -302,7 +302,7 @@ AODTriggerAnalyzer::hltFilter(trigger::TriggerObjectCollection muonL3Objects, tr
 bool 
 AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, edm::Handle< reco::PhotonCollection > recoPhotons, const edm::Event &iEvent)
 {
-  int nDimuon=0, nJpsi=0, nPhoton=0;       
+  int nDimuon = 0, nJpsi = 0, nPhoton = 0;       
   std::vector<reco::Muon> myLeptons;
   std::vector<reco::Photon> myPhotons; 
 
@@ -311,7 +311,7 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
     if (muon->isPFMuon()){
       if (muon->isTrackerMuon() || muon->isGlobalMuon()){
         if (verbose_) std::cout << muon->charge() << std::endl;
-        if (muon->pt()<minMuPt_ && std::abs(muon->eta())<maxMuEta_){
+        if (muon->pt() < minMuPt_ && std::abs(muon->eta()) < maxMuEta_){
           myLeptons.push_back(*muon);
           if(verbose_) cout<<"Muon "<<muon->pt()<<endl;
         }  //eta and pt muon
@@ -346,7 +346,7 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
     double Mlleta = (leadingMuon.p4() + trailingMuon.p4()).eta();
     double Mllphi = (leadingMuon.p4() + trailingMuon.p4()).phi();
     if(verbose_) std::cout<< "Dimuons Invariant Mass Mll, pT, eta, phi: " << Mll << " " << MllpT << " " << Mlleta << " " << Mllphi << std::endl;
-    if (leadingMuon.pt() > muonLeadPt_ || trailingMuon.pt() > muonTrailPt_ ) {
+    if (leadingMuon.pt() >= muonLeadPt_ || trailingMuon.pt() >= muonTrailPt_ ) {
 
       // ***
       //   // jpsi peak
@@ -356,8 +356,8 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
         nJpsi++;                           
         if(verbose_) std::cout<<" Invariant Mass in JPsi peak, pT, eta, phi " << Mll << " " << MllpT << " " << Mlleta << " " << Mllphi << std::endl;
         if(verbose_) std::cout<<" Jpsi Multiplicity:  " <<  nJpsi << std::endl;
-      }// jpsi selection
-    }//lead and trail muon pT cut
+      } else {return false;}// jpsi selection
+    } else {return false;}//lead and trail muon pT cut
 
 
     // Reco Photons
@@ -388,7 +388,7 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
         double Mllgeta = (leadingMuon.p4() + trailingMuon.p4() + Gamma.p4()).eta();
         double Mllgphi = (leadingMuon.p4() + trailingMuon.p4() + Gamma.p4()).phi();    
         if(verbose_) std::cout<< "Invariant Mass Mllg, pT, eta, phi: " << Mllg << " " << MllgpT << " " << Mllgeta << " " << Mllgphi << std::endl;  
-      }// deltaR cuts 
+      } else {return false;}// deltaR cuts 
     } else {return false;}//photon selection
   } else {return false;}//dimuons selection
   ////////////////// 
