@@ -310,10 +310,10 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
   for (reco::MuonCollection::const_iterator muon = recoMuons->begin(); muon != recoMuons->end(); muon++) {
     if (muon->isPFMuon()){
       if (muon->isTrackerMuon() || muon->isGlobalMuon()){
-        if (verbose_) std::cout << muon->charge() << std::endl;
+        // if (verbose_) std::cout << muon->charge() << std::endl;
         if (muon->pt() < minMuPt_ && std::abs(muon->eta()) < maxMuEta_){
           myLeptons.push_back(*muon);
-          if(verbose_) cout<<"Muon "<<muon->pt()<<endl;
+          // if(verbose_) cout<<"REcoMuon "<<muon->pt()<<endl;
         }  //eta and pt muon
       }  //muon type selection
     }  //PF muon
@@ -323,14 +323,14 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
     return a.pt() > b.pt();
   });
 
-  if(verbose_) std::cout<<" myLeptons.size() all  " << myLeptons.size() << std::endl;
+  if(verbose_) std::cout<<"RECO myLeptons.size() all  " << myLeptons.size() << std::endl;
   
   // dimuon selection
   if (myLeptons.size() >= 2) {
     //recoFilter_ = true;
     nDimuon++;
-    if(verbose_) std::cout<<"  Muons Multiplicity:  " << myLeptons.size() << std::endl; 
-    if(verbose_) std::cout<<" Dimuons Multiplicity:  " << nDimuon << std::endl;
+    if(verbose_) std::cout<<"RECO  Muons Multiplicity:  " << myLeptons.size() << std::endl; 
+    // if(verbose_) std::cout<<"RECO Dimuons Multiplicity:  " << nDimuon << std::endl;
     reco::Muon leadingMuon = myLeptons[0];
     reco::Muon trailingMuon = myLeptons[1];
     //Dimuons  selection
@@ -355,7 +355,7 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
       if (Mll > minJPsiMass_ && Mll < maxJPsiMass_){
         nJpsi++;                           
         if(verbose_) std::cout<<" Invariant Mass in JPsi peak, pT, eta, phi " << Mll << " " << MllpT << " " << Mlleta << " " << Mllphi << std::endl;
-        if(verbose_) std::cout<<" Jpsi Multiplicity:  " <<  nJpsi << std::endl;
+        // if(verbose_) std::cout<<" Jpsi Multiplicity:  " <<  nJpsi << std::endl;
       } else {return false;}// jpsi selection
     } else {return false;}//lead and trail muon pT cut
 
@@ -364,7 +364,7 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
     for (reco::PhotonCollection::const_iterator photon = recoPhotons ->begin(); photon != recoPhotons->end(); photon++) {
       if(photon->pt() > GammaMinPtCut_ && photon->isPhoton()) {
         myPhotons.push_back(*photon);                       
-        if(verbose_) std::cout << "Reco Photon: " << photon->pt() << std::endl;
+        // if(verbose_) std::cout << "RECO Photon: " << photon->pt() << std::endl;
       }
     }
 
