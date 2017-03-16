@@ -323,6 +323,11 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
     return a.pt() > b.pt();
   });
 
+  // Print Reco Muons
+  for (std::vector< reco::Muon >::const_iterator muon = myLeptons.begin(); muon != myLeptons.end(); muon++) {
+    if(verbose_) std::cout<<"RECO myLeptons.Pt:  " << *muon.pt() << std::endl;
+  }// Muon loop
+
   if(verbose_) std::cout<<"RECO myLeptons.size() all  " << myLeptons.size() << std::endl;
   
   // dimuon selection
