@@ -282,6 +282,7 @@ AODTriggerAnalyzer::hltFilter(trigger::TriggerObjectCollection muonL3Objects, tr
     // phiPhoton.push_back(it->phi());
     // if(it->pt() < minPhotonPt_ )continue;
     hltPhotonsVec.push_back(*it);
+    if (verbose_) std::cout << "HLT Photon Pt: " << it->pt() << std::endl;
   }
 
   std::sort(hltPhotonsVec.begin(), hltPhotonsVec.end(), [](const trigger::TriggerObject &a, const trigger::TriggerObject &b){
@@ -450,7 +451,7 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
     for (BXVector<l1t::EGamma>::const_iterator it=l1EGammas->begin(); it!=l1EGammas->end(); it++){
       if (it->pt() >= 0){
         l1EGammasVec.push_back(*it);
-        std::cout << "EGamaa Iso: " << it->hwIso() << std::endl;
+        // std::cout << "EGamaa Iso: " << it->hwIso() << std::endl;
         // std::cout << "L1 EGamma: " << it->pt() << std::endl;
         // l1upgrade_.egEt.push_back(it->pt());
         // l1upgrade_.egEta.push_back(it->eta());
@@ -487,6 +488,7 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
   // l1EGammaIso_
   // l1EGammaPt_
 
+  // ZB condition
   if (configName_ == "Zerobias") return true;
 
   // N muons
