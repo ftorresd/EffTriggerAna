@@ -305,6 +305,7 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
   int nDimuon=0, nJpsi=0, nPhoton=0;       
   std::vector<reco::Muon> myLeptons;
   std::vector<reco::Photon> myPhotons; 
+
   // Reco Muons
   for (reco::MuonCollection::const_iterator muon = recoMuons->begin(); muon != recoMuons->end(); muon++) {
     if (muon->isPFMuon()){
@@ -323,8 +324,9 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
   });
 
   if(verbose_) std::cout<<" myLeptons.size() all  " << myLeptons.size() << std::endl;
-  // bimuon selection
-  if (myLeptons.size() == 2 && myLeptons.size() !=0) {
+  
+  // dimuon selection
+  if (myLeptons.size() >= 2) {
     //recoFilter_ = true;
     nDimuon++;
     if(verbose_) std::cout<<"  Muons Multiplicity:  " << myLeptons.size() << std::endl; 
@@ -370,7 +372,7 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
       return a.pt() > b.pt();
     });
 
-    if (  myPhotons.size() == 1 && myPhotons.size() != 0 ){
+    if (  myPhotons.size() >= 1 ) {
       nPhoton++;
       if(verbose_) std::cout<<" Photon Multiplicity:  " <<  nPhoton << std::endl;
       reco::Photon Gamma = myPhotons[0];         
@@ -386,16 +388,11 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
         double Mllgeta = (leadingMuon.p4() + trailingMuon.p4() + Gamma.p4()).eta();
         double Mllgphi = (leadingMuon.p4() + trailingMuon.p4() + Gamma.p4()).phi();    
         if(verbose_) std::cout<< "Invariant Mass Mllg, pT, eta, phi: " << Mllg << " " << MllgpT << " " << Mllgeta << " " << Mllgphi << std::endl;  
-
-
       }// deltaR cuts 
-
     } else {return false;}//photon selection
-
-
   } else {return false;}//dimuons selection
-
   ////////////////// 
+
   return true;
 }//end RecoFilter
 
