@@ -16,7 +16,7 @@ process.TFileService = cms.Service ('TFileService',
 )
 
 process.effana1 = cms.EDAnalyzer("AODTriggerAnalyzer",
-    verbose = cms.bool(False),
+    verbose = cms.bool(True),
     configName = cms.string("effana"),
     bits = cms.InputTag("TriggerResults","","HLT"),
     # HLT Configs
