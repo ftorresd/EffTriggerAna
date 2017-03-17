@@ -119,5 +119,5 @@ process.DoubleMu_X_OS_IsoEG_Y = process.Zerobias.clone(
     l1EGammaIso = cms.bool(True),
     )
 
-process.p = cms.Path(process.Zerobias + process.DoubeMu_X + process.DoubeMu_X_OS + process.DoubeMu_X_EG_Y + process.DoubeMu_X_OS_EG_Y + process.DoubeMu_X_IsoEG_Y + process.DoubeMu_X_OS_IsoEG)
+process.p = cms.Path(process.Zerobias + process.DoubleMu_X + process.DoubleMu_X_OS + process.DoubleMu_X_EG_Y + process.DoubleMu_X_OS_EG_Y + process.DoubleMu_X_IsoEG_Y + process.DoubleMu_X_OS_IsoEG)
 # process.p = cms.Path(process.demo1 + process.demo2)
