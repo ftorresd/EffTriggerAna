@@ -159,10 +159,10 @@ l1EGammaPt_ (iConfig.getParameter< std::vector<double> > ("l1EGammaPt"))
   // eg histos
   for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
     std::string histoNameSufix = configName_+"_DoubleMu_"+std::to_string((int) *i);
-    nEvtsHistosMap["h_L1_"+histoNameSufix] = fs->make<TH1D>( ("h_L1_"+histoNameSufix).c_str() , ("h_L1_"+histoNameSufix+";  EGamma Pt Cut (GeV); Efficiency").c_str(), 30, 0., 30.);
-    nEvtsHistosMap["h_L1RECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1RECO_"+histoNameSufix).c_str() , ("h_L1RECO_"+histoNameSufix+";  EGamma Pt Cut (GeV); Efficiency").c_str(), 30, 0., 30.);
-    nEvtsHistosMap["h_L1HLT_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLT_"+histoNameSufix).c_str() , ("h_L1HLT_"+histoNameSufix+";  EGamma Pt Cut (GeV); Efficiency").c_str(), 30, 0., 30.);
-    nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLTRECO_"+histoNameSufix).c_str() , ("h_L1HLTRECO_"+histoNameSufix+";  EGamma Pt Cut (GeV); Efficiency").c_str(), 30, 0., 30.);
+    nEvtsHistosMap["h_L1_"+histoNameSufix] = fs->make<TH1D>( ("h_L1_"+histoNameSufix).c_str() , ("h_L1_"+histoNameSufix+";  EGamma Pt Cut (GeV); Efficiency").c_str(), 50, 0., 50.);
+    nEvtsHistosMap["h_L1RECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1RECO_"+histoNameSufix).c_str() , ("h_L1RECO_"+histoNameSufix+";  EGamma Pt Cut (GeV); Efficiency").c_str(), 50, 0., 50.);
+    nEvtsHistosMap["h_L1HLT_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLT_"+histoNameSufix).c_str() , ("h_L1HLT_"+histoNameSufix+";  EGamma Pt Cut (GeV); Efficiency").c_str(), 50, 0., 50.);
+    nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLTRECO_"+histoNameSufix).c_str() , ("h_L1HLTRECO_"+histoNameSufix+";  EGamma Pt Cut (GeV); Efficiency").c_str(), 50, 0., 50.);
   }
 }
 
