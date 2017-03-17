@@ -55,12 +55,22 @@ process.Zerobias = cms.EDAnalyzer("AODTriggerAnalyzer",
     #HLT Labels
     triggerSummaryLabel = cms.InputTag("hltTriggerSummaryAOD","","HLT"),
     muonFilterTag = cms.InputTag ("hltDoubleMuon0L3PreFiltered0","","HLT"),
-    # photonFilterTag = cms.InputTag ("hltEG22HEFilter","","HLT"),
-    photonFilterTag = cms.InputTag ("hltEGL1SingleEG18Filter","","HLT"),
+    photonFilterTag = cms.InputTag ("hltEG22HEFilter","","HLT"),
+    # photonFilterTag = cms.InputTag ("hltEGL1SingleEG18Filter","","HLT"),
 )
 
-process.effana1 = process.Zerobias.clone(
-    configName = cms.string("effana2"),
+process.DoubeMu_X = process.Zerobias.clone(
+    configName = cms.string("DoubeMu_X"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(False),
+    l1MuonIso = cms.bool(False),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(0),
+    l1EGammaIso = cms.bool(False),
+    )
+
+process.DoubeMu_X_OS = process.Zerobias.clone(
+    configName = cms.string("DoubeMu_X_OS"),
     # L1 Configs - Muons
     l1MuonOS = cms.bool(True),
     l1MuonIso = cms.bool(False),
@@ -69,6 +79,45 @@ process.effana1 = process.Zerobias.clone(
     l1EGammaIso = cms.bool(False),
     )
 
+process.DoubeMu_X_EG_Y = process.Zerobias.clone(
+    configName = cms.string("DoubeMu_X_EG_Y"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(False),
+    l1MuonIso = cms.bool(False),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(1),
+    l1EGammaIso = cms.bool(False),
+    )
 
-process.p = cms.Path(process.Zerobias + process.effana1)
+process.DoubeMu_X_OS_EG_Y = process.Zerobias.clone(
+    configName = cms.string("DoubeMu_X_OS_EG_Y"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(True),
+    l1MuonIso = cms.bool(False),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(1),
+    l1EGammaIso = cms.bool(False),
+    )
+
+process.DoubeMu_X_IsoEG_Y = process.Zerobias.clone(
+    configName = cms.string("DoubeMu_X_EG_Y"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(False),
+    l1MuonIso = cms.bool(False),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(1),
+    l1EGammaIso = cms.bool(True),
+    )
+
+process.DoubeMu_X_OS_IsoEG_Y = process.Zerobias.clone(
+    configName = cms.string("DoubeMu_X_OS_EG_Y"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(True),
+    l1MuonIso = cms.bool(False),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(1),
+    l1EGammaIso = cms.bool(True),
+    )
+
+process.p = cms.Path(process.DoubeMu_X + process.DoubeMu_X_OS + process.DoubeMu_X_EG_Y + process.DoubeMu_X_OS_EG_Y + process.DoubeMu_X_IsoEG_Y + process.DoubeMu_X_OS_IsoEG)
 # process.p = cms.Path(process.demo1 + process.demo2)

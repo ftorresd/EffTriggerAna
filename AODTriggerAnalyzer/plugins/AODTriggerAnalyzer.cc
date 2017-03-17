@@ -147,7 +147,7 @@ l1EGammaPt_ (iConfig.getParameter< std::vector<double> > ("l1EGammaPt"))
   nEvtsHLTRECO = 0;
 
   // Define Histos
-  TH1D::SetDefaultSumw2 ();  
+  TH1D::SetDefaultSumw2();  
   // eg mu
   for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
     std::string histoNameSufix = configName_+"_EG_"+std::to_string((int) *j);
@@ -273,8 +273,8 @@ AODTriggerAnalyzer::hltFilter(trigger::TriggerObjectCollection muonL3Objects, tr
 // L3 Photons
   std::vector<trigger::TriggerObject> hltPhotonsVec;
    // std::vector<float> ptPhoton, etaPhoton, phiPhoton;
-  std::cout << "### Photon ###" << std::endl;
-  std::cout << "### HLT_Photon_Size: " << photonL3Objects.size() << std::endl;
+  // std::cout << "### Photon ###" << std::endl;
+  // std::cout << "### HLT_Photon_Size: " << photonL3Objects.size() << std::endl;
   for (trigger::TriggerObjectCollection::const_iterator it = photonL3Objects.begin(); it != photonL3Objects.end(); it++) {
     // if(it->pt() >= 0 ) {
     //   if (verbose_) std::cout << "HLT Photon: " << it->pt() << std::endl;
@@ -284,9 +284,9 @@ AODTriggerAnalyzer::hltFilter(trigger::TriggerObjectCollection muonL3Objects, tr
     // phiPhoton.push_back(it->phi());
     // if(it->pt() < minPhotonPt_ )continue;
     hltPhotonsVec.push_back(*it);
-    std::cout << "HLT_Photon_Pt: " << it->pt() << std::endl;
+    // std::cout << "HLT_Photon_Pt: " << it->pt() << std::endl;
   }
-  std::cout << "### (end) Photon ###" << std::endl;
+  // std::cout << "### (end) Photon ###" << std::endl;
   
   std::sort(hltPhotonsVec.begin(), hltPhotonsVec.end(), [](const trigger::TriggerObject &a, const trigger::TriggerObject &b){
     return a.pt() > b.pt();
