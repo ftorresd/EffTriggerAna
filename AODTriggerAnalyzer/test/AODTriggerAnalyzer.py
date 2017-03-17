@@ -55,7 +55,7 @@ process.Zerobias = cms.EDAnalyzer("AODTriggerAnalyzer",
     #HLT Labels
     triggerSummaryLabel = cms.InputTag("hltTriggerSummaryAOD","","HLT"),
     muonFilterTag = cms.InputTag ("hltDoubleMuon0L3PreFiltered0","","HLT"),
-    photonFilterTag = cms.InputTag ("hltEG22HEFilter","","HLT"),
+    # photonFilterTag = cms.InputTag ("hltEG22HEFilter","","HLT"),
     photonFilterTag = cms.InputTag ("hltEGL1SingleEG18Filter","","HLT"),
 )
 
