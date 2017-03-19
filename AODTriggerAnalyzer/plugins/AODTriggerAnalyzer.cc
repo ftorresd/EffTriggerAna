@@ -609,7 +609,7 @@ AODTriggerAnalyzer::endJob()
 //     if (nEvtsHLT != 0) nEvtsHistosMap["h_L1HLT_"+histoNameSufix]->Scale(1.0/nEvtsHLT);
 //     if (nEvtsHLTRECO != 0) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Scale(1.0/nEvtsHLTRECO);
 //   }
-// }
+}
 
 //define this as a plug-in
 DEFINE_FWK_MODULE(AODTriggerAnalyzer);
