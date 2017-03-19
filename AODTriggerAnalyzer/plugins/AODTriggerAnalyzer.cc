@@ -90,10 +90,10 @@ private:
   int nEvtsRECO;
   int nEvtsHLT;
   int nEvtsHLTRECO;
-  TVectorD TnEvts;
-  TVectorD TnEvtsRECO;
-  TVectorD TnEvtsHLT;
-  TVectorD TnEvtsHLTRECO;
+  // TVectorD TnEvts;
+  // TVectorD TnEvtsRECO;
+  // TVectorD TnEvtsHLT;
+  // TVectorD TnEvtsHLTRECO;
 
   // Histos map
   std::map<std::string, TH1D*> nEvtsHistosMap;
@@ -157,7 +157,6 @@ l1EGammaPt_ (iConfig.getParameter< std::vector<double> > ("l1EGammaPt"))
   TnEvtsRECO = fs->make<TVectorD>(1);
   TnEvtsHLT = fs->make<TVectorD>(1);
   TnEvtsHLTRECO = fs->make<TVectorD>(1);
-
 
   // Define Histos
   TH1D::SetDefaultSumw2();  
