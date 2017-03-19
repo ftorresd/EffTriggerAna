@@ -90,10 +90,10 @@ private:
   int nEvtsRECO;
   int nEvtsHLT;
   int nEvtsHLTRECO;
-  // TVectorD TnEvts;
-  // TVectorD TnEvtsRECO;
-  // TVectorD TnEvtsHLT;
-  // TVectorD TnEvtsHLTRECO;
+  TVectorD TnEvts;
+  TVectorD TnEvtsRECO;
+  TVectorD TnEvtsHLT;
+  TVectorD TnEvtsHLTRECO;
 
   // Histos map
   std::map<std::string, TH1D*> nEvtsHistosMap;
