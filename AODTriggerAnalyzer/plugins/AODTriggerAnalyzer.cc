@@ -592,10 +592,10 @@ AODTriggerAnalyzer::endJob()
   *TnEvts[2] = nEvtsHLT;
   *TnEvts[3] = nEvtsHLTRECO;
 
-  std::cout << *TnEvts[0] << std::endl;
-  std::cout << *TnEvts[1] << std::endl;
-  std::cout << *TnEvts[2] << std::endl;
-  std::cout << *TnEvts[3] << std::endl;
+  // std::cout << *TnEvts[0] << std::endl;
+  // std::cout << *TnEvts[1] << std::endl;
+  // std::cout << *TnEvts[2] << std::endl;
+  // std::cout << *TnEvts[3] << std::endl;
 
   
 
