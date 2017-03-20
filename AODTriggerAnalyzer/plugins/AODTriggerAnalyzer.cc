@@ -154,10 +154,10 @@ l1EGammaPt_ (iConfig.getParameter< std::vector<double> > ("l1EGammaPt"))
   nEvtsHLTRECO = 0;
  
   // Books evts counters
-  TnEvts = fs->make<RooInt>();
-  TnEvtsRECO = fs->make<RooInt>();
-  TnEvtsHLT = fs->make<RooInt>();
-  TnEvtsHLTRECO = fs->make<RooInt>();
+  TnEvts = fs->make<RooInt>(0);
+  TnEvtsRECO = fs->make<RooInt>(0);
+  TnEvtsHLT = fs->make<RooInt>(0);
+  TnEvtsHLTRECO = fs->make<RooInt>(0);
 
   // Define Histos
   TH1D::SetDefaultSumw2();  
@@ -205,7 +205,7 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
   bool recoTest = recoFilter(recoMuons, recoPhotons, iEvent);
     // std::cout << "recoTest: " << recoTest << std::endl;
 
-  nEvts++;
+  TnEvts++;
   if (recoTest == true) nEvtsRECO++;
   if (hltTest == true) nEvtsHLT++;
   if (hltTest == true && recoTest == true) nEvtsHLTRECO++;
