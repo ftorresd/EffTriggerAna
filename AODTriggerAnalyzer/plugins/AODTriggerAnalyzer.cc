@@ -154,7 +154,7 @@ l1EGammaPt_ (iConfig.getParameter< std::vector<double> > ("l1EGammaPt"))
   nEvtsHLTRECO = 0;
 
   // Books evts counters
-  TnEvts = fs->make<TVectorD>();
+  TnEvts = fs->make<TVectorD>(4);
   // TnEvtsRECO = fs->make<TVectorD>();
   // TnEvtsHLT = fs->make<TVectorD>();
   // TnEvtsHLTRECO = fs->make<TVectorD>();
