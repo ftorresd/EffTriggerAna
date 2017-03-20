@@ -30,6 +30,7 @@
 
 // #include "TEfficiency.h"
 #include "TVectorD.h"
+#include "RooInt.h"
 
 
 class AODTriggerAnalyzer : public edm::EDAnalyzer {
@@ -90,10 +91,10 @@ private:
   int nEvtsRECO;
   int nEvtsHLT;
   int nEvtsHLTRECO;
-  TVectorD * TnEvts;
-  // TVectorD * TnEvtsRECO;
-  // TVectorD * TnEvtsHLT;
-  // TVectorD * TnEvtsHLTRECO;
+  RooInt * TnEvts;
+  RooInt * TnEvtsRECO;
+  RooInt * TnEvtsHLT;
+  RooInt * TnEvtsHLTRECO;
 
   // Histos map
   std::map<std::string, TH1D*> nEvtsHistosMap;
@@ -153,10 +154,10 @@ l1EGammaPt_ (iConfig.getParameter< std::vector<double> > ("l1EGammaPt"))
   nEvtsHLTRECO = 0;
 
   // Books evts counters
-  TnEvts = fs->make<TVectorD>(4);
-  // TnEvtsRECO = fs->make<TVectorD>(1);
-  // TnEvtsHLT = fs->make<TVectorD>(1);
-  // TnEvtsHLTRECO = fs->make<TVectorD>(1);
+  TnEvts = fs->make<TVectorD>();
+  TnEvtsRECO = fs->make<TVectorD>();
+  TnEvtsHLT = fs->make<TVectorD>();
+  TnEvtsHLTRECO = fs->make<TVectorD>();
 
   // Define Histos
   TH1D::SetDefaultSumw2();  
@@ -587,10 +588,16 @@ AODTriggerAnalyzer::endJob()
 
     // set evts counters
   // TnEvts->SetElements(nEvts, nEvtsRECO, nEvtsHLT, nEvtsHLTRECO)
-  *TnEvts[0] = nEvts;
-  *TnEvts[1] = nEvtsRECO;
-  *TnEvts[2] = nEvtsHLT;
-  *TnEvts[3] = nEvtsHLTRECO;
+  // *TnEvts[0] = nEvts;
+  // *TnEvts[1] = nEvtsRECO;
+  // *TnEvts[2] = nEvtsHLT;
+  // *TnEvts[3] = nEvtsHLTRECO;
+
+  TnEvts = nEvts;
+  TnEvtsRECO = nEvtsRECO;
+  TnEvtsHLT = nEvtsHLT;
+  TnEvtsHLTRECO = nEvtsHLTRECO;
+
 
   // std::cout << *TnEvts[0] << std::endl;
   // std::cout << *TnEvts[1] << std::endl;
