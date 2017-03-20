@@ -13,8 +13,8 @@ ROOT.gStyle.SetOptStat(0)
 
 effFiles = {
 	'DYJetsToLL_M-1to10' : ROOT.TFile('efficiency_DYJetsToLL_M-1to10.root'),
-	# 'DYJetsToLL_M-10to50' : 'efficiency_DYJetsToLL_M-10to50.root',
-	# 'DYJetsToLL_M-50' : 'efficiency_DYJetsToLL_M-50.root',
+	# 'DYJetsToLL_M-10to50' : ROOT.TFile('efficiency_DYJetsToLL_M-10to50.root'),
+	# 'DYJetsToLL_M-50' : ROOT.TFile('efficiency_DYJetsToLL_M-50.root'),
 	'ZToJPsiGamma' : ROOT.TFile('efficiency_ZToJPsiGamma.root')
 }
 
@@ -26,6 +26,13 @@ configNames = [
 		"DoubleMu_X_OS_EG_Y",
 		"DoubleMu_X_IsoEG_Y",
      	"DoubleMu_X_OS_IsoEG_Y"
+]
+
+selectionSequences = [
+		"",
+		"HLT",
+		"RECO",
+		"HLTRECO"
 ]
 
 def translateConfigNameToLegend(config, egCut):
@@ -43,14 +50,14 @@ def translateConfigNameToLegend(config, egCut):
 		return "DoubleMu_X_OS_IsoEG_"+str(egCut)
 
 
-def plotEff(file, configNames, egCut):
+def plotEff(file, configNames, egCut, selectionSequence):
 	ROOT.gROOT.Reset()
 	c1 = ROOT.TCanvas("c1","c1",200,10,1050,750);
 	leg = ROOT.TLegend(0.9-.38,0.7,0.9,0.9);
 
 	for index, config in enumerate(configNames):
-		histo = effFiles[file].Get(config).Get("h_L1HLTRECO_"+config+"_EG_"+str(egCut))
-		histo.Scale( 1./(effFiles[file].Get(config).Get("h_nEvtsHLTRECO_"+config).GetBinContent(1) ) )
+		histo = effFiles[file].Get(config).Get("h_L1"+selectionSequence+"_"+config+"_EG_"+str(egCut))
+		histo.Scale( 1./(effFiles[file].Get(config).Get("h_nEvts"+selectionSequence+"_"+config).GetBinContent(1) ) )
 		histo.SetTitle("")
 		histo.SetMarkerStyle(24)
 		histo.SetMarkerColor(index+1)
@@ -68,13 +75,15 @@ def plotEff(file, configNames, egCut):
 	# leg->AddEntry("gr","Graph with error bars","lep");
 	leg.Draw();
 	c1.Update()
-	c1.SaveAs("l1Plots/"+file+"/h_L1HLTRECO_EG_"+str(egCut)+".pdf");
-	c1.SaveAs("l1Plots/"+file+"/h_L1HLTRECO_EG_"+str(egCut)+".png");
+	c1.SaveAs("l1Plots/"+file+"/L1"+selectionSequence+"/h_L1"+selectionSequence+"_EG_"+str(egCut)+".pdf");
+	c1.SaveAs("l1Plots/"+file+"/L1"+selectionSequence+"/h_L1"+selectionSequence+"_EG_"+str(egCut)+".png");
 
 # loop over datasets file
 os.system("rm -rf l1Plots ; mkdir l1Plots")
 for file_ in effFiles:
 	os.system("mkdir l1Plots/"+file_)
-	for egCut in range(51):
-		plotEff(file_, configNames, egCut)
+	for selectionSequence in selectionSequences:
+		os.system("mkdir l1Plots/"+file_+"/L1"+selectionSequence)
+		for egCut in range(51):
+			plotEff(file_, configNames, egCut, selectionSequence)
 
