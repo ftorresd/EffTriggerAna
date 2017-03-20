@@ -152,7 +152,7 @@ l1EGammaPt_ (iConfig.getParameter< std::vector<double> > ("l1EGammaPt"))
   nEvtsRECO = 0;
   nEvtsHLT = 0;
   nEvtsHLTRECO = 0;
-
+ 
   // Books evts counters
   TnEvts = fs->make<RooInt>();
   TnEvtsRECO = fs->make<RooInt>();
