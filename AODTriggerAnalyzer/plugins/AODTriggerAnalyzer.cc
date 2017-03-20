@@ -154,10 +154,10 @@ l1EGammaPt_ (iConfig.getParameter< std::vector<double> > ("l1EGammaPt"))
   nEvtsHLTRECO = 0;
 
   // Books evts counters
-  TnEvts = fs->make<TVectorD>();
-  TnEvtsRECO = fs->make<TVectorD>();
-  TnEvtsHLT = fs->make<TVectorD>();
-  TnEvtsHLTRECO = fs->make<TVectorD>();
+  TnEvts = fs->make<RooInt>();
+  TnEvtsRECO = fs->make<RooInt>();
+  TnEvtsHLT = fs->make<RooInt>();
+  TnEvtsHLTRECO = fs->make<RooInt>();
 
   // Define Histos
   TH1D::SetDefaultSumw2();  
