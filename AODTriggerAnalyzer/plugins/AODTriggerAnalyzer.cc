@@ -11,8 +11,7 @@
 #include "DataFormats/Math/interface/deltaR.h"
 #include "FWCore/Common/interface/TriggerNames.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
-// #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
-// #include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
+
 
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
@@ -29,8 +28,8 @@
 #include "DataFormats/HLTReco/interface/TriggerEvent.h"
 
 // #include "TEfficiency.h"
-#include "TVectorD.h"
-#include "RooInt.h"
+// #include "TVectorD.h"
+// #include "RooInt.h"
 
 
 class AODTriggerAnalyzer : public edm::EDAnalyzer {
@@ -143,7 +142,7 @@ l1EGammaN_ (iConfig.getParameter< unsigned > ("l1EGammaN")),
 l1EGammaIso_ (iConfig.getParameter< bool > ("l1EGammaIso")),
 l1EGammaPt_ (iConfig.getParameter< std::vector<double> > ("l1EGammaPt"))
 
-{
+{ 
   // Histos File
   edm::Service<TFileService> fs;
 
@@ -592,31 +591,6 @@ AODTriggerAnalyzer::endJob()
   TnEvtsHLT->SetBinContent(1, nEvtsHLT);
   TnEvtsHLTRECO->SetBinContent(1, nEvtsHLTRECO);
 
-
-  // std::cout << nEvts << std::endl;
-  // std::cout << nEvtsRECO << std::endl;
-  // std::cout << nEvtsHLT << std::endl;
-  // std::cout <<  << std::endl;
-
-  
-
-//   // eg histos
-//   for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ) {
-//     std::string histoNameSufix = configName_+"_EG_"+std::to_string((int) *j);
-//     if (nEvts != 0) nEvtsHistosMap["h_L1_"+histoNameSufix]->Scale(1.0/nEvts);
-//     if (nEvtsRECO != 0) nEvtsHistosMap["h_L1RECO_"+histoNameSufix]->Scale(1.0/nEvtsRECO);
-//     if (nEvtsHLT != 0) nEvtsHistosMap["h_L1HLT_"+histoNameSufix]->Scale(1.0/nEvtsHLT);
-//     if (nEvtsHLTRECO != 0) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Scale(1.0/nEvtsHLTRECO);
-//   }
-
-//   // mu histos
-//   for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
-//     std::string histoNameSufix = configName_+"_DoubleMu_"+std::to_string((int) *i);
-//     if (nEvts != 0) nEvtsHistosMap["h_L1_"+histoNameSufix]->Scale(1.0/nEvts);
-//     if (nEvtsRECO != 0) nEvtsHistosMap["h_L1RECO_"+histoNameSufix]->Scale(1.0/nEvtsRECO);
-//     if (nEvtsHLT != 0) nEvtsHistosMap["h_L1HLT_"+histoNameSufix]->Scale(1.0/nEvtsHLT);
-//     if (nEvtsHLTRECO != 0) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Scale(1.0/nEvtsHLTRECO);
-//   }
 }
 
 //define this as a plug-in
