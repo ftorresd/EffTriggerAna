@@ -2,3 +2,7 @@
 multiCRAB\.py
 
 *.root
+
+l1Plots/DYJetsToLL_M-1to10/
+
+l1Plots/ZToJPsiGamma/
