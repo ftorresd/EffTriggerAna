@@ -91,14 +91,14 @@ private:
   int nEvtsRECO;
   int nEvtsHLT;
   int nEvtsHLTRECO;
-  TVectorD * TnEvts;
-  TVectorD * TnEvtsRECO;
-  TVectorD * TnEvtsHLT;
-  TVectorD * TnEvtsHLTRECO;
+  TVectorD* TnEvts;
+  TVectorD* TnEvtsRECO;
+  TVectorD* TnEvtsHLT;
+  TVectorD* TnEvtsHLTRECO;
 
   // Histos map
   std::map<std::string, TH1D*> nEvtsHistosMap;
- 
+
 
 };
 
@@ -588,10 +588,10 @@ AODTriggerAnalyzer::endJob()
 
     // set evts counters
   // TnEvts->SetElements(nEvts, nEvtsRECO, nEvtsHLT, nEvtsHLTRECO)
-  TnEvts[0] = nEvts;
-  TnEvts[1] = nEvtsRECO;
-  TnEvts[2] = nEvtsHLT;
-  TnEvts[3] = nEvtsHLTRECO;
+  TnEvts[0] = double(nEvts);
+  TnEvts[1] = double(nEvtsRECO);
+  TnEvts[2] = double(nEvtsHLT);
+  TnEvts[3] = double(nEvtsHLTRECO);
 
   // std::cout << *TnEvts[0] << std::endl;
   // std::cout << *TnEvts[1] << std::endl;
