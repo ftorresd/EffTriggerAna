@@ -91,10 +91,10 @@ private:
   int nEvtsRECO;
   int nEvtsHLT;
   int nEvtsHLTRECO;
-  TVectorD* TnEvts;
-  // TVectorD* TnEvtsRECO;
-  // TVectorD* TnEvtsHLT;
-  // TVectorD* TnEvtsHLTRECO;
+  TH1D* TnEvts;
+  TH1D* TnEvtsRECO;
+  TH1D* TnEvtsHLT;
+  TH1D* TnEvtsHLTRECO;
 
   // Histos map
   std::map<std::string, TH1D*> nEvtsHistosMap;
@@ -154,10 +154,10 @@ l1EGammaPt_ (iConfig.getParameter< std::vector<double> > ("l1EGammaPt"))
   nEvtsHLTRECO = 0;
 
   // Books evts counters
-  TnEvts = fs->make<TVectorD>(4);
-  // TnEvtsRECO = fs->make<TVectorD>();
-  // TnEvtsHLT = fs->make<TVectorD>();
-  // TnEvtsHLTRECO = fs->make<TVectorD>();
+  TnEvts = fs->make<TH1D>( ("h_nEvts_"+configName_).c_str() , ("h_nEvts_"+configName_+";  x; NEvts").c_str(), 1, 0., 1.);
+  TnEvtsRECO = fs->make<TH1D>( ("h_nEvtsRECO"+configName_).c_str() , ("h_nEvtsRECO"+configName_+";  x; nEvtsRECO").c_str(), 1, 0., 1.);
+  TnEvtsHLT = fs->make<TH1D>( ("h_nEvtsHLT_"+configName_).c_str() , ("h_nEvtsHLT_"+configName_+";  x; nEvtsHLT").c_str(), 1, 0., 1.);
+  TnEvtsHLTRECO = fs->make<TH1D>( ("h_nEvtsHLTRECO_"+configName_).c_str() , ("h_nEvtsHLTRECO_"+configName_+";  x; nEvtsHLTRECO").c_str(), 1, 0., 1.);
 
   // Define Histos
   TH1D::SetDefaultSumw2();  
@@ -588,14 +588,10 @@ AODTriggerAnalyzer::endJob()
 
     // set evts counters
   // TnEvts->SetElements(nEvts, nEvtsRECO, nEvtsHLT, nEvtsHLTRECO)
-  TnEvts->Zero();
-  TnEvts->Print();
-  TnEvts[0] = double(nEvts);
-  TnEvts[1] = double(nEvtsRECO);
-  TnEvts[2] = double(nEvtsHLT);
-  TnEvts[3] = double(nEvtsHLTRECO);
-
-    TnEvts->Print();
+  TnEvts->SetBinContent(1, nEvts);
+  TnEvtsRECO->SetBinContent(1, nEvtsRECO);
+  TnEvtsHLT->SetBinContent(1, nEvtsHLT);
+  TnEvtsHLTRECO->SetBinContent(1, nEvtsHLTRECO);
 
 
   // std::cout << nEvts << std::endl;
