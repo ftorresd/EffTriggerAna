@@ -587,15 +587,15 @@ AODTriggerAnalyzer::endJob()
 
     // set evts counters
   // TnEvts->SetElements(nEvts, nEvtsRECO, nEvtsHLT, nEvtsHLTRECO)
-  TnEvts[0] = nEvts;
-  TnEvts[1] = nEvtsRECO;
-  TnEvts[2] = nEvtsHLT;
-  TnEvts[3] = nEvtsHLTRECO;
+  *TnEvts[0] = nEvts;
+  *TnEvts[1] = nEvtsRECO;
+  *TnEvts[2] = nEvtsHLT;
+  *TnEvts[3] = nEvtsHLTRECO;
 
-  std::cout << TnEvts[0] << std::endl;
-  std::cout << TnEvts[1] << std::endl;
-  std::cout << TnEvts[2] << std::endl;
-  std::cout << TnEvts[3] << std::endl;
+  std::cout << *TnEvts[0] << std::endl;
+  std::cout << *TnEvts[1] << std::endl;
+  std::cout << *TnEvts[2] << std::endl;
+  std::cout << *TnEvts[3] << std::endl;
 
   
 
