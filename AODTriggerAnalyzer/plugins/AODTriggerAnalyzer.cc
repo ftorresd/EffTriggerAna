@@ -91,10 +91,10 @@ private:
   int nEvtsRECO;
   int nEvtsHLT;
   int nEvtsHLTRECO;
-  RooInt * TnEvts;
-  RooInt * TnEvtsRECO;
-  RooInt * TnEvtsHLT;
-  RooInt * TnEvtsHLTRECO;
+  TVectorD * TnEvts;
+  TVectorD * TnEvtsRECO;
+  TVectorD * TnEvtsHLT;
+  TVectorD * TnEvtsHLTRECO;
 
   // Histos map
   std::map<std::string, TH1D*> nEvtsHistosMap;
@@ -152,12 +152,12 @@ l1EGammaPt_ (iConfig.getParameter< std::vector<double> > ("l1EGammaPt"))
   nEvtsRECO = 0;
   nEvtsHLT = 0;
   nEvtsHLTRECO = 0;
- 
+
   // Books evts counters
-  TnEvts = fs->make<RooInt>(0);
-  TnEvtsRECO = fs->make<RooInt>(0);
-  TnEvtsHLT = fs->make<RooInt>(0);
-  TnEvtsHLTRECO = fs->make<RooInt>(0);
+  TnEvts = fs->make<TVectorD>();
+  TnEvtsRECO = fs->make<TVectorD>();
+  TnEvtsHLT = fs->make<TVectorD>();
+  TnEvtsHLTRECO = fs->make<TVectorD>();
 
   // Define Histos
   TH1D::SetDefaultSumw2();  
@@ -205,10 +205,10 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
   bool recoTest = recoFilter(recoMuons, recoPhotons, iEvent);
     // std::cout << "recoTest: " << recoTest << std::endl;
 
-  TnEvts++;
-  if (recoTest == true) TnEvtsRECO++;
-  if (hltTest == true) TnEvtsHLT++;
-  if (hltTest == true && recoTest == true) TnEvtsHLTRECO++;
+  nEvts++;
+  if (recoTest == true) nEvtsRECO++;
+  if (hltTest == true) nEvtsHLT++;
+  if (hltTest == true && recoTest == true) nEvtsHLTRECO++;
 
   for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
     for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
@@ -588,16 +588,10 @@ AODTriggerAnalyzer::endJob()
 
     // set evts counters
   // TnEvts->SetElements(nEvts, nEvtsRECO, nEvtsHLT, nEvtsHLTRECO)
-  // *TnEvts[0] = nEvts;
-  // *TnEvts[1] = nEvtsRECO;
-  // *TnEvts[2] = nEvtsHLT;
-  // *TnEvts[3] = nEvtsHLTRECO;
-
-  // TnEvts = nEvts;
-  // TnEvtsRECO = nEvtsRECO;
-  // TnEvtsHLT = nEvtsHLT;
-  // TnEvtsHLTRECO = nEvtsHLTRECO;
-
+  TnEvts[0] = nEvts;
+  TnEvts[1] = nEvtsRECO;
+  TnEvts[2] = nEvtsHLT;
+  TnEvts[3] = nEvtsHLTRECO;
 
   // std::cout << *TnEvts[0] << std::endl;
   // std::cout << *TnEvts[1] << std::endl;
