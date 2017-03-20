@@ -206,9 +206,9 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
     // std::cout << "recoTest: " << recoTest << std::endl;
 
   TnEvts++;
-  if (recoTest == true) nEvtsRECO++;
-  if (hltTest == true) nEvtsHLT++;
-  if (hltTest == true && recoTest == true) nEvtsHLTRECO++;
+  if (recoTest == true) TnEvtsRECO++;
+  if (hltTest == true) TnEvtsHLT++;
+  if (hltTest == true && recoTest == true) TnEvtsHLTRECO++;
 
   for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
     for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
@@ -593,10 +593,10 @@ AODTriggerAnalyzer::endJob()
   // *TnEvts[2] = nEvtsHLT;
   // *TnEvts[3] = nEvtsHLTRECO;
 
-  TnEvts = nEvts;
-  TnEvtsRECO = nEvtsRECO;
-  TnEvtsHLT = nEvtsHLT;
-  TnEvtsHLTRECO = nEvtsHLTRECO;
+  // TnEvts = nEvts;
+  // TnEvtsRECO = nEvtsRECO;
+  // TnEvtsHLT = nEvtsHLT;
+  // TnEvtsHLTRECO = nEvtsHLTRECO;
 
 
   // std::cout << *TnEvts[0] << std::endl;
