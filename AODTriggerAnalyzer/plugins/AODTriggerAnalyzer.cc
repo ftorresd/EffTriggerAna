@@ -155,7 +155,7 @@ l1EGammaPt_ (iConfig.getParameter< std::vector<double> > ("l1EGammaPt"))
 
   // Books evts counters
   TnEvts = fs->make<TH1D>( ("h_nEvts_"+configName_).c_str() , ("h_nEvts_"+configName_+";  x; NEvts").c_str(), 1, 0., 1.);
-  TnEvtsRECO = fs->make<TH1D>( ("h_nEvtsRECO"+configName_).c_str() , ("h_nEvtsRECO"+configName_+";  x; nEvtsRECO").c_str(), 1, 0., 1.);
+  TnEvtsRECO = fs->make<TH1D>( ("h_nEvtsRECO_"+configName_).c_str() , ("h_nEvtsRECO_"+configName_+";  x; nEvtsRECO").c_str(), 1, 0., 1.);
   TnEvtsHLT = fs->make<TH1D>( ("h_nEvtsHLT_"+configName_).c_str() , ("h_nEvtsHLT_"+configName_+";  x; nEvtsHLT").c_str(), 1, 0., 1.);
   TnEvtsHLTRECO = fs->make<TH1D>( ("h_nEvtsHLTRECO_"+configName_).c_str() , ("h_nEvtsHLTRECO_"+configName_+";  x; nEvtsHLTRECO").c_str(), 1, 0., 1.);
 
@@ -587,7 +587,6 @@ AODTriggerAnalyzer::endJob()
 
 
     // set evts counters
-  // TnEvts->SetElements(nEvts, nEvtsRECO, nEvtsHLT, nEvtsHLTRECO)
   TnEvts->SetBinContent(1, nEvts);
   TnEvtsRECO->SetBinContent(1, nEvtsRECO);
   TnEvtsHLT->SetBinContent(1, nEvtsHLT);
