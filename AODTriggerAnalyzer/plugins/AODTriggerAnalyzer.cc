@@ -590,10 +590,10 @@ AODTriggerAnalyzer::endJob()
   // TnEvts->SetElements(nEvts, nEvtsRECO, nEvtsHLT, nEvtsHLTRECO)
   TnEvts->Zero();
   TnEvts->Print();
-  TnEvts[0] = double(nEvts);
-  TnEvts[1] = double(nEvtsRECO);
-  TnEvts[2] = double(nEvtsHLT);
-  TnEvts[3] = double(nEvtsHLTRECO);
+  // TnEvts[0] = double(nEvts);
+  // TnEvts[1] = double(nEvtsRECO);
+  // TnEvts[2] = double(nEvtsHLT);
+  // TnEvts[3] = double(nEvtsHLTRECO);
 
   // std::cout << nEvts << std::endl;
   // std::cout << nEvtsRECO << std::endl;
