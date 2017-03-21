@@ -6,3 +6,11 @@ multiCRAB\.py
 l1Plots/DYJetsToLL_M-1to10/
 
 l1Plots/ZToJPsiGamma/
+
+l1Plots/DYJetsToLL/L1/
+
+l1Plots/DYJetsToLL/L1HLT/
+
+l1Plots/DYJetsToLL/L1HLTRECO/
+
+l1Plots/DYJetsToLL/L1RECO/

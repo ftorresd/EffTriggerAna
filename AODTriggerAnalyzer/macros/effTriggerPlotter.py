@@ -12,23 +12,32 @@ ROOT.TH1.SetDefaultSumw2(True)
 ROOT.gStyle.SetOptStat(0)
 	
 effFilesXSec = {
-	'QCD_MuEnrichedPt5' : [
-				(ROOT.TFile('efficiency_QCD_Pt-15to20_MuEnrichedPt5'), 1.0),
-				(ROOT.TFile('efficiency_QCD_Pt-20to30_MuEnrichedPt5'), 2.0),
-				(ROOT.TFile('efficiency_QCD_Pt-30to50_MuEnrichedPt5'), 2.0),
-				(ROOT.TFile('efficiency_QCD_Pt-50to80_MuEnrichedPt5'), 2.0),
-				(ROOT.TFile('efficiency_QCD_Pt-80to120_MuEnrichedPt5'), 2.0),
-				(ROOT.TFile('efficiency_QCD_Pt-120to170_MuEnrichedPt5'), 2.0)
+	# 'QCD_MuEnrichedPt5' : [
+	# 			(ROOT.TFile('efficiency_QCD_Pt-15to20_MuEnrichedPt5'), 1.27E+09), #pb
+	# 			(ROOT.TFile('efficiency_QCD_Pt-20to30_MuEnrichedPt5'), 5.59E+08), #pb
+	# 			(ROOT.TFile('efficiency_QCD_Pt-30to50_MuEnrichedPt5'), 1.40E+08), #pb
+	# 			(ROOT.TFile('efficiency_QCD_Pt-50to80_MuEnrichedPt5'), 1.92E+07), #pb
+	# 			(ROOT.TFile('efficiency_QCD_Pt-80to120_MuEnrichedPt5'), 2.76E+06), #pb
+	# 			(ROOT.TFile('efficiency_QCD_Pt-120to170_MuEnrichedPt5'), 4.70E+05) #pb
+	# 			],
+	'DYJetsToLL_M-1to10' : [
+				(ROOT.TFile('efficiency_DYJetsToLL_M-1to10.root'), 1.757E+05) #pb
 				],
+	'DYJetsToLL_M-10to50' : [
+				(ROOT.TFile('efficiency_DYJetsToLL_M-10to50.root'), 1.614E+04) #pb
+				],
+	'DYJetsToLL_M-50' : [
+				(ROOT.TFile('efficiency_DYJetsToLL_M-50.root'), 4.895E+03) #pb
+				],									
 	'DYJetsToLL' : [
-				(ROOT.TFile('efficiency_DYJetsToLL_M-1to10.root'), 1.0),
-				(ROOT.TFile('efficiency_DYJetsToLL_M-10to50.root'), 2.0),
-				(ROOT.TFile('efficiency_DYJetsToLL_M-50.root'), 3.0)
+				(ROOT.TFile('efficiency_DYJetsToLL_M-1to10.root'), 1.757E+05), #pb
+				(ROOT.TFile('efficiency_DYJetsToLL_M-10to50.root'), 1.614E+04), #pb
+				(ROOT.TFile('efficiency_DYJetsToLL_M-50.root'), 4.895E+03) #pb
 				],
 	'ZToJPsiGamma' : [
-				(ROOT.TFile('efficiency_ZToJPsiGamma.root'), 1.0)
+				(ROOT.TFile('efficiency_ZToJPsiGamma.root'), 1.881E0) #pb
 				]
-}
+			}
 
 configNames = [
 		# "Zerobias",
@@ -69,11 +78,17 @@ def plotEff(dataset, filesXSec, configNames, egCut, selectionSequence):
 
 	for index, config in enumerate(configNames):
 		histoToPlot = filesXSec[0][0].Get(config).Get("h_L1"+selectionSequence+"_"+config+"_EG_"+str(egCut))
-		histoToPlot.Scale( (filesXSec[0][1]/filesXSec[0][0].Get(config).Get("h_nEvts_"+config).GetBinContent(1))/(filesXSec[0][0].Get(config).Get("h_nEvts"+selectionSequence+"_"+config).GetBinContent(1) ) )
+		# histoToPlot.Scale( (filesXSec[0][1]/filesXSec[0][0].Get(config).Get("h_nEvts_"+config).GetBinContent(1))/(filesXSec[0][0].Get(config).Get("h_nEvts"+selectionSequence+"_"+config).GetBinContent(1) ) )
+		normFactor = (filesXSec[0][1]/filesXSec[0][0].Get(config).Get("h_nEvts_"+config).GetBinContent(1))
+		histoToPlot.Scale( normFactor )
+		nEvtsEff = normFactor * ( filesXSec[0][0].Get(config).Get("h_nEvts"+selectionSequence+"_"+config).GetBinContent(1))
 		for fileXSec in filesXSec[1:]:
 			histo = fileXSec[0].Get(config).Get("h_L1"+selectionSequence+"_"+config+"_EG_"+str(egCut))
-			histo.Scale( (fileXSec[1]/fileXSec[0].Get(config).Get("h_nEvts_"+config).GetBinContent(1))/(fileXSec[0].Get(config).Get("h_nEvts"+selectionSequence+"_"+config).GetBinContent(1) ) )
+			# histo.Scale( (fileXSec[1]/fileXSec[0].Get(config).Get("h_nEvts_"+config).GetBinContent(1))/(fileXSec[0].Get(config).Get("h_nEvts"+selectionSequence+"_"+config).GetBinContent(1) ) )
+			histo.Scale( normFactor )
 			histoToPlot.Add(histo)
+			nEvtsEff += normFactor * ( fileXSec[0].Get(config).Get("h_nEvts"+selectionSequence+"_"+config).GetBinContent(1) )
+		histoToPlot.Scale(1/nEvtsEff)
 		histoToPlot.SetTitle("")
 		histoToPlot.SetMarkerStyle(24)
 		histoToPlot.SetMarkerColor(index+1)
@@ -102,4 +117,3 @@ for dataset in effFilesXSec:
 		os.system("mkdir l1Plots/"+dataset+"/L1"+selectionSequence)
 		for egCut in range(51):
 			plotEff(dataset, effFilesXSec[dataset], configNames, egCut, selectionSequence)
-
