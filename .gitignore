@@ -14,3 +14,7 @@ l1Plots/DYJetsToLL/L1HLT/
 l1Plots/DYJetsToLL/L1HLTRECO/
 
 l1Plots/DYJetsToLL/L1RECO/
+
+*.pdf
+
+*.png

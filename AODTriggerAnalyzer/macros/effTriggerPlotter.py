@@ -88,17 +88,18 @@ def plotEff(dataset, filesXSec, configNames, egCut, selectionSequence):
 			histo.Scale( normFactor )
 			histoToPlot.Add(histo)
 			nEvtsEff += normFactor * ( fileXSec[0].Get(config).Get("h_nEvts"+selectionSequence+"_"+config).GetBinContent(1) )
-		histoToPlot.Scale(1/nEvtsEff)
-		histoToPlot.SetTitle("")
-		histoToPlot.SetMarkerStyle(24)
-		histoToPlot.SetMarkerColor(index+1)
-		histoToPlot.SetMinimum(0.0);
-		histoToPlot.SetMaximum(1.15);
-		histoToPlot.GetXaxis().SetRangeUser(0.0, 40.0)
-  		leg.AddEntry(histoToPlot,translateConfigNameToLegend(config, egCut));
-		histoToPlot.Draw("same")
-		# print "oi"
-		# histo.Print()
+		if (nEvtsEff > 0):
+			histoToPlot.Scale(1.0/nEvtsEff)
+			histoToPlot.SetTitle("")
+			histoToPlot.SetMarkerStyle(24)
+			histoToPlot.SetMarkerColor(index+1)
+			histoToPlot.SetMinimum(0.0);
+			histoToPlot.SetMaximum(1.15);
+			histoToPlot.GetXaxis().SetRangeUser(0.0, 40.0)
+	  		leg.AddEntry(histoToPlot,translateConfigNameToLegend(config, egCut));
+			histoToPlot.Draw("same")
+			# print "oi"
+			# histo.Print()
  
 	# leg->SetHeader("The Legend Title","C"); // option "C" allows to center the header
 	# leg->AddEntry(h1,"Histogram filled with random numbers","f");
