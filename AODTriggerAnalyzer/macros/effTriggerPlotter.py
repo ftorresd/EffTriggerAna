@@ -13,30 +13,30 @@ ROOT.gStyle.SetOptStat(0)
 	
 effFilesXSec = {
 	'QCD_MuEnrichedPt5' : [
-				(ROOT.TFile('efficiency_QCD_Pt-15to20_MuEnrichedPt5'), 1.27E+09), #pb
-				(ROOT.TFile('efficiency_QCD_Pt-20to30_MuEnrichedPt5'), 5.59E+08), #pb
-				(ROOT.TFile('efficiency_QCD_Pt-30to50_MuEnrichedPt5'), 1.40E+08), #pb
-				(ROOT.TFile('efficiency_QCD_Pt-50to80_MuEnrichedPt5'), 1.92E+07), #pb
-				(ROOT.TFile('efficiency_QCD_Pt-80to120_MuEnrichedPt5'), 2.76E+06), #pb
-				(ROOT.TFile('efficiency_QCD_Pt-120to170_MuEnrichedPt5'), 4.70E+05) #pb
+				(ROOT.TFile('efficiency_QCD_Pt-15to20_MuEnrichedPt5.root'), 1.27E+09), #pb
+				(ROOT.TFile('efficiency_QCD_Pt-20to30_MuEnrichedPt5.root'), 5.59E+08), #pb
+				(ROOT.TFile('efficiency_QCD_Pt-30to50_MuEnrichedPt5.root'), 1.40E+08), #pb
+				(ROOT.TFile('efficiency_QCD_Pt-50to80_MuEnrichedPt5.root'), 1.92E+07), #pb
+				(ROOT.TFile('efficiency_QCD_Pt-80to120_MuEnrichedPt5.root'), 2.76E+06), #pb
+				(ROOT.TFile('efficiency_QCD_Pt-120to170_MuEnrichedPt5.root'), 4.70E+05) #pb
 				],
 	'QCD_Pt-15to20_MuEnrichedPt5' : [
-				(ROOT.TFile('efficiency_QCD_Pt-15to20_MuEnrichedPt5') 1.27E+09) #pb
+				(ROOT.TFile('efficiency_QCD_Pt-15to20_MuEnrichedPt5.root') 1.27E+09) #pb
 				],
 	'QCD_Pt-20to30_MuEnrichedPt5' : [
-				(ROOT.TFile('efficiency_QCD_Pt-20to30_MuEnrichedPt5') 5.59E+08) #pb
+				(ROOT.TFile('efficiency_QCD_Pt-20to30_MuEnrichedPt5.root') 5.59E+08) #pb
 				],
 	'QCD_Pt-30to50_MuEnrichedPt5' : [
-				(ROOT.TFile('efficiency_QCD_Pt-30to50_MuEnrichedPt5') 1.40E+08), #pb
+				(ROOT.TFile('efficiency_QCD_Pt-30to50_MuEnrichedPt5.root') 1.40E+08), #pb
 				],
 	'QCD_Pt-50to80_MuEnrichedPt5' : [
-				(ROOT.TFile('efficiency_QCD_Pt-50to80_MuEnrichedPt5') 1.92E+07), #pb
+				(ROOT.TFile('efficiency_QCD_Pt-50to80_MuEnrichedPt5.root') 1.92E+07), #pb
 				],
 	'QCD_Pt-80to120_MuEnrichedPt5' : [
-				(ROOT.TFile('efficiency_QCD_Pt-80to120_MuEnrichedPt5') 2.76E+06), #pb
+				(ROOT.TFile('efficiency_QCD_Pt-80to120_MuEnrichedPt5.root') 2.76E+06), #pb
 				],
 	'QCD_Pt-120to170_MuEnrichedPt5' : [
-				(ROOT.TFile('efficiency_QCD_Pt-120to170_MuEnrichedPt5') 4.70E+05) #pb
+				(ROOT.TFile('efficiency_QCD_Pt-120to170_MuEnrichedPt5.root') 4.70E+05) #pb
 				],
 	'DYJetsToLL_M-1to10' : [
 				(ROOT.TFile('efficiency_DYJetsToLL_M-1to10.root'), 1.757E+05) #pb
