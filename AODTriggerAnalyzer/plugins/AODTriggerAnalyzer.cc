@@ -82,7 +82,7 @@ private:
   int l1MuonQltMin_;
   int l1MuonQltMax_;
   std::vector<double> l1MuonPt_;
-  double l1AsymmetricLeadingMuonCut_
+  double l1AsymmetricLeadingMuonCut_;
   std::vector<double> l1AsymmetricTrailingMuonCut;
 
   unsigned l1EGammaN_;
