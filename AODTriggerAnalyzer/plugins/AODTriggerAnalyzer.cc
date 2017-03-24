@@ -355,8 +355,8 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
     reco::Muon leadingMuon = myLeptons[0];
     reco::Muon trailingMuon = myLeptons[1];
     //Dimuons  selection
-    if ((leadingMuon.charge() != trailingMuon.charge())) {
-    } else {return false;}
+    // if ((leadingMuon.charge() != trailingMuon.charge())) {
+    // } else {return false;}
 
     if(verbose_) std::cout<< "Leading Muon pt, eta, phi, charge = " << leadingMuon.pt() << " "<< leadingMuon.eta() << " "<< leadingMuon.phi() << " " << leadingMuon.charge() << std::endl;
     if(verbose_) std::cout<< "Trailing Muon  pt, eta, phi,charge = " << trailingMuon.pt() << " " << trailingMuon.eta() << " " << trailingMuon.phi() << " " << trailingMuon.charge()<< std::endl;
