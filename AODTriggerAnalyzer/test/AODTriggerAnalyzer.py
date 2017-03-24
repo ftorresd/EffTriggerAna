@@ -659,11 +659,11 @@ process.p = cms.Path(
                      + process.Mu_3_X_OS_EG_Y 
                      + process.Mu_3_X_IsoEG_Y 
                      + process.Mu_3_X_OS_IsoEG_Y
-                     + process.Mu_2_X
-                     + process.Mu_2_X_OS 
-                     + process.Mu_2_X_EG_Y 
-                     + process.Mu_2_X_OS_EG_Y 
-                     + process.Mu_2_X_IsoEG_Y 
-                     + process.Mu_2_X_OS_IsoEG_Y
+                     # + process.Mu_2_X
+                     # + process.Mu_2_X_OS 
+                     # + process.Mu_2_X_EG_Y 
+                     # + process.Mu_2_X_OS_EG_Y 
+                     # + process.Mu_2_X_IsoEG_Y 
+                     # + process.Mu_2_X_OS_IsoEG_Y
                      )
 
