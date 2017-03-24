@@ -76,11 +76,15 @@ private:
   // L1 Configs
   std::string configName_;
   unsigned l1MuonN_;
+  bool l1AsymmetricCut_;
   bool l1MuonOS_;
   bool l1MuonIso_;
   int l1MuonQltMin_;
   int l1MuonQltMax_;
   std::vector<double> l1MuonPt_;
+  double l1AsymmetricLeadingMuonCut_
+  std::vector<double> l1AsymmetricTrailingMuonCut;
+
   unsigned l1EGammaN_;
   bool l1EGammaIso_;
   std::vector<double> l1EGammaPt_;
@@ -133,11 +137,14 @@ maxDimuonMass_  (iConfig.getParameter<double>("maxDimuonMass")),
 // L1 Configs    
 configName_ (iConfig.getParameter< std::string > ("configName")),
 l1MuonN_ (iConfig.getParameter< unsigned > ("l1MuonN")),
+l1AsymmetricCut_ (iConfig.getParameter< bool > ("l1AsymmetricCut")),
 l1MuonOS_ (iConfig.getParameter< bool > ("l1MuonOS")),
 l1MuonIso_ (iConfig.getParameter< bool > ("l1MuonIso")),
 l1MuonQltMin_ (iConfig.getParameter< int > ("l1MuonQltMin")),
 l1MuonQltMax_ (iConfig.getParameter< int > ("l1MuonQltMax")),
 l1MuonPt_ (iConfig.getParameter< std::vector<double> > ("l1MuonPt")),
+l1AsymmetricLeadingMuonCut_ (iConfig.getParameter< double > ("l1AsymmetricLeadingMuonCut")),
+l1AsymmetricTrailingMuonCut (iConfig.getParameter< std::vector<double> > ("l1AsymmetricTrailingMuonCut_")),
 l1EGammaN_ (iConfig.getParameter< unsigned > ("l1EGammaN")),
 l1EGammaIso_ (iConfig.getParameter< bool > ("l1EGammaIso")),
 l1EGammaPt_ (iConfig.getParameter< std::vector<double> > ("l1EGammaPt"))
@@ -538,10 +545,18 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
   }
 
   // Muon Pt
-  if (leadingMuon.pt() >= muonPtCut && trailingMuon.pt() >= muonPtCut) {
-    l1Filter_ = true;
+  if (l1AsymmetricCut_ == false) {
+    if (leadingMuon.pt() >= muonPtCut && trailingMuon.pt() >= muonPtCut) {
+      l1Filter_ = true;
+    } else {
+      return false;
+    }
   } else {
-    return false;
+    if (leadingMuon.pt() >= l1AsymmetricLeadingMuonCut_ && trailingMuon.pt() >= muonPtCut) {
+      l1Filter_ = true;
+    } else {
+      return false;
+    }
   }
 
   // EGamma

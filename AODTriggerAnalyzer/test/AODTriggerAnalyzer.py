@@ -7,7 +7,8 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-        '/store/mc/RunIISummer16DR80/ZToJPsiGamma-TuneCUETP8M1_13TeV-pythia8/RAWAODSIM/FlatPU28to62HcalNZSRAWAODSIM_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/2A6F3D90-B0F5-E611-A742-ECF4BBE15B60.root'
+        # '/store/mc/RunIISummer16DR80/ZToJPsiGamma-TuneCUETP8M1_13TeV-pythia8/RAWAODSIM/FlatPU28to62HcalNZSRAWAODSIM_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/2A6F3D90-B0F5-E611-A742-ECF4BBE15B60.root'
+        '/store/data/Run2016G/ZeroBias/AOD/23Sep2016-v1/50000/00042352-7786-E611-90FF-0025905A6118.root'
     )
 )
 
@@ -30,6 +31,7 @@ process.Zerobias = cms.EDAnalyzer("AODTriggerAnalyzer",
     l1EGammasLabel = cms.InputTag("caloStage2Digis:EGamma"),
     # L1 Configs - Muons
     l1MuonN = cms.uint32(2),
+    l1AsymmetricCut = cms.bool(False),
     l1MuonOS = cms.bool(True),
     l1MuonIso = cms.bool(False),
     l1MuonQltMin = cms.int32(8),
