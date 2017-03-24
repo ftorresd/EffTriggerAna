@@ -220,6 +220,399 @@ process.Mu_8_X_OS_IsoEG_Y = process.Zerobias.clone(
     l1EGammaN = cms.uint32(1),
     l1EGammaIso = cms.bool(True),
     )
+# asymmetric seeds
+process.Mu_7_X = process.Zerobias.clone(
+    configName = cms.string("Mu_7_X"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(False),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(7.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2., 3., 4., 5., 6.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(0),
+    l1EGammaIso = cms.bool(False),
+    )
+
+process.Mu_7_X_OS = process.Zerobias.clone(
+    configName = cms.string("Mu_7_X_OS"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(True),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(7.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2., 3., 4., 5., 6.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(0),
+    l1EGammaIso = cms.bool(False),
+    )
+
+process.Mu_7_X_EG_Y = process.Zerobias.clone(
+    configName = cms.string("Mu_7_X_EG_Y"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(False),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(7.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2., 3., 4., 5., 6.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(1),
+    l1EGammaIso = cms.bool(False),
+    )
+
+process.Mu_7_X_OS_EG_Y = process.Zerobias.clone(
+    configName = cms.string("Mu_7_X_OS_EG_Y"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(True),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(7.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2., 3., 4., 5., 6.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(1),
+    l1EGammaIso = cms.bool(False),
+    )
+
+process.Mu_7_X_IsoEG_Y = process.Zerobias.clone(
+    configName = cms.string("Mu_7_X_IsoEG_Y"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(False),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(7.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2., 3., 4., 5., 6.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(1),
+    l1EGammaIso = cms.bool(True),
+    )
+
+process.Mu_7_X_OS_IsoEG_Y = process.Zerobias.clone(
+    configName = cms.string("Mu_7_X_OS_IsoEG_Y"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(True),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(7.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2., 3., 4., 5., 6.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(1),
+    l1EGammaIso = cms.bool(True),
+    )
+# asymmetric seeds
+process.Mu_6_X = process.Zerobias.clone(
+    configName = cms.string("Mu_6_X"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(False),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(6.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2., 3., 4., 5.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(0),
+    l1EGammaIso = cms.bool(False),
+    )
+
+process.Mu_6_X_OS = process.Zerobias.clone(
+    configName = cms.string("Mu_6_X_OS"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(True),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(6.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2., 3., 4., 5.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(0),
+    l1EGammaIso = cms.bool(False),
+    )
+
+process.Mu_6_X_EG_Y = process.Zerobias.clone(
+    configName = cms.string("Mu_6_X_EG_Y"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(False),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(6.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2., 3., 4., 5.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(1),
+    l1EGammaIso = cms.bool(False),
+    )
+
+process.Mu_6_X_OS_EG_Y = process.Zerobias.clone(
+    configName = cms.string("Mu_6_X_OS_EG_Y"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(True),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(6.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2., 3., 4., 5.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(1),
+    l1EGammaIso = cms.bool(False),
+    )
+
+process.Mu_6_X_IsoEG_Y = process.Zerobias.clone(
+    configName = cms.string("Mu_6_X_IsoEG_Y"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(False),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(6.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2., 3., 4., 5.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(1),
+    l1EGammaIso = cms.bool(True),
+    )
+
+process.Mu_6_X_OS_IsoEG_Y = process.Zerobias.clone(
+    configName = cms.string("Mu_6_X_OS_IsoEG_Y"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(True),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(6.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2., 3., 4., 5.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(1),
+    l1EGammaIso = cms.bool(True),
+    )
+
+# asymmetric seeds
+process.Mu_5_X = process.Zerobias.clone(
+    configName = cms.string("Mu_5_X"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(False),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(5.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2., 3., 4.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(0),
+    l1EGammaIso = cms.bool(False),
+    )
+
+process.Mu_5_X_OS = process.Zerobias.clone(
+    configName = cms.string("Mu_5_X_OS"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(True),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(5.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2., 3., 4.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(0),
+    l1EGammaIso = cms.bool(False),
+    )
+
+process.Mu_5_X_EG_Y = process.Zerobias.clone(
+    configName = cms.string("Mu_5_X_EG_Y"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(False),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(5.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2., 3., 4.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(1),
+    l1EGammaIso = cms.bool(False),
+    )
+
+process.Mu_5_X_OS_EG_Y = process.Zerobias.clone(
+    configName = cms.string("Mu_5_X_OS_EG_Y"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(True),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(5.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2., 3., 4.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(1),
+    l1EGammaIso = cms.bool(False),
+    )
+
+process.Mu_5_X_IsoEG_Y = process.Zerobias.clone(
+    configName = cms.string("Mu_5_X_IsoEG_Y"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(False),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(5.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2., 3., 4.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(1),
+    l1EGammaIso = cms.bool(True),
+    )
+
+process.Mu_5_X_OS_IsoEG_Y = process.Zerobias.clone(
+    configName = cms.string("Mu_5_X_OS_IsoEG_Y"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(True),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(5.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2., 3., 4.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(1),
+    l1EGammaIso = cms.bool(True),
+    )
+
+# asymmetric seeds
+process.Mu_4_X = process.Zerobias.clone(
+    configName = cms.string("Mu_4_X"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(False),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(4.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2., 3.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(0),
+    l1EGammaIso = cms.bool(False),
+    )
+
+process.Mu_4_X_OS = process.Zerobias.clone(
+    configName = cms.string("Mu_4_X_OS"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(True),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(4.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2., 3.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(0),
+    l1EGammaIso = cms.bool(False),
+    )
+
+process.Mu_4_X_EG_Y = process.Zerobias.clone(
+    configName = cms.string("Mu_4_X_EG_Y"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(False),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(4.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2., 3.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(1),
+    l1EGammaIso = cms.bool(False),
+    )
+
+process.Mu_4_X_OS_EG_Y = process.Zerobias.clone(
+    configName = cms.string("Mu_4_X_OS_EG_Y"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(True),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(4.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2., 3.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(1),
+    l1EGammaIso = cms.bool(False),
+    )
+
+process.Mu_4_X_IsoEG_Y = process.Zerobias.clone(
+    configName = cms.string("Mu_4_X_IsoEG_Y"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(False),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(4.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2., 3.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(1),
+    l1EGammaIso = cms.bool(True),
+    )
+
+process.Mu_4_X_OS_IsoEG_Y = process.Zerobias.clone(
+    configName = cms.string("Mu_4_X_OS_IsoEG_Y"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(True),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(4.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2., 3.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(1),
+    l1EGammaIso = cms.bool(True),
+    )
+
+# asymmetric seeds
+process.Mu_3_X = process.Zerobias.clone(
+    configName = cms.string("Mu_3_X"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(False),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    Mu_4l1AsymmetricLeadingMuonCut = cms.double(3.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(0),
+    l1EGammaIso = cms.bool(False),
+    )
+
+process.Mu_3_X_OS = process.Zerobias.clone(
+    configName = cms.string("Mu_3_X_OS"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(True),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    Mu_4l1AsymmetricLeadingMuonCut = cms.double(3.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(0),
+    l1EGammaIso = cms.bool(False),
+    )
+
+process.Mu_3_X_EG_Y = process.Zerobias.clone(
+    configName = cms.string("Mu_3_X_EG_Y"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(False),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    Mu_4l1AsymmetricLeadingMuonCut = cms.double(3.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(1),
+    l1EGammaIso = cms.bool(False),
+    )
+
+process.Mu_3_X_OS_EG_Y = process.Zerobias.clone(
+    configName = cms.string("Mu_3_X_OS_EG_Y"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(True),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    Mu_4l1AsymmetricLeadingMuonCut = cms.double(3.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(1),
+    l1EGammaIso = cms.bool(False),
+    )
+
+process.Mu_3_X_IsoEG_Y = process.Zerobias.clone(
+    configName = cms.string("Mu_3_X_IsoEG_Y"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(False),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    l1AsymmetricLeadingMuonCut = cms.double(3.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(1),
+    l1EGammaIso = cms.bool(True),
+    )
+
+process.Mu_3_X_OS_IsoEG_Y = process.Zerobias.clone(
+    configName = cms.string("Mu_3_X_OS_IsoEG_Y"),
+    # L1 Configs - Muons
+    l1MuonOS = cms.bool(True),
+    l1MuonIso = cms.bool(False),
+    l1AsymmetricCut = cms.bool(True),
+    Mu_4l1AsymmetricLeadingMuonCut = cms.double(3.),
+    l1AsymmetricTrailingMuonCut = cms.vdouble(0., 1., 2.),
+    # L1 Configs - EGammas
+    l1EGammaN = cms.uint32(1),
+    l1EGammaIso = cms.bool(True),
+    )
 process.p = cms.Path(
                      process.Zerobias
                      # symmetric cuts
@@ -236,4 +629,41 @@ process.p = cms.Path(
                      + process.Mu_8_X_OS_EG_Y 
                      + process.Mu_8_X_IsoEG_Y 
                      + process.Mu_8_X_OS_IsoEG_Y
+                     + process.Mu_7_X
+                     + process.Mu_7_X_OS 
+                     + process.Mu_7_X_EG_Y 
+                     + process.Mu_7_X_OS_EG_Y 
+                     + process.Mu_7_X_IsoEG_Y 
+                     + process.Mu_7_X_OS_IsoEG_Y
+                     + process.Mu_6_X
+                     + process.Mu_6_X_OS 
+                     + process.Mu_6_X_EG_Y 
+                     + process.Mu_6_X_OS_EG_Y 
+                     + process.Mu_6_X_IsoEG_Y 
+                     + process.Mu_6_X_OS_IsoEG_Y
+                     + process.Mu_5_X
+                     + process.Mu_5_X_OS 
+                     + process.Mu_5_X_EG_Y 
+                     + process.Mu_5_X_OS_EG_Y 
+                     + process.Mu_5_X_IsoEG_Y 
+                     + process.Mu_5_X_OS_IsoEG_Y
+                     + process.Mu_4_X
+                     + process.Mu_4_X_OS 
+                     + process.Mu_4_X_EG_Y 
+                     + process.Mu_4_X_OS_EG_Y 
+                     + process.Mu_4_X_IsoEG_Y 
+                     + process.Mu_4_X_OS_IsoEG_Y
+                     + process.Mu_3_X
+                     + process.Mu_3_X_OS 
+                     + process.Mu_3_X_EG_Y 
+                     + process.Mu_3_X_OS_EG_Y 
+                     + process.Mu_3_X_IsoEG_Y 
+                     + process.Mu_3_X_OS_IsoEG_Y
+                     + process.Mu_2_X
+                     + process.Mu_2_X_OS 
+                     + process.Mu_2_X_EG_Y 
+                     + process.Mu_2_X_OS_EG_Y 
+                     + process.Mu_2_X_IsoEG_Y 
+                     + process.Mu_2_X_OS_IsoEG_Y
                      )
+
