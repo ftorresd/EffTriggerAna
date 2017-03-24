@@ -83,7 +83,7 @@ private:
   int l1MuonQltMax_;
   std::vector<double> l1MuonPt_;
   double l1AsymmetricLeadingMuonCut_;
-  std::vector<double> l1AsymmetricTrailingMuonCut;
+  std::vector<double> l1AsymmetricTrailingMuonCut_;
 
   unsigned l1EGammaN_;
   bool l1EGammaIso_;
@@ -144,7 +144,7 @@ l1MuonQltMin_ (iConfig.getParameter< int > ("l1MuonQltMin")),
 l1MuonQltMax_ (iConfig.getParameter< int > ("l1MuonQltMax")),
 l1MuonPt_ (iConfig.getParameter< std::vector<double> > ("l1MuonPt")),
 l1AsymmetricLeadingMuonCut_ (iConfig.getParameter< double > ("l1AsymmetricLeadingMuonCut")),
-l1AsymmetricTrailingMuonCut (iConfig.getParameter< std::vector<double> > ("l1AsymmetricTrailingMuonCut_")),
+l1AsymmetricTrailingMuonCut_ (iConfig.getParameter< std::vector<double> > ("l1AsymmetricTrailingMuonCut")),
 l1EGammaN_ (iConfig.getParameter< unsigned > ("l1EGammaN")),
 l1EGammaIso_ (iConfig.getParameter< bool > ("l1EGammaIso")),
 l1EGammaPt_ (iConfig.getParameter< std::vector<double> > ("l1EGammaPt"))
