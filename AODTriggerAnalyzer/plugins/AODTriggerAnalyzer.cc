@@ -188,10 +188,10 @@ l1EGammaPt_ (iConfig.getParameter< std::vector<double> > ("l1EGammaPt"))
   // mu histos
     for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
       std::string histoNameSufix = configName_+"_EG_"+std::to_string((int) *j);
-      nEvtsHistosMap["h_L1_"+histoNameSufix] = fs->make<TH1D>( ("h_L1_"+histoNameSufix).c_str() , ("h_L1_"+histoNameSufix+";  Trailing Muon Pt Cut (GeV); Efficiency").c_str(), 8, 0., 8.);
-      nEvtsHistosMap["h_L1RECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1RECO_"+histoNameSufix).c_str() , ("h_L1RECO_"+histoNameSufix+";  Trailing Muon Pt Cut (GeV); Efficiency").c_str(), 8, 0., 8.);
-      nEvtsHistosMap["h_L1HLT_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLT_"+histoNameSufix).c_str() , ("h_L1HLT_"+histoNameSufix+";  Trailing Muon Pt Cut (GeV); Efficiency").c_str(), 8, 0., 8.);
-      nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLTRECO_"+histoNameSufix).c_str() , ("h_L1HLTRECO_"+histoNameSufix+";  Trailing Muon Pt Cut (GeV); Efficiency").c_str(), 8, 0., 8.);
+      nEvtsHistosMap["h_L1_"+histoNameSufix] = fs->make<TH1D>( ("h_L1_"+histoNameSufix).c_str() , ("h_L1_"+histoNameSufix+";  Trailing Muon Pt Cut (GeV); Efficiency").c_str(), int (l1AsymmetricLeadingMuonCut_), 0., l1AsymmetricLeadingMuonCut_);
+      nEvtsHistosMap["h_L1RECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1RECO_"+histoNameSufix).c_str() , ("h_L1RECO_"+histoNameSufix+";  Trailing Muon Pt Cut (GeV); Efficiency").c_str(), int (l1AsymmetricLeadingMuonCut_), 0., l1AsymmetricLeadingMuonCut_);
+      nEvtsHistosMap["h_L1HLT_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLT_"+histoNameSufix).c_str() , ("h_L1HLT_"+histoNameSufix+";  Trailing Muon Pt Cut (GeV); Efficiency").c_str(), int (l1AsymmetricLeadingMuonCut_), 0., l1AsymmetricLeadingMuonCut_);
+      nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLTRECO_"+histoNameSufix).c_str() , ("h_L1HLTRECO_"+histoNameSufix+";  Trailing Muon Pt Cut (GeV); Efficiency").c_str(), int (l1AsymmetricLeadingMuonCut_), 0., l1AsymmetricLeadingMuonCut_);
     }
   // eg histos
     for (std::vector<double>::const_iterator i = l1AsymmetricTrailingMuonCut_.begin(); i != l1AsymmetricTrailingMuonCut_.end(); i++ ){
@@ -273,29 +273,6 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
       }
     }    
   }
-
-
-  // mu histos
-    for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
-      std::string histoNameSufix = configName_+"_EG_"+std::to_string((int) *j);
-      nEvtsHistosMap["h_L1_"+histoNameSufix] = fs->make<TH1D>( ("h_L1_"+histoNameSufix).c_str() , ("h_L1_"+histoNameSufix+";  Trailing Muon Pt Cut (GeV); Efficiency").c_str(), 8, 0., 8.);
-      nEvtsHistosMap["h_L1RECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1RECO_"+histoNameSufix).c_str() , ("h_L1RECO_"+histoNameSufix+";  Trailing Muon Pt Cut (GeV); Efficiency").c_str(), 8, 0., 8.);
-      nEvtsHistosMap["h_L1HLT_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLT_"+histoNameSufix).c_str() , ("h_L1HLT_"+histoNameSufix+";  Trailing Muon Pt Cut (GeV); Efficiency").c_str(), 8, 0., 8.);
-      nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLTRECO_"+histoNameSufix).c_str() , ("h_L1HLTRECO_"+histoNameSufix+";  Trailing Muon Pt Cut (GeV); Efficiency").c_str(), 8, 0., 8.);
-    }
-  // eg histos
-    for (std::vector<double>::const_iterator i = l1AsymmetricTrailingMuonCut_.begin(); i != l1AsymmetricTrailingMuonCut_.end(); i++ ){
-      std::string histoNameSufix = configName_+"_TrailingMu_"+std::to_string((int) *i);
-      nEvtsHistosMap["h_L1_"+histoNameSufix] = fs->make<TH1D>( ("h_L1_"+histoNameSufix).c_str() , ("h_L1_"+histoNameSufix+";  EGamma Pt Cut (GeV); Efficiency").c_str(), 50, 0., 50.);
-      nEvtsHistosMap["h_L1RECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1RECO_"+histoNameSufix).c_str() , ("h_L1RECO_"+histoNameSufix+";  EGamma Pt Cut (GeV); Efficiency").c_str(), 50, 0., 50.);
-      nEvtsHistosMap["h_L1HLT_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLT_"+histoNameSufix).c_str() , ("h_L1HLT_"+histoNameSufix+";  EGamma Pt Cut (GeV); Efficiency").c_str(), 50, 0., 50.);
-      nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLTRECO_"+histoNameSufix).c_str() , ("h_L1HLTRECO_"+histoNameSufix+";  EGamma Pt Cut (GeV); Efficiency").c_str(), 50, 0., 50.);
-    }
-
-
-
-
-
 }
 
 //find the filters
