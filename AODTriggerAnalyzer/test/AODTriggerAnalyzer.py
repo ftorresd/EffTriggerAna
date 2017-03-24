@@ -144,7 +144,7 @@ process.DoubleMu_X_OS_IsoEG_Y = process.Zerobias.clone(
 
 # asymmetric seeds
 process.Mu_8_X = process.Zerobias.clone(
-    configName = cms.string("DoubleMu_X"),
+    configName = cms.string("Mu_8_X"),
     # L1 Configs - Muons
     l1MuonOS = cms.bool(False),
     l1MuonIso = cms.bool(False),
@@ -157,7 +157,7 @@ process.Mu_8_X = process.Zerobias.clone(
     )
 
 process.Mu_8_X_OS = process.Zerobias.clone(
-    configName = cms.string("DoubleMu_X_OS"),
+    configName = cms.string("Mu_8_X_OS"),
     # L1 Configs - Muons
     l1MuonOS = cms.bool(True),
     l1MuonIso = cms.bool(False),
@@ -170,7 +170,7 @@ process.Mu_8_X_OS = process.Zerobias.clone(
     )
 
 process.Mu_8_X_EG_Y = process.Zerobias.clone(
-    configName = cms.string("DoubleMu_X_EG_Y"),
+    configName = cms.string("Mu_8_X_EG_Y"),
     # L1 Configs - Muons
     l1MuonOS = cms.bool(False),
     l1MuonIso = cms.bool(False),
@@ -183,7 +183,7 @@ process.Mu_8_X_EG_Y = process.Zerobias.clone(
     )
 
 process.Mu_8_X_OS_EG_Y = process.Zerobias.clone(
-    configName = cms.string("DoubleMu_X_OS_EG_Y"),
+    configName = cms.string("Mu_8_X_OS_EG_Y"),
     # L1 Configs - Muons
     l1MuonOS = cms.bool(True),
     l1MuonIso = cms.bool(False),
@@ -196,7 +196,7 @@ process.Mu_8_X_OS_EG_Y = process.Zerobias.clone(
     )
 
 process.Mu_8_X_IsoEG_Y = process.Zerobias.clone(
-    configName = cms.string("DoubleMu_X_IsoEG_Y"),
+    configName = cms.string("Mu_8_X_IsoEG_Y"),
     # L1 Configs - Muons
     l1MuonOS = cms.bool(False),
     l1MuonIso = cms.bool(False),
@@ -209,7 +209,7 @@ process.Mu_8_X_IsoEG_Y = process.Zerobias.clone(
     )
 
 process.Mu_8_X_OS_IsoEG_Y = process.Zerobias.clone(
-    configName = cms.string("DoubleMu_X_OS_IsoEG_Y"),
+    configName = cms.string("Mu_8_X_OS_IsoEG_Y"),
     # L1 Configs - Muons
     l1MuonOS = cms.bool(True),
     l1MuonIso = cms.bool(False),
