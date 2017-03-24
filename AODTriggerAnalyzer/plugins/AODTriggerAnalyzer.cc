@@ -236,23 +236,66 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
   if (hltTest == true) nEvtsHLT++;
   if (hltTest == true && recoTest == true) nEvtsHLTRECO++;
 
-  for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
-    for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
-      bool l1Test = l1Filter(l1Muons, l1EGammas, *i, *j, iEvent);
+  if (l1AsymmetricCut_ == false) {
+    for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
+      for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
+        bool l1Test = l1Filter(l1Muons, l1EGammas, *i, *j, iEvent);
       // EG histos
-      std::string histoNameSufix = configName_+"_EG_"+std::to_string((int) *j);
-      if (l1Test == true) nEvtsHistosMap["h_L1_"+histoNameSufix]->Fill(*i);
-      if (recoTest == true && l1Test == true) nEvtsHistosMap["h_L1RECO_"+histoNameSufix]->Fill(*i);
-      if (hltTest == true && l1Test == true) nEvtsHistosMap["h_L1HLT_"+histoNameSufix]->Fill(*i);
-      if (hltTest == true && recoTest == true && l1Test == true) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Fill(*i);
+        std::string histoNameSufix = configName_+"_EG_"+std::to_string((int) *j);
+        if (l1Test == true) nEvtsHistosMap["h_L1_"+histoNameSufix]->Fill(*i);
+        if (recoTest == true && l1Test == true) nEvtsHistosMap["h_L1RECO_"+histoNameSufix]->Fill(*i);
+        if (hltTest == true && l1Test == true) nEvtsHistosMap["h_L1HLT_"+histoNameSufix]->Fill(*i);
+        if (hltTest == true && recoTest == true && l1Test == true) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Fill(*i);
       // DoubleMu histos
-      histoNameSufix = configName_+"_DoubleMu_"+std::to_string((int) *i);
-      if (l1Test == true) nEvtsHistosMap["h_L1_"+histoNameSufix]->Fill(*j);
-      if (recoTest == true && l1Test == true) nEvtsHistosMap["h_L1RECO_"+histoNameSufix]->Fill(*j);
-      if (hltTest == true && l1Test == true) nEvtsHistosMap["h_L1HLT_"+histoNameSufix]->Fill(*j);
-      if (hltTest == true && recoTest == true && l1Test == true) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Fill(*j);
-    }
+        histoNameSufix = configName_+"_DoubleMu_"+std::to_string((int) *i);
+        if (l1Test == true) nEvtsHistosMap["h_L1_"+histoNameSufix]->Fill(*j);
+        if (recoTest == true && l1Test == true) nEvtsHistosMap["h_L1RECO_"+histoNameSufix]->Fill(*j);
+        if (hltTest == true && l1Test == true) nEvtsHistosMap["h_L1HLT_"+histoNameSufix]->Fill(*j);
+        if (hltTest == true && recoTest == true && l1Test == true) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Fill(*j);
+      }
+    }    
+  } else {  //l1AsymmetricCut_ == false
+    for (std::vector<double>::const_iterator i = l1AsymmetricTrailingMuonCut_.begin(); i != l1AsymmetricTrailingMuonCut_.end(); i++ ){
+      for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
+        bool l1Test = l1Filter(l1Muons, l1EGammas, *i, *j, iEvent);
+      // EG histos
+        std::string histoNameSufix = configName_+"_EG_"+std::to_string((int) *j);
+        if (l1Test == true) nEvtsHistosMap["h_L1_"+histoNameSufix]->Fill(*i);
+        if (recoTest == true && l1Test == true) nEvtsHistosMap["h_L1RECO_"+histoNameSufix]->Fill(*i);
+        if (hltTest == true && l1Test == true) nEvtsHistosMap["h_L1HLT_"+histoNameSufix]->Fill(*i);
+        if (hltTest == true && recoTest == true && l1Test == true) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Fill(*i);
+      // Asymmetric Mu histos
+        histoNameSufix = configName_+"_TrailingMu_"+std::to_string((int) *i);
+        if (l1Test == true) nEvtsHistosMap["h_L1_"+histoNameSufix]->Fill(*j);
+        if (recoTest == true && l1Test == true) nEvtsHistosMap["h_L1RECO_"+histoNameSufix]->Fill(*j);
+        if (hltTest == true && l1Test == true) nEvtsHistosMap["h_L1HLT_"+histoNameSufix]->Fill(*j);
+        if (hltTest == true && recoTest == true && l1Test == true) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Fill(*j);
+      }
+    }    
   }
+
+
+  // mu histos
+    for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
+      std::string histoNameSufix = configName_+"_EG_"+std::to_string((int) *j);
+      nEvtsHistosMap["h_L1_"+histoNameSufix] = fs->make<TH1D>( ("h_L1_"+histoNameSufix).c_str() , ("h_L1_"+histoNameSufix+";  Trailing Muon Pt Cut (GeV); Efficiency").c_str(), 8, 0., 8.);
+      nEvtsHistosMap["h_L1RECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1RECO_"+histoNameSufix).c_str() , ("h_L1RECO_"+histoNameSufix+";  Trailing Muon Pt Cut (GeV); Efficiency").c_str(), 8, 0., 8.);
+      nEvtsHistosMap["h_L1HLT_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLT_"+histoNameSufix).c_str() , ("h_L1HLT_"+histoNameSufix+";  Trailing Muon Pt Cut (GeV); Efficiency").c_str(), 8, 0., 8.);
+      nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLTRECO_"+histoNameSufix).c_str() , ("h_L1HLTRECO_"+histoNameSufix+";  Trailing Muon Pt Cut (GeV); Efficiency").c_str(), 8, 0., 8.);
+    }
+  // eg histos
+    for (std::vector<double>::const_iterator i = l1AsymmetricTrailingMuonCut_.begin(); i != l1AsymmetricTrailingMuonCut_.end(); i++ ){
+      std::string histoNameSufix = configName_+"_TrailingMu_"+std::to_string((int) *i);
+      nEvtsHistosMap["h_L1_"+histoNameSufix] = fs->make<TH1D>( ("h_L1_"+histoNameSufix).c_str() , ("h_L1_"+histoNameSufix+";  EGamma Pt Cut (GeV); Efficiency").c_str(), 50, 0., 50.);
+      nEvtsHistosMap["h_L1RECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1RECO_"+histoNameSufix).c_str() , ("h_L1RECO_"+histoNameSufix+";  EGamma Pt Cut (GeV); Efficiency").c_str(), 50, 0., 50.);
+      nEvtsHistosMap["h_L1HLT_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLT_"+histoNameSufix).c_str() , ("h_L1HLT_"+histoNameSufix+";  EGamma Pt Cut (GeV); Efficiency").c_str(), 50, 0., 50.);
+      nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLTRECO_"+histoNameSufix).c_str() , ("h_L1HLTRECO_"+histoNameSufix+";  EGamma Pt Cut (GeV); Efficiency").c_str(), 50, 0., 50.);
+    }
+
+
+
+
+
 }
 
 //find the filters
@@ -571,7 +614,7 @@ AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Ha
     } else {
       return false;
     }
-  } else {
+  } else { //l1AsymmetricCut_ == true
     if (leadingMuon.pt() >= l1AsymmetricLeadingMuonCut_ && trailingMuon.pt() >= muonPtCut) {
       l1Filter_ = true;
     } else {
