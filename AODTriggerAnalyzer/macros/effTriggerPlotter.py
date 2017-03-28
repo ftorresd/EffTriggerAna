@@ -12,6 +12,9 @@ ROOT.TH1.SetDefaultSumw2(True)
 ROOT.gStyle.SetOptStat(0)
 	
 effFilesXSec = {
+	'ZeroBias' : [
+				(ROOT.TFile('efficiency_ZeroBias.root'), 1.0), #pb
+				],
 	'QCD_MuEnrichedPt5' : [
 				(ROOT.TFile('efficiency_QCD_Pt-15to20_MuEnrichedPt5.root'), 1.27E+09), #pb
 				(ROOT.TFile('efficiency_QCD_Pt-20to30_MuEnrichedPt5.root'), 5.59E+08), #pb
@@ -57,23 +60,30 @@ effFilesXSec = {
 				]
 			}
 
-configNames = [
-		# "Zerobias",
-		"DoubleMu_X",
-		"DoubleMu_X_OS",
-		"DoubleMu_X_EG_Y",
-		"DoubleMu_X_OS_EG_Y",
-		"DoubleMu_X_IsoEG_Y",
-     	"DoubleMu_X_OS_IsoEG_Y"
-]
+configSets = {
+			# "Zerobias": ["Zerobias"],
+			"DoubleMu": ["DoubleMu_X", "DoubleMu_X_OS", "DoubleMu_X_EG_Y", "DoubleMu_X_OS_EG_Y", "DoubleMu_X_IsoEG_Y", "DoubleMu_X_OS_IsoEG_Y"],
+			"Mu_9": ["Mu_9_X", "Mu_9_X_OS", "Mu_9_X_EG_Y", "Mu_9_X_OS_EG_Y", "Mu_9_X_IsoEG_Y", "Mu_9_X_OS_IsoEG_Y"],
+			"Mu_10": ["Mu_10_X", "Mu_10_X_OS", "Mu_10_X_EG_Y", "Mu_10_X_OS_EG_Y", "Mu_10_X_IsoEG_Y", "Mu_10_X_OS_IsoEG_Y"],
+			"Mu_11": ["Mu_11_X", "Mu_11_X_OS", "Mu_11_X_EG_Y", "Mu_11_X_OS_EG_Y", "Mu_11_X_IsoEG_Y", "Mu_11_X_OS_IsoEG_Y"],
+			"Mu_12": ["Mu_12_X", "Mu_12_X_OS", "Mu_12_X_EG_Y", "Mu_12_X_OS_EG_Y", "Mu_12_X_IsoEG_Y", "Mu_12_X_OS_IsoEG_Y"],
+			"Mu_13": ["Mu_13_X", "Mu_13_X_OS", "Mu_13_X_EG_Y", "Mu_13_X_OS_EG_Y", "Mu_13_X_IsoEG_Y", "Mu_13_X_OS_IsoEG_Y"],
+			"Mu_8": ["Mu_8_X", "Mu_8_X_OS", "Mu_8_X_EG_Y", "Mu_8_X_OS_EG_Y", "Mu_8_X_IsoEG_Y", "Mu_8_X_OS_IsoEG_Y"],
+			"Mu_7": ["Mu_7_X", "Mu_7_X_OS", "Mu_7_X_EG_Y", "Mu_7_X_OS_EG_Y", "Mu_7_X_IsoEG_Y", "Mu_7_X_OS_IsoEG_Y"],
+			"Mu_6": ["Mu_6_X", "Mu_6_X_OS", "Mu_6_X_EG_Y", "Mu_6_X_OS_EG_Y", "Mu_6_X_IsoEG_Y", "Mu_6_X_OS_IsoEG_Y"],
+			"Mu_5": ["Mu_5_X", "Mu_5_X_OS", "Mu_5_X_EG_Y", "Mu_5_X_OS_EG_Y", "Mu_5_X_IsoEG_Y", "Mu_5_X_OS_IsoEG_Y"],
+			"Mu_4": ["Mu_4_X", "Mu_4_X_OS", "Mu_4_X_EG_Y", "Mu_4_X_OS_EG_Y", "Mu_4_X_IsoEG_Y", "Mu_4_X_OS_IsoEG_Y"],
+			"Mu_3": ["Mu_3_X", "Mu_3_X_OS", "Mu_3_X_EG_Y", "Mu_3_X_OS_EG_Y", "Mu_3_X_IsoEG_Y", "Mu_3_X_OS_IsoEG_Y"]
+			}
 
 selectionSequences = [
 		"",
-		"HLT",
+		# "HLT",
 		"RECO",
 		"HLTRECO"
 ]
 
+# needs to be rewriten
 def translateConfigNameToLegend(config, egCut):
 	if (config == "DoubleMu_X"):
 		return "DoubleMu_X"
@@ -87,6 +97,138 @@ def translateConfigNameToLegend(config, egCut):
 		return "DoubleMu_X_IsoEG_"+str(egCut)
 	if (config == "DoubleMu_X_OS_IsoEG_Y"):
 		return "DoubleMu_X_OS_IsoEG_"+str(egCut)
+	if (config == "Mu_3_X"):
+		return "Mu_3_X"
+	if (config == "Mu_3_X_OS"):
+		return "Mu_3_X_OS"		
+	if (config == "Mu_3_X_EG_Y"):
+		return "Mu_3_X_EG_"+str(egCut)
+	if (config == "Mu_3_X_OS_EG_Y"):
+		return "Mu_3_X_OS_EG_"+str(egCut)
+	if (config == "Mu_3_X_IsoEG_Y"):
+		return "Mu_3_X_IsoEG_"+str(egCut)
+	if (config == "Mu_3_X_OS_IsoEG_Y"):
+		return "Mu_3_X_OS_IsoEG_"+str(egCut)
+	if (config == "Mu_4_X"):
+		return "Mu_4_X"
+	if (config == "Mu_4_X_OS"):
+		return "Mu_4_X_OS"		
+	if (config == "Mu_4_X_EG_Y"):
+		return "Mu_4_X_EG_"+str(egCut)
+	if (config == "Mu_4_X_OS_EG_Y"):
+		return "Mu_4_X_OS_EG_"+str(egCut)
+	if (config == "Mu_4_X_IsoEG_Y"):
+		return "Mu_4_X_IsoEG_"+str(egCut)
+	if (config == "Mu_4_X_OS_IsoEG_Y"):
+		return "Mu_4_X_OS_IsoEG_"+str(egCut)
+	if (config == "Mu_5_X"):
+		return "Mu_5_X"
+	if (config == "Mu_5_X_OS"):
+		return "Mu_5_X_OS"		
+	if (config == "Mu_5_X_EG_Y"):
+		return "Mu_5_X_EG_"+str(egCut)
+	if (config == "Mu_5_X_OS_EG_Y"):
+		return "Mu_5_X_OS_EG_"+str(egCut)
+	if (config == "Mu_5_X_IsoEG_Y"):
+		return "Mu_5_X_IsoEG_"+str(egCut)
+	if (config == "Mu_5_X_OS_IsoEG_Y"):
+		return "Mu_5_X_OS_IsoEG_"+str(egCut)
+	if (config == "Mu_6_X"):
+		return "Mu_6_X"
+	if (config == "Mu_6_X_OS"):
+		return "Mu_6_X_OS"		
+	if (config == "Mu_6_X_EG_Y"):
+		return "Mu_6_X_EG_"+str(egCut)
+	if (config == "Mu_6_X_OS_EG_Y"):
+		return "Mu_6_X_OS_EG_"+str(egCut)
+	if (config == "Mu_6_X_IsoEG_Y"):
+		return "Mu_6_X_IsoEG_"+str(egCut)
+	if (config == "Mu_6_X_OS_IsoEG_Y"):
+		return "Mu_6_X_OS_IsoEG_"+str(egCut)
+	if (config == "Mu_7_X"):
+		return "Mu_7_X"
+	if (config == "Mu_7_X_OS"):
+		return "Mu_7_X_OS"		
+	if (config == "Mu_7_X_EG_Y"):
+		return "Mu_7_X_EG_"+str(egCut)
+	if (config == "Mu_7_X_OS_EG_Y"):
+		return "Mu_7_X_OS_EG_"+str(egCut)
+	if (config == "Mu_7_X_IsoEG_Y"):
+		return "Mu_7_X_IsoEG_"+str(egCut)
+	if (config == "Mu_7_X_OS_IsoEG_Y"):
+		return "Mu_7_X_OS_IsoEG_"+str(egCut)
+	if (config == "Mu_8_X"):
+		return "Mu_8_X"
+	if (config == "Mu_8_X_OS"):
+		return "Mu_8_X_OS"		
+	if (config == "Mu_8_X_EG_Y"):
+		return "Mu_8_X_EG_"+str(egCut)
+	if (config == "Mu_8_X_OS_EG_Y"):
+		return "Mu_8_X_OS_EG_"+str(egCut)
+	if (config == "Mu_8_X_IsoEG_Y"):
+		return "Mu_8_X_IsoEG_"+str(egCut)
+	if (config == "Mu_8_X_OS_IsoEG_Y"):
+		return "Mu_8_X_OS_IsoEG_"+str(egCut)
+	if (config == "Mu_9_X"):
+		return "Mu_9_X"
+	if (config == "Mu_9_X_OS"):
+		return "Mu_9_X_OS"		
+	if (config == "Mu_9_X_EG_Y"):
+		return "Mu_9_X_EG_"+str(egCut)
+	if (config == "Mu_9_X_OS_EG_Y"):
+		return "Mu_9_X_OS_EG_"+str(egCut)
+	if (config == "Mu_9_X_IsoEG_Y"):
+		return "Mu_9_X_IsoEG_"+str(egCut)
+	if (config == "Mu_9_X_OS_IsoEG_Y"):
+		return "Mu_9_X_OS_IsoEG_"+str(egCut)
+	if (config == "Mu_10_X"):
+		return "Mu_10_X"
+	if (config == "Mu_10_X_OS"):
+		return "Mu_10_X_OS"		
+	if (config == "Mu_10_X_EG_Y"):
+		return "Mu_10_X_EG_"+str(egCut)
+	if (config == "Mu_10_X_OS_EG_Y"):
+		return "Mu_10_X_OS_EG_"+str(egCut)
+	if (config == "Mu_10_X_IsoEG_Y"):
+		return "Mu_10_X_IsoEG_"+str(egCut)
+	if (config == "Mu_10_X_OS_IsoEG_Y"):
+		return "Mu_10_X_OS_IsoEG_"+str(egCut)
+	if (config == "Mu_11_X"):
+		return "Mu_11_X"
+	if (config == "Mu_11_X_OS"):
+		return "Mu_11_X_OS"		
+	if (config == "Mu_11_X_EG_Y"):
+		return "Mu_11_X_EG_"+str(egCut)
+	if (config == "Mu_11_X_OS_EG_Y"):
+		return "Mu_11_X_OS_EG_"+str(egCut)
+	if (config == "Mu_11_X_IsoEG_Y"):
+		return "Mu_11_X_IsoEG_"+str(egCut)
+	if (config == "Mu_11_X_OS_IsoEG_Y"):
+		return "Mu_11_X_OS_IsoEG_"+str(egCut)
+	if (config == "Mu_12_X"):
+		return "Mu_12_X"
+	if (config == "Mu_12_X_OS"):
+		return "Mu_12_X_OS"		
+	if (config == "Mu_12_X_EG_Y"):
+		return "Mu_12_X_EG_"+str(egCut)
+	if (config == "Mu_12_X_OS_EG_Y"):
+		return "Mu_12_X_OS_EG_"+str(egCut)
+	if (config == "Mu_12_X_IsoEG_Y"):
+		return "Mu_12_X_IsoEG_"+str(egCut)
+	if (config == "Mu_12_X_OS_IsoEG_Y"):
+		return "Mu_12_X_OS_IsoEG_"+str(egCut)
+	if (config == "Mu_13_X"):
+		return "Mu_13_X"
+	if (config == "Mu_13_X_OS"):
+		return "Mu_13_X_OS"		
+	if (config == "Mu_13_X_EG_Y"):
+		return "Mu_13_X_EG_"+str(egCut)
+	if (config == "Mu_13_X_OS_EG_Y"):
+		return "Mu_13_X_OS_EG_"+str(egCut)
+	if (config == "Mu_13_X_IsoEG_Y"):
+		return "Mu_13_X_IsoEG_"+str(egCut)
+	if (config == "Mu_13_X_OS_IsoEG_Y"):
+		return "Mu_13_X_OS_IsoEG_"+str(egCut)
 
 
 def plotEff(dataset, filesXSec, configNames, egCut, selectionSequence):
@@ -95,6 +237,9 @@ def plotEff(dataset, filesXSec, configNames, egCut, selectionSequence):
 	leg = ROOT.TLegend(0.9-.38,0.7,0.9,0.9);
 
 	for index, config in enumerate(configNames):
+		# print "h_L1"+selectionSequence+"_"+config+"_EG_"+str(egCut)
+		# print config
+		# print filesXSec[0][0].Get(config)
 		histoToPlot = filesXSec[0][0].Get(config).Get("h_L1"+selectionSequence+"_"+config+"_EG_"+str(egCut))
 		# histoToPlot.Scale( (filesXSec[0][1]/filesXSec[0][0].Get(config).Get("h_nEvts_"+config).GetBinContent(1))/(filesXSec[0][0].Get(config).Get("h_nEvts"+selectionSequence+"_"+config).GetBinContent(1) ) )
 		normFactor = (filesXSec[0][1]/filesXSec[0][0].Get(config).Get("h_nEvts_"+config).GetBinContent(1))
@@ -126,8 +271,8 @@ def plotEff(dataset, filesXSec, configNames, egCut, selectionSequence):
 	# leg->AddEntry("gr","Graph with error bars","lep");
 	leg.Draw();
 	c1.Update()
-	c1.SaveAs("l1Plots/"+dataset+"/L1"+selectionSequence+"/h_L1"+selectionSequence+"_EG_"+str(egCut)+".pdf");
-	c1.SaveAs("l1Plots/"+dataset+"/L1"+selectionSequence+"/h_L1"+selectionSequence+"_EG_"+str(egCut)+".png");
+	# c1.SaveAs("l1Plots/"+dataset+"/L1"+selectionSequence+"/"+configName+"/h_L1"+selectionSequence+"_EG_"+str(egCut)+".pdf");
+	c1.SaveAs("l1Plots/"+dataset+"/L1"+selectionSequence+"/"+configName+"/h_L1"+selectionSequence+"_EG_"+str(egCut)+".png");
 
 # loop over datasets file
 os.system("rm -rf l1Plots ; mkdir l1Plots")
@@ -135,5 +280,8 @@ for dataset in effFilesXSec:
 	os.system("mkdir l1Plots/"+dataset)
 	for selectionSequence in selectionSequences:
 		os.system("mkdir l1Plots/"+dataset+"/L1"+selectionSequence)
-		for egCut in range(51):
-			plotEff(dataset, effFilesXSec[dataset], configNames, egCut, selectionSequence)
+		for configName in configSets:
+			os.system("mkdir l1Plots/"+dataset+"/L1"+selectionSequence+"/"+configName)
+			# for egCut in range(51):
+			for egCut in [0,5,6,7,8,9,10,11,12,13,14,15]:
+				plotEff(dataset, effFilesXSec[dataset], configSets[configName], egCut, selectionSequence)
