@@ -24,33 +24,33 @@ effFilesXSec = {
 				(ROOT.TFile('efficiency_QCD_Pt-80to120_MuEnrichedPt5.root'), 2.76E+06), #pb
 				(ROOT.TFile('efficiency_QCD_Pt-120to170_MuEnrichedPt5.root'), 4.70E+05) #pb
 				],
-	'QCD_Pt-15to20_MuEnrichedPt5' : [
-				(ROOT.TFile('efficiency_QCD_Pt-15to20_MuEnrichedPt5.root'), 1.27E+09) #pb
-				],
-	'QCD_Pt-20to30_MuEnrichedPt5' : [
-				(ROOT.TFile('efficiency_QCD_Pt-20to30_MuEnrichedPt5.root'), 5.59E+08) #pb
-				],
-	'QCD_Pt-30to50_MuEnrichedPt5' : [
-				(ROOT.TFile('efficiency_QCD_Pt-30to50_MuEnrichedPt5.root'), 1.40E+08), #pb
-				],
-	'QCD_Pt-50to80_MuEnrichedPt5' : [
-				(ROOT.TFile('efficiency_QCD_Pt-50to80_MuEnrichedPt5.root'), 1.92E+07), #pb
-				],
-	'QCD_Pt-80to120_MuEnrichedPt5' : [
-				(ROOT.TFile('efficiency_QCD_Pt-80to120_MuEnrichedPt5.root'), 2.76E+06), #pb
-				],
-	'QCD_Pt-120to170_MuEnrichedPt5' : [
-				(ROOT.TFile('efficiency_QCD_Pt-120to170_MuEnrichedPt5.root'), 4.70E+05) #pb
-				],
-	'DYJetsToLL_M-1to10' : [
-				(ROOT.TFile('efficiency_DYJetsToLL_M-1to10.root'), 1.757E+05) #pb
-				],
-	'DYJetsToLL_M-10to50' : [
-				(ROOT.TFile('efficiency_DYJetsToLL_M-10to50.root'), 1.614E+04) #pb
-				],
-	'DYJetsToLL_M-50' : [
-				(ROOT.TFile('efficiency_DYJetsToLL_M-50.root'), 4.895E+03) #pb
-				],									
+	# 'QCD_Pt-15to20_MuEnrichedPt5' : [
+	# 			(ROOT.TFile('efficiency_QCD_Pt-15to20_MuEnrichedPt5.root'), 1.27E+09) #pb
+	# 			],
+	# 'QCD_Pt-20to30_MuEnrichedPt5' : [
+	# 			(ROOT.TFile('efficiency_QCD_Pt-20to30_MuEnrichedPt5.root'), 5.59E+08) #pb
+	# 			],
+	# 'QCD_Pt-30to50_MuEnrichedPt5' : [
+	# 			(ROOT.TFile('efficiency_QCD_Pt-30to50_MuEnrichedPt5.root'), 1.40E+08), #pb
+	# 			],
+	# 'QCD_Pt-50to80_MuEnrichedPt5' : [
+	# 			(ROOT.TFile('efficiency_QCD_Pt-50to80_MuEnrichedPt5.root'), 1.92E+07), #pb
+	# 			],
+	# 'QCD_Pt-80to120_MuEnrichedPt5' : [
+	# 			(ROOT.TFile('efficiency_QCD_Pt-80to120_MuEnrichedPt5.root'), 2.76E+06), #pb
+	# 			],
+	# 'QCD_Pt-120to170_MuEnrichedPt5' : [
+	# 			(ROOT.TFile('efficiency_QCD_Pt-120to170_MuEnrichedPt5.root'), 4.70E+05) #pb
+	# 			],
+	# 'DYJetsToLL_M-1to10' : [
+	# 			(ROOT.TFile('efficiency_DYJetsToLL_M-1to10.root'), 1.757E+05) #pb
+	# 			],
+	# 'DYJetsToLL_M-10to50' : [
+	# 			(ROOT.TFile('efficiency_DYJetsToLL_M-10to50.root'), 1.614E+04) #pb
+	# 			],
+	# 'DYJetsToLL_M-50' : [
+	# 			(ROOT.TFile('efficiency_DYJetsToLL_M-50.root'), 4.895E+03) #pb
+	# 			],									
 	'DYJetsToLL' : [
 				(ROOT.TFile('efficiency_DYJetsToLL_M-1to10.root'), 1.757E+05), #pb
 				(ROOT.TFile('efficiency_DYJetsToLL_M-10to50.root'), 1.614E+04), #pb
@@ -78,7 +78,7 @@ configSets = {
 			}
 
 selectionSequences = [
-		"",
+		# "",
 		# "HLT",
 		"RECO",
 		"HLTRECO"
@@ -119,7 +119,11 @@ def plotEff(dataset, filesXSec, configNames, egCut, selectionSequence, writer):
 			histoToPlot.Draw("SAME")
 			# fill csv
 			if (9 <= egCut <= 12):
-				writer.writerow([egCut, translateConfigNameToLegend(config, egCut), histoToPlot.GetBinContent(4+1), histoToPlot.GetBinContent(5+1), histoToPlot.GetBinContent(6+1), histoToPlot.GetBinContent(7+1), ])
+				writer.writerow([egCut, translateConfigNameToLegend(config, egCut), str(int(round(100.0*histoToPlot.GetBinContent(4+1))))+"%",
+																					str(int(round(100.0*histoToPlot.GetBinContent(5+1))))+"%",
+																					str(int(round(100.0*histoToPlot.GetBinContent(6+1))))+"%",
+																					str(int(round(100.0*histoToPlot.GetBinContent(7+1))))+"%"
+																					])
 
 	leg.Draw();
 	c1.Update()
@@ -138,7 +142,7 @@ for dataset in effFilesXSec:
 			effCSVFile  = open("l1Plots/"+dataset+"/L1"+selectionSequence+"/"+configName+"/h_L1"+selectionSequence+".csv", "wb")
 			writer = csv.writer(effCSVFile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 			writer.writerow(["EG Cut","L1 Config", "DoubleMu_"+str(4), "DoubleMu_"+str(5), "DoubleMu_"+str(6), "DoubleMu_"+str(7)])
-			for egCut in [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]:
+			for egCut in [4,5,6,7,8,9,10,11,12]:
 				plotEff(dataset, effFilesXSec[dataset], configSets[configName], egCut, selectionSequence, writer)
 			effCSVFile.close()
 
