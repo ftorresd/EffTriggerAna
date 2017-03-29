@@ -61,41 +61,27 @@ def translateConfigNameToLegend(config, egCut):
 	return config.replace("Y",str(egCut))
 
 
-def getPlot(filesXSec, configNames, egCut, selectionSequence):
+def getPlot(filesXSec, config, egCut, selectionSequence):
 	histoToPlot = filesXSec[0][0].Get(config).Get("h_L1"+selectionSequence+"_"+config+"_EG_"+str(egCut))
 	normFactor = (filesXSec[0][1]/filesXSec[0][0].Get(config).Get("h_nEvts_"+config).GetBinContent(1))
 	histoToPlot.Scale( normFactor )
-	nEvtsEff = normFactor * ( filesXSec[0][0].Get(config).Get("h_nEvts"+selectionSequence+"_"+config).GetBinContent(1))	
-	for index, config in enumerate(configNames):
-		histoToPlot = filesXSec[0][0].Get(config).Get("h_L1"+selectionSequence+"_"+config+"_EG_"+str(egCut))
-		normFactor = (filesXSec[0][1]/filesXSec[0][0].Get(config).Get("h_nEvts_"+config).GetBinContent(1))
-		histoToPlot.Scale( normFactor )
-		nEvtsEff = normFactor * ( filesXSec[0][0].Get(config).Get("h_nEvts"+selectionSequence+"_"+config).GetBinContent(1))
-		for fileXSec in filesXSec[1:]:
-			histo = fileXSec[0].Get(config).Get("h_L1"+selectionSequence+"_"+config+"_EG_"+str(egCut))
-			# histo.Scale( (fileXSec[1]/fileXSec[0].Get(config).Get("h_nEvts_"+config).GetBinContent(1))/(fileXSec[0].Get(config).Get("h_nEvts"+selectionSequence+"_"+config).GetBinContent(1) ) )
-			histo.Scale( normFactor )
-			histoToPlot.Add(histo)
-			nEvtsEff += normFactor * ( fileXSec[0].Get(config).Get("h_nEvts"+selectionSequence+"_"+config).GetBinContent(1) )
+	nEvtsEff = normFactor * ( filesXSec[0][0].Get(config).Get("h_nEvts"+selectionSequence+"_"+config).GetBinContent(1))
+	for fileXSec in filesXSec[1:]:
+		histo = fileXSec[0].Get(config).Get("h_L1"+selectionSequence+"_"+config+"_EG_"+str(egCut))
+		histo.Scale( normFactor )
+		histoToPlot.Add(histo)
+		nEvtsEff += normFactor * ( fileXSec[0].Get(config).Get("h_nEvts"+selectionSequence+"_"+config).GetBinContent(1) )
+
 	return (histoToPlot,nEvtsEff)
 
 
 def plotEff(filesXSec, configNames, egCut, selectionSequence):
-	# ROOT.gROOT.Reset()
-	# c1 = ROOT.TCanvas("c1","c1",200,10,1050,750);
-	# leg = ROOT.TLegend(0.90-.38,0.7,0.9,0.9);
+	ROOT.gROOT.Reset()
+	c1 = ROOT.TCanvas("c1","c1",200,10,1050,750);
+	leg = ROOT.TLegend(0.90-.38,0.7,0.9,0.9);
 
 	for index, config in enumerate(configNames):
-		histoToPlot = filesXSec[0][0].Get(config).Get("h_L1"+selectionSequence+"_"+config+"_EG_"+str(egCut))
-		normFactor = (filesXSec[0][1]/filesXSec[0][0].Get(config).Get("h_nEvts_"+config).GetBinContent(1))
-		histoToPlot.Scale( normFactor )
-		nEvtsEff = normFactor * ( filesXSec[0][0].Get(config).Get("h_nEvts"+selectionSequence+"_"+config).GetBinContent(1))
-		for fileXSec in filesXSec[1:]:
-			histo = fileXSec[0].Get(config).Get("h_L1"+selectionSequence+"_"+config+"_EG_"+str(egCut))
-			# histo.Scale( (fileXSec[1]/fileXSec[0].Get(config).Get("h_nEvts_"+config).GetBinContent(1))/(fileXSec[0].Get(config).Get("h_nEvts"+selectionSequence+"_"+config).GetBinContent(1) ) )
-			histo.Scale( normFactor )
-			histoToPlot.Add(histo)
-			nEvtsEff += normFactor * ( fileXSec[0].Get(config).Get("h_nEvts"+selectionSequence+"_"+config).GetBinContent(1) )
+		signalPlot = getPlot(filesXSec["ZToJPsiGamma"], config, egCut, selectionSequence)
 
 		if (nEvtsEff > 0):
 			histoToPlot.Scale(1.0/nEvtsEff)
@@ -110,14 +96,10 @@ def plotEff(filesXSec, configNames, egCut, selectionSequence):
 			# print "oi"
 			# histo.Print()
  
-	# leg->SetHeader("The Legend Title","C"); // option "C" allows to center the header
-	# leg->AddEntry(h1,"Histogram filled with random numbers","f");
-	# leg->AddEntry("f1","Function abs(#frac{sin(x)}{x})","l");
-	# leg->AddEntry("gr","Graph with error bars","lep");
-	# leg.Draw();
-	# c1.Update()
-	# c1.SaveAs("ratioL1Plots/"+dataset+"/L1"+selectionSequence+"/"+configName+"/h_L1"+selectionSequence+"_EG_"+str(egCut)+".pdf");
-	# c1.SaveAs("ratioL1Plots/"+dataset+"/L1"+selectionSequence+"/"+configName+"/h_L1"+selectionSequence+"_EG_"+str(egCut)+".png");
+	leg.Draw();
+	c1.Update()
+	c1.SaveAs("ratioL1Plots/"+dataset+"/L1"+selectionSequence+"/"+configName+"/h_L1"+selectionSequence+"_EG_"+str(egCut)+".pdf");
+	c1.SaveAs("ratioL1Plots/"+dataset+"/L1"+selectionSequence+"/"+configName+"/h_L1"+selectionSequence+"_EG_"+str(egCut)+".png");
 
 # loop over datasets file
 os.system("rm -rf ratioL1Plots ; mkdir ratioL1Plots")

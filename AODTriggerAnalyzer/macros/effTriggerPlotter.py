@@ -237,17 +237,12 @@ def plotEff(dataset, filesXSec, configNames, egCut, selectionSequence):
 	leg = ROOT.TLegend(0.9-.38,0.7,0.9,0.9);
 
 	for index, config in enumerate(configNames):
-		# print "h_L1"+selectionSequence+"_"+config+"_EG_"+str(egCut)
-		# print config
-		# print filesXSec[0][0].Get(config)
 		histoToPlot = filesXSec[0][0].Get(config).Get("h_L1"+selectionSequence+"_"+config+"_EG_"+str(egCut))
-		# histoToPlot.Scale( (filesXSec[0][1]/filesXSec[0][0].Get(config).Get("h_nEvts_"+config).GetBinContent(1))/(filesXSec[0][0].Get(config).Get("h_nEvts"+selectionSequence+"_"+config).GetBinContent(1) ) )
 		normFactor = (filesXSec[0][1]/filesXSec[0][0].Get(config).Get("h_nEvts_"+config).GetBinContent(1))
 		histoToPlot.Scale( normFactor )
 		nEvtsEff = normFactor * ( filesXSec[0][0].Get(config).Get("h_nEvts"+selectionSequence+"_"+config).GetBinContent(1))
 		for fileXSec in filesXSec[1:]:
 			histo = fileXSec[0].Get(config).Get("h_L1"+selectionSequence+"_"+config+"_EG_"+str(egCut))
-			# histo.Scale( (fileXSec[1]/fileXSec[0].Get(config).Get("h_nEvts_"+config).GetBinContent(1))/(fileXSec[0].Get(config).Get("h_nEvts"+selectionSequence+"_"+config).GetBinContent(1) ) )
 			histo.Scale( normFactor )
 			histoToPlot.Add(histo)
 			nEvtsEff += normFactor * ( fileXSec[0].Get(config).Get("h_nEvts"+selectionSequence+"_"+config).GetBinContent(1) )
@@ -262,13 +257,7 @@ def plotEff(dataset, filesXSec, configNames, egCut, selectionSequence):
 			histoToPlot.GetXaxis().SetRangeUser(0.0, 40.0)
 	  		leg.AddEntry(histoToPlot,translateConfigNameToLegend(config, egCut));
 			histoToPlot.Draw("same")
-			# print "oi"
-			# histo.Print()
- 
-	# leg->SetHeader("The Legend Title","C"); // option "C" allows to center the header
-	# leg->AddEntry(h1,"Histogram filled with random numbers","f");
-	# leg->AddEntry("f1","Function abs(#frac{sin(x)}{x})","l");
-	# leg->AddEntry("gr","Graph with error bars","lep");
+
 	leg.Draw();
 	c1.Update()
 	# c1.SaveAs("l1Plots/"+dataset+"/L1"+selectionSequence+"/"+configName+"/h_L1"+selectionSequence+"_EG_"+str(egCut)+".pdf");
@@ -285,3 +274,6 @@ for dataset in effFilesXSec:
 			# for egCut in range(51):
 			for egCut in [0,5,6,7,8,9,10,11,12,13,14,15]:
 				plotEff(dataset, effFilesXSec[dataset], configSets[configName], egCut, selectionSequence)
+
+
+				
