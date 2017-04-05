@@ -127,26 +127,28 @@ DoubleMu_X_OS_EG_Y = {
 		"L1_DoubleMu5_OS_EG11" : [ 165.428, 14.398],
 		"L1_DoubleMu5_OS_EG12" : [ 137.857, 13.144],
 		"L1_DoubleMu4_OS_EG09" : [ 617.848, 27.826],
-		# "L1_DoubleMu4_OS_EG11" : [ 350.908, 20.970],
-		# "L1_DoubleMu4_OS_EG12" : [ 278.22,  18.672],
-		# "L1_DoubleMu3_OS_EG9" : [ 1279.56, 40.044],
-		# "L1_DoubleMu3_OS_EG11" : [ 723.12,  30.103],
-		# "L1_DoubleMu3_OS_EG12" : [ 562.705, 26.555],
-		# "L1_DoubleMu2_OS_EG9" : [ 2436.3,  55.256],
-		# "L1_DoubleMu2_OS_EG11" : [ 1363.53, 41.338],
-		# "L1_DoubleMu2_OS_EG12" : [ 1035.18, 36.018],
-		# "L1_DoubleMu1_OS_EG9" : [ 2891.23, 60.194],
-		# "L1_DoubleMu1_OS_EG11" : [ 1599.14, 44.767],
-		# "L1_DoubleMu1_OS_EG12" : [ 1216.9,  39.052],
-		# "L1_DoubleMu0_OS_EG11" : [ 1599.14, 44.767],
-		# "L1_DoubleMu0_OS_EG12" : [ 1216.9,  39.052],
+		"L1_DoubleMu4_OS_EG11" : [ 350.908, 20.970],
+		"L1_DoubleMu4_OS_EG12" : [ 278.22,  18.672],
+		"L1_DoubleMu3_OS_EG9" : [ 1279.56, 40.044],
+		"L1_DoubleMu3_OS_EG11" : [ 723.12,  30.103],
+		"L1_DoubleMu3_OS_EG12" : [ 562.705, 26.555],
+		"L1_DoubleMu2_OS_EG9" : [ 2436.3,  55.256],
+		"L1_DoubleMu2_OS_EG11" : [ 1363.53, 41.338],
+		"L1_DoubleMu2_OS_EG12" : [ 1035.18, 36.018],
+		"L1_DoubleMu1_OS_EG9" : [ 2891.23, 60.194],
+		"L1_DoubleMu1_OS_EG11" : [ 1599.14, 44.767],
+		"L1_DoubleMu1_OS_EG12" : [ 1216.9,  39.052],
+		"L1_DoubleMu0_OS_EG11" : [ 1599.14, 44.767],
+		"L1_DoubleMu0_OS_EG12" : [ 1216.9,  39.052],
 	}
 
 
 def ratePlotter(configList, configName, sortBy):
 	plt.rcdefaults()
-	plt.figure(num=None, figsize=(99, 6), dpi=300, facecolor='w', edgecolor='k')
+	# plt.figure(num=None, figsize=(99, 6), dpi=300, facecolor='w', edgecolor='k')
 	fig, ax = plt.subplots()
+	fig.set_figheight(15)
+	fig.set_figwidth(15)
 	# Example data
 	y_pos = np.arange(len(configList))
 	rates = []
@@ -185,7 +187,7 @@ def ratePlotter(configList, configName, sortBy):
 	for label in ticklabels:
 	    label.set_color('orangered')
 	    # label.set_fontsize('medium')
-	    label.set_fontsize("small")
+	    label.set_fontsize(21)
 
 
 	plt.tight_layout()
