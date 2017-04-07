@@ -614,7 +614,8 @@ def ratePlotter(configList, configName, sortBy, minRate, maxRate):
 	ax.set_yticks(y_pos)
 	ax.set_yticklabels(labels)
 	ax.invert_yaxis()  # labels read top-to-bottom
-	ax.set_xlabel('Rate (Hz)')
+	ax.set_xlabel('Rate (Hz)', fontsize=35)
+	# fig.suptitle('test title', fontsize=35)
 	# ax.set_title('How fast do you want to go today?')
 	# plt.figure(figsize=(1, 1), dpi=300)
 	ax.grid(True)
@@ -633,17 +634,17 @@ def ratePlotter(configList, configName, sortBy, minRate, maxRate):
 	for label in ticklabels:
 	    label.set_color('orangered')
 	    # label.set_fontsize('medium')
-	    label.set_fontsize(21)
+	    label.set_fontsize(30)
 
-
+	plt.xlim([minRate,maxRate])
 	plt.tight_layout()
-	plt.savefig("l1Rates/rates_"+configName+"_"+sortBy+".png")
-	plt.savefig("l1Rates/rates_"+configName+"_"+sortBy+".pdf")
+	plt.savefig("l1Rates/rates_"+configName+"_"+sortBy+"_"+str(minRate)+"to"+str(minRate)+".png")
+	# plt.savefig("l1Rates/rates_"+configName+"_"+sortBy+"_"+str(minRate)+"to"+str(minRate)+".pdf")
 
 os.system("rm -rf l1Rates ; mkdir l1Rates")
 # ratePlotter(configRates, "total", "rate")
 # ratePlotter(configRates, "total", "label")
-ratePlotter(DoubleMu_Asymetric, "DoubleMu_Asymetric", "rate", 100.0, 200.0)
-ratePlotter(DoubleMu_Asymetric, "DoubleMu_Asymetric", "label", 100.0, 200.0)
-ratePlotter(DoubleMu_AsymetricISO, "DoubleMu_AsymetricISO", "rate", 50.0, 200.0)
-ratePlotter(DoubleMu_AsymetricISO, "DoubleMu_AsymetricISO", "label", 50.0, 200.0)
+ratePlotter(DoubleMu_Asymetric, "DoubleMu_Asymetric", "rate", 80.0, 200.0)
+ratePlotter(DoubleMu_Asymetric, "DoubleMu_Asymetric", "label", 80.0, 200.0)
+ratePlotter(DoubleMu_AsymetricISO, "DoubleMu_AsymetricISO", "rate", 40.0, 80.0)
+ratePlotter(DoubleMu_AsymetricISO, "DoubleMu_AsymetricISO", "label", 40.0, 80.0)
