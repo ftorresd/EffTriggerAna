@@ -1,18 +1,53 @@
 #!/usr/bin/env python
 
-"""
-Plotter for EffTriggerAna
-"""
 
-import ROOT, os
-import csv
+# from  ROOT import *
+import sys, math, csv, os, ROOT
+from array import array
+
 
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 ROOT.gROOT.SetBatch(1)
 ROOT.TH1.SetDefaultSumw2(True)
 ROOT.gStyle.SetOptStat(0)
+# ROOT.gStyle.SetPalette(ROOT.kBird)
 
 # configSets = [
+# "HLT_DoubleMu10_5_Mass0to30_Photon13_v1",
+# "HLT_DoubleMu11_5_Mass0to30_Photon13_v1",
+# "HLT_DoubleMu12_5_Mass0to30_Photon13_v1",
+# "HLT_DoubleMu13_5_Mass0to30_Photon13_v1",
+# "HLT_DoubleMu14_5_Mass0to30_Photon13_v1",
+# "HLT_DoubleMu15_5_Mass0to30_Photon13_v1",
+# "HLT_DoubleMu16_6_Mass0to30_Photon13_v1",
+# "HLT_DoubleMu17_7_Mass0to30_Photon13_v1",
+# "HLT_DoubleMu10_5_Mass0to30_Photon14_v1",
+# "HLT_DoubleMu11_5_Mass0to30_Photon14_v1",
+# "HLT_DoubleMu12_5_Mass0to30_Photon14_v1",
+# "HLT_DoubleMu13_5_Mass0to30_Photon14_v1",
+# "HLT_DoubleMu14_5_Mass0to30_Photon14_v1",
+# "HLT_DoubleMu15_5_Mass0to30_Photon14_v1",
+# "HLT_DoubleMu16_6_Mass0to30_Photon14_v1",
+# "HLT_DoubleMu17_7_Mass0to30_Photon14_v1",
+# "HLT_DoubleMu10_5_Mass0to30_Photon15_v1",
+# "HLT_DoubleMu11_5_Mass0to30_Photon15_v1",
+# "HLT_DoubleMu12_5_Mass0to30_Photon15_v1",
+# "HLT_DoubleMu13_5_Mass0to30_Photon15_v1",
+# "HLT_DoubleMu14_5_Mass0to30_Photon15_v1",
+# "HLT_DoubleMu15_5_Mass0to30_Photon15_v1",
+# "HLT_DoubleMu16_6_Mass0to30_Photon15_v1",
+# "HLT_DoubleMu17_7_Mass0to30_Photon15_v1",
+# "HLT_DoubleMu10_5_Mass0to30_Photon16_v1",
+# "HLT_DoubleMu11_5_Mass0to30_Photon16_v1",
+# "HLT_DoubleMu12_5_Mass0to30_Photon16_v1",
+# "HLT_DoubleMu13_5_Mass0to30_Photon16_v1",
+# "HLT_DoubleMu14_5_Mass0to30_Photon16_v1",
+# "HLT_DoubleMu15_5_Mass0to30_Photon16_v1",
+# "HLT_DoubleMu16_6_Mass0to30_Photon16_v1",
+# "HLT_DoubleMu17_7_Mass0to30_Photon16_v1",
+
+
+
 # "HLT_DoubleMu5_5_Mass0to30_Photon12_v1",
 # "HLT_DoubleMu6_6_Mass0to30_Photon12_v1",
 # "HLT_DoubleMu7_7_Mass0to30_Photon12_v1",
@@ -2304,219 +2339,106 @@ ROOT.gStyle.SetOptStat(0)
 # "HLT_DoubleMu20_15_Mass0to30_Photon40_v1",
 # "HLT_DoubleMu20_16_Mass0to30_Photon40_v1",
 # "HLT_DoubleMu20_20_Mass0to30_Photon40_v1"
-# 	]
+	# ]
 
 configSets = [
 "HLT_DoubleMu5_5_Mass0to30_Photon14_v1", "HLT_DoubleMu6_6_Mass0to30_Photon14_v1", "HLT_DoubleMu7_7_Mass0to30_Photon14_v1", "HLT_DoubleMu8_8_Mass0to30_Photon14_v1", "HLT_DoubleMu9_9_Mass0to30_Photon14_v1", "HLT_DoubleMu13_5_Mass0to30_Photon14_v1", "HLT_DoubleMu14_5_Mass0to30_Photon14_v1", "HLT_DoubleMu14_6_Mass0to30_Photon14_v1", "HLT_DoubleMu15_5_Mass0to30_Photon14_v1", "HLT_DoubleMu15_6_Mass0to30_Photon14_v1", "HLT_DoubleMu15_7_Mass0to30_Photon14_v1", "HLT_DoubleMu16_5_Mass0to30_Photon14_v1", "HLT_DoubleMu16_6_Mass0to30_Photon14_v1", "HLT_DoubleMu16_7_Mass0to30_Photon14_v1", "HLT_DoubleMu17_5_Mass0to30_Photon14_v1", "HLT_DoubleMu17_6_Mass0to30_Photon14_v1", "HLT_DoubleMu17_7_Mass0to30_Photon14_v1", "HLT_DoubleMu18_5_Mass0to30_Photon14_v1", "HLT_DoubleMu18_6_Mass0to30_Photon14_v1", "HLT_DoubleMu18_7_Mass0to30_Photon14_v1", "HLT_DoubleMu19_5_Mass0to30_Photon14_v1", "HLT_DoubleMu19_6_Mass0to30_Photon14_v1", "HLT_DoubleMu19_7_Mass0to30_Photon14_v1", "HLT_DoubleMu20_5_Mass0to30_Photon14_v1", "HLT_DoubleMu20_6_Mass0to30_Photon14_v1", "HLT_DoubleMu20_7_Mass0to30_Photon14_v1", "HLT_DoubleMu5_5_Mass0to30_Photon15_v1", "HLT_DoubleMu6_6_Mass0to30_Photon15_v1", "HLT_DoubleMu7_7_Mass0to30_Photon15_v1", "HLT_DoubleMu8_8_Mass0to30_Photon15_v1", "HLT_DoubleMu9_9_Mass0to30_Photon15_v1", "HLT_DoubleMu13_5_Mass0to30_Photon15_v1", "HLT_DoubleMu14_5_Mass0to30_Photon15_v1", "HLT_DoubleMu14_6_Mass0to30_Photon15_v1", "HLT_DoubleMu15_5_Mass0to30_Photon15_v1", "HLT_DoubleMu15_6_Mass0to30_Photon15_v1", "HLT_DoubleMu15_7_Mass0to30_Photon15_v1", "HLT_DoubleMu16_5_Mass0to30_Photon15_v1", "HLT_DoubleMu16_6_Mass0to30_Photon15_v1", "HLT_DoubleMu16_7_Mass0to30_Photon15_v1", "HLT_DoubleMu17_5_Mass0to30_Photon15_v1", "HLT_DoubleMu17_6_Mass0to30_Photon15_v1", "HLT_DoubleMu17_7_Mass0to30_Photon15_v1", "HLT_DoubleMu18_5_Mass0to30_Photon15_v1", "HLT_DoubleMu18_6_Mass0to30_Photon15_v1", "HLT_DoubleMu18_7_Mass0to30_Photon15_v1", "HLT_DoubleMu19_5_Mass0to30_Photon15_v1", "HLT_DoubleMu19_6_Mass0to30_Photon15_v1", "HLT_DoubleMu19_7_Mass0to30_Photon15_v1", "HLT_DoubleMu20_5_Mass0to30_Photon15_v1", "HLT_DoubleMu20_6_Mass0to30_Photon15_v1", "HLT_DoubleMu20_7_Mass0to30_Photon15_v1", "HLT_DoubleMu5_5_Mass0to30_Photon16_v1", "HLT_DoubleMu6_6_Mass0to30_Photon16_v1", "HLT_DoubleMu7_7_Mass0to30_Photon16_v1", "HLT_DoubleMu8_8_Mass0to30_Photon16_v1", "HLT_DoubleMu9_9_Mass0to30_Photon16_v1", "HLT_DoubleMu13_5_Mass0to30_Photon16_v1", "HLT_DoubleMu14_5_Mass0to30_Photon16_v1", "HLT_DoubleMu14_6_Mass0to30_Photon16_v1", "HLT_DoubleMu15_5_Mass0to30_Photon16_v1", "HLT_DoubleMu15_6_Mass0to30_Photon16_v1", "HLT_DoubleMu15_7_Mass0to30_Photon16_v1", "HLT_DoubleMu16_5_Mass0to30_Photon16_v1", "HLT_DoubleMu16_6_Mass0to30_Photon16_v1", "HLT_DoubleMu16_7_Mass0to30_Photon16_v1", "HLT_DoubleMu17_5_Mass0to30_Photon16_v1", "HLT_DoubleMu17_6_Mass0to30_Photon16_v1", "HLT_DoubleMu17_7_Mass0to30_Photon16_v1", "HLT_DoubleMu18_5_Mass0to30_Photon16_v1", "HLT_DoubleMu18_6_Mass0to30_Photon16_v1", "HLT_DoubleMu18_7_Mass0to30_Photon16_v1", "HLT_DoubleMu19_5_Mass0to30_Photon16_v1", "HLT_DoubleMu19_6_Mass0to30_Photon16_v1", "HLT_DoubleMu19_7_Mass0to30_Photon16_v1", "HLT_DoubleMu20_5_Mass0to30_Photon16_v1", "HLT_DoubleMu20_6_Mass0to30_Photon16_v1", "HLT_DoubleMu20_7_Mass0to30_Photon16_v1", "HLT_DoubleMu5_5_Mass0to30_Photon17_v1", "HLT_DoubleMu6_6_Mass0to30_Photon17_v1", "HLT_DoubleMu7_7_Mass0to30_Photon17_v1", "HLT_DoubleMu8_8_Mass0to30_Photon17_v1", "HLT_DoubleMu9_9_Mass0to30_Photon17_v1", "HLT_DoubleMu13_5_Mass0to30_Photon17_v1", "HLT_DoubleMu14_5_Mass0to30_Photon17_v1", "HLT_DoubleMu14_6_Mass0to30_Photon17_v1", "HLT_DoubleMu15_5_Mass0to30_Photon17_v1", "HLT_DoubleMu15_6_Mass0to30_Photon17_v1", "HLT_DoubleMu15_7_Mass0to30_Photon17_v1", "HLT_DoubleMu16_5_Mass0to30_Photon17_v1", "HLT_DoubleMu16_6_Mass0to30_Photon17_v1", "HLT_DoubleMu16_7_Mass0to30_Photon17_v1", "HLT_DoubleMu17_5_Mass0to30_Photon17_v1", "HLT_DoubleMu17_6_Mass0to30_Photon17_v1", "HLT_DoubleMu17_7_Mass0to30_Photon17_v1", "HLT_DoubleMu18_5_Mass0to30_Photon17_v1", "HLT_DoubleMu18_6_Mass0to30_Photon17_v1", "HLT_DoubleMu18_7_Mass0to30_Photon17_v1", "HLT_DoubleMu19_5_Mass0to30_Photon17_v1", "HLT_DoubleMu19_6_Mass0to30_Photon17_v1", "HLT_DoubleMu19_7_Mass0to30_Photon17_v1", "HLT_DoubleMu20_5_Mass0to30_Photon17_v1", "HLT_DoubleMu20_6_Mass0to30_Photon17_v1", "HLT_DoubleMu20_7_Mass0to30_Photon17_v1", "HLT_DoubleMu5_5_Mass0to30_Photon18_v1", "HLT_DoubleMu6_6_Mass0to30_Photon18_v1", "HLT_DoubleMu7_7_Mass0to30_Photon18_v1", "HLT_DoubleMu8_8_Mass0to30_Photon18_v1", "HLT_DoubleMu9_9_Mass0to30_Photon18_v1", "HLT_DoubleMu13_5_Mass0to30_Photon18_v1", "HLT_DoubleMu14_5_Mass0to30_Photon18_v1", "HLT_DoubleMu14_6_Mass0to30_Photon18_v1", "HLT_DoubleMu15_5_Mass0to30_Photon18_v1", "HLT_DoubleMu15_6_Mass0to30_Photon18_v1", "HLT_DoubleMu15_7_Mass0to30_Photon18_v1", "HLT_DoubleMu16_5_Mass0to30_Photon18_v1", "HLT_DoubleMu16_6_Mass0to30_Photon18_v1", "HLT_DoubleMu16_7_Mass0to30_Photon18_v1", "HLT_DoubleMu17_5_Mass0to30_Photon18_v1", "HLT_DoubleMu17_6_Mass0to30_Photon18_v1", "HLT_DoubleMu17_7_Mass0to30_Photon18_v1", "HLT_DoubleMu18_5_Mass0to30_Photon18_v1", "HLT_DoubleMu18_6_Mass0to30_Photon18_v1", "HLT_DoubleMu18_7_Mass0to30_Photon18_v1", "HLT_DoubleMu19_5_Mass0to30_Photon18_v1", "HLT_DoubleMu19_6_Mass0to30_Photon18_v1", "HLT_DoubleMu19_7_Mass0to30_Photon18_v1", "HLT_DoubleMu20_5_Mass0to30_Photon18_v1", "HLT_DoubleMu20_6_Mass0to30_Photon18_v1", "HLT_DoubleMu20_7_Mass0to30_Photon18_v1", "HLT_DoubleMu5_5_Mass0to30_Photon19_v1", "HLT_DoubleMu6_6_Mass0to30_Photon19_v1", "HLT_DoubleMu7_7_Mass0to30_Photon19_v1", "HLT_DoubleMu8_8_Mass0to30_Photon19_v1", "HLT_DoubleMu9_9_Mass0to30_Photon19_v1", "HLT_DoubleMu13_5_Mass0to30_Photon19_v1", "HLT_DoubleMu14_5_Mass0to30_Photon19_v1", "HLT_DoubleMu14_6_Mass0to30_Photon19_v1", "HLT_DoubleMu15_5_Mass0to30_Photon19_v1", "HLT_DoubleMu15_6_Mass0to30_Photon19_v1", "HLT_DoubleMu15_7_Mass0to30_Photon19_v1", "HLT_DoubleMu16_5_Mass0to30_Photon19_v1", "HLT_DoubleMu16_6_Mass0to30_Photon19_v1", "HLT_DoubleMu16_7_Mass0to30_Photon19_v1", "HLT_DoubleMu17_5_Mass0to30_Photon19_v1", "HLT_DoubleMu17_6_Mass0to30_Photon19_v1", "HLT_DoubleMu17_7_Mass0to30_Photon19_v1", "HLT_DoubleMu18_5_Mass0to30_Photon19_v1", "HLT_DoubleMu18_6_Mass0to30_Photon19_v1", "HLT_DoubleMu18_7_Mass0to30_Photon19_v1", "HLT_DoubleMu19_5_Mass0to30_Photon19_v1", "HLT_DoubleMu19_6_Mass0to30_Photon19_v1", "HLT_DoubleMu19_7_Mass0to30_Photon19_v1", "HLT_DoubleMu20_5_Mass0to30_Photon19_v1", "HLT_DoubleMu20_6_Mass0to30_Photon19_v1", "HLT_DoubleMu20_7_Mass0to30_Photon19_v1", "HLT_DoubleMu5_5_Mass0to30_Photon20_v1", "HLT_DoubleMu6_6_Mass0to30_Photon20_v1", "HLT_DoubleMu7_7_Mass0to30_Photon20_v1", "HLT_DoubleMu8_8_Mass0to30_Photon20_v1", "HLT_DoubleMu9_9_Mass0to30_Photon20_v1", "HLT_DoubleMu13_5_Mass0to30_Photon20_v1", "HLT_DoubleMu14_5_Mass0to30_Photon20_v1", "HLT_DoubleMu14_6_Mass0to30_Photon20_v1", "HLT_DoubleMu15_5_Mass0to30_Photon20_v1", "HLT_DoubleMu15_6_Mass0to30_Photon20_v1", "HLT_DoubleMu15_7_Mass0to30_Photon20_v1", "HLT_DoubleMu16_5_Mass0to30_Photon20_v1", "HLT_DoubleMu16_6_Mass0to30_Photon20_v1", "HLT_DoubleMu16_7_Mass0to30_Photon20_v1", "HLT_DoubleMu17_5_Mass0to30_Photon20_v1", "HLT_DoubleMu17_6_Mass0to30_Photon20_v1", "HLT_DoubleMu17_7_Mass0to30_Photon20_v1", "HLT_DoubleMu18_5_Mass0to30_Photon20_v1", "HLT_DoubleMu18_6_Mass0to30_Photon20_v1", "HLT_DoubleMu18_7_Mass0to30_Photon20_v1", "HLT_DoubleMu19_5_Mass0to30_Photon20_v1", "HLT_DoubleMu19_6_Mass0to30_Photon20_v1", "HLT_DoubleMu19_7_Mass0to30_Photon20_v1", "HLT_DoubleMu20_5_Mass0to30_Photon20_v1", "HLT_DoubleMu20_6_Mass0to30_Photon20_v1", "HLT_DoubleMu20_7_Mass0to30_Photon20_v1",
 ]
 
 
-def plotEff(numerator,denominator,configName, effName, saveDir, fileToWrite):
+# goodPaths = open("goodPaths.txt","w") 
+ 
+def getEff(numerator,denominator,configName, ratesToPlot):
+	ROOT.gROOT.Reset()
+	h_Eff = ROOT.TEfficiency(numerator,denominator)
+	efficiencyValue = h_Eff.GetEfficiency(1)
+	efficiencyErrorUp = h_Eff.GetEfficiencyErrorUp(1)
+	efficiencyErrorLow = h_Eff.GetEfficiencyErrorLow(1)
+	# if (efficiencyValue >= 0.6):
+	# 	goodPaths.write(configName+"\n") 
+	return [efficiencyValue, efficiencyErrorUp, efficiencyErrorLow]
+
+
+
+ratesToPlot = {}
+with open("rates_final_MC_QCDMu_QCDEm_WJets.csv", 'rb') as csvfile:	
+	reader = csv.DictReader(csvfile, delimiter=';', quotechar=';', quoting=csv.QUOTE_MINIMAL)
+	for row in reader:
+		# print row
+		ratesToPlot.update({row["HLT Path"] : [float(row["Rate_2p0E34"]), float(row["Rate_2p0E34 Error"])]})
+	# print ratesToPlot
+
+effsToPlot = {}
+effFile = ROOT.TFile('efficiency_v02_noL1.root')
+for configName in configSets:
+	# os.system("mkdir hltPlots/"+configName)
+	print configName
+	numerator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECOHLT_" + configName)
+	denominator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECO_" + configName)
+	effsToPlot.update({configName :  getEff(numerator, denominator, configName, ratesToPlot)})
+
+def plotRateEff(ratesToPlot, effsToPlot, minRate, maxRate, minEff, maxEff):
 	ROOT.gROOT.Reset()
 	c1 = ROOT.TCanvas("c1","c1",200,10,1050,750)
+	# c1.DrawFrame(minEff-0.1, minRate-0.1, maxEff+0.1, maxRate+0.1);				
+	baseGraph = ROOT.TMultiGraph();
 
-	numClone = numerator.Clone()
-	denClone = denominator.Clone()
-	if (effName != "total" and effName != "2d"):
-		numClone.Rebin(2)
-		denClone.Rebin(2)
+	index = 0
+	for config in effsToPlot:
+		if config in ratesToPlot:
+			rate = ratesToPlot[config][0]
+			ratesError = ratesToPlot[config][1]
+			efficiency = effsToPlot[config][0]
+			efficiencyErrorUp = effsToPlot[config][1]
+			efficiencyErrorLow = effsToPlot[config][2]
 
-	if (effName == "2d"):
-		numClone.Rebin2D(2)
-		denClone.Rebin2D(2)
-
-	# numClone.Print("base")
-	# denClone.Print("base")
-	
-	h_Eff = ROOT.TEfficiency(numClone,denClone)
-	if (effName == "2d"):
-		h_Eff.Draw("COLZ")
-	else:
-		h_Eff.Draw("AP")
+			if ((minEff <= efficiency <= maxEff) and (minRate <= rate <= maxRate)):
+				index += 1
+				# print efficiency, rate
+				x = [efficiency]
+				y = [rate]
+				exl = [efficiencyErrorUp]
+				exh = [efficiencyErrorLow]
+				eyl = [ratesError]
+				eyh = [ratesError]
+				# gr = ROOT.TGraphAsymmErrors(len(x),array('d',x),array('d',y),array('d',exl),array('d',exh),array('d',eyl),array('d',eyh))
+				gr = ROOT.TGraphAsymmErrors(len(x),array('d',x),array('d',y))
+				gr.SetTitle(config)
+				if (index == 10): index += 1
+				gr.SetMarkerColor(index)
+				gr.SetMarkerStyle(20)
+				gr.SetLineColor(0)
+				gr.SetFillColor(0)
+				baseGraph.Add(gr,"PMC");
+				# gr.SetTitle("")
+				# gr.GetXaxis().SetTitle("Efficiency")
+				# gr.GetYaxis().SetTitle("Unprescaled Rate (at 2E34 cm^-2 s^-1) [Hz]")
+				# gr.GetXaxis().SetRangeUser(minEff-0.1, maxEff+0.1)
+				# gr.GetYaxis().SetRangeUser(minRate-0.1, maxRate+0.1)
+				# gr.SetMarkerColor(index+1)
+				# gr.SetMarkerColor(ROOT.kBlue)
+				# gr.SetMarkerStyle(20)
+				# gr.Draw("P")
+	baseGraph.SetTitle("; Efficiency ; Unprescaled Rate (at 2E34 cm^-2 s^-1) [Hz]")
+	baseGraph.Draw("A PMC")
+	ROOT.gPad.BuildLegend()
 	c1.Update()
+	c1.SaveAs("hltRatesEff/ratesEffPlot_"+str(minRate)+"_"+str(maxRate)+"_"+str(minEff)+"_"+str(maxEff)+".png")
+	c1.SaveAs("hltRatesEff/ratesEffPlot_"+str(minRate)+"_"+str(maxRate)+"_"+str(minEff)+"_"+str(maxEff)+".pdf")
+	c1.SaveAs("hltRatesEff/ratesEffPlot_"+str(minRate)+"_"+str(maxRate)+"_"+str(minEff)+"_"+str(maxEff)+".root")
 
-	if (effName == "purity"):
-		h_Eff.SetTitle(configName+";  ; Purity")
-		h_Eff.GetPaintedGraph().GetYaxis().SetRangeUser(0.0, 1.05)
-		fileToWrite.write(configName+": "+str(h_Eff.GetEfficiency(1))+"\n") 
+os.system("rm -rf hltRatesEff ; mkdir hltRatesEff")
+# plotRateEff(ratesToPlot, effsToPlot, 0.1, 30.0, 0.0, 1.0)
+# # plotRateEff(ratesToPlot, effsToPlot, 0.1, 10.0, 0.5, 1.0)
+# plotRateEff(ratesToPlot, effsToPlot, 0.1, 18.0, 0.6, 1.0)
+# plotRateEff(ratesToPlot, effsToPlot, 0.1, 4.5, 0.6, 1.0)
+# plotRateEff(ratesToPlot, effsToPlot, 0.1, 4.5, 0.71, 1.0)
 
-	if (effName == "total"):
-		h_Eff.SetTitle(configName+";  ; Efficiency")
-		h_Eff.GetPaintedGraph().GetYaxis().SetRangeUser(0.0, 1.05)
-		fileToWrite.write(configName+": "+str(h_Eff.GetEfficiency(1))+"\n")
-
-	if (effName == "muon"):
-		h_Eff.SetTitle(configName+"; Leading Muon pT (GeV) ; Efficiency")
-		h_Eff.GetPaintedGraph().GetXaxis().SetRangeUser(0.0, 45.0)
-		h_Eff.GetPaintedGraph().GetYaxis().SetRangeUser(0.0, 1.05)
-
-	if (effName == "photon"):
-		h_Eff.SetTitle(configName+";  Photon pT (GeV) ; Efficiency")
-		h_Eff.GetPaintedGraph().GetXaxis().SetRangeUser(0.0, 60.0)
-		h_Eff.GetPaintedGraph().GetYaxis().SetRangeUser(0.0, 1.05)
-
-	if (effName == "2d"):
-		h_Eff.SetTitle(configName+";  Photon pT (GeV) ; Leading Muon pT (GeV)")
-		# h_Eff.GetPaintedGraph().SetRangeUser(0.0, 60.0)
-		h_Eff.GetPaintedHistogram().GetXaxis().SetRangeUser(0.0, 60.0)
-		h_Eff.GetPaintedHistogram().GetYaxis().SetRangeUser(0.0, 45.0)
-
-	c1.Update()
-	c1.SaveAs(saveDir+"/"+configName+"/"+effName+"_"+configName+".png")
-
-# loop over datasets file
-os.system("rm -rf hltPlots ; mkdir hltPlots")
-effFile = ROOT.TFile('efficiency_ZToJPsiGamma_HLTEff2017_ZToJPsiGamma_NoIso_90X_v11.root')
-# effFile = ROOT.TFile('efficiency_2.root')
-
-# RECOHLT / RECO
-saveDir = "hltPlots/RECOHLT" 
-os.system("mkdir -p "+saveDir)
-eff_RECOHLT = open(saveDir+"/eff_RECOHLT.txt","w") 
-for configName in configSets:
-	os.system("mkdir "+saveDir+"/"+configName)
-	print configName
-
-	# total
-	effName = "total"
-	numerator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECOHLT_" + configName)
-	denominator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECO_" + configName)
-	plotEff(numerator, denominator, configName, effName, saveDir, eff_RECOHLT)
-		
-	# muon
-	effName = "muon"
-	numerator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECOHLT_Muon_pT_" + configName)
-	denominator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECO_Muon_pT_" + configName)
-	plotEff(numerator, denominator, configName, effName, saveDir, eff_RECOHLT)
-		
-	# photon
-	effName = "photon"
-	numerator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECOHLT_Photon_pT_" + configName)
-	denominator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECO_Photon_pT_" + configName)
-	plotEff(numerator, denominator, configName, effName, saveDir, eff_RECOHLT)
-	
-	# photon x muon
-	effName = "2d"
-	numerator = effFile.Get(configName+"_EffAna").Get("h2_nEvtsRECOHLT_" + configName)
-	denominator = effFile.Get(configName+"_EffAna").Get("h2_nEvtsRECO_" + configName)
-	plotEff(numerator, denominator, configName, effName, saveDir, eff_RECOHLT)
-	# h2_nEvtsRECOHLT_HLT_DoubleMu20_7_Mass0to30_Photon20_v1
-
-		
-# RECOHLTMATCHMUON / RECO
-saveDir = "hltPlots/RECOHLTMATCHMUON" 
-os.system("mkdir -p "+saveDir)
-eff_RECOHLTMATCHMUON = open(saveDir+"/eff_RECOHLTMATCHMUON.txt","w") 
-for configName in configSets:
-	os.system("mkdir "+saveDir+"/"+configName)
-	print configName
-
-	# total
-	effName = "total"
-	numerator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECOHLTMATCHMUON_" + configName)
-	denominator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECO_" + configName)
-	plotEff(numerator, denominator, configName, effName, saveDir, eff_RECOHLTMATCHMUON)
-		
-	# muon
-	effName = "muon"
-	numerator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECOHLTMATCHMUON_Muon_pT_" + configName)
-	denominator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECO_Muon_pT_" + configName)
-	plotEff(numerator, denominator, configName, effName, saveDir, eff_RECOHLTMATCHMUON)
-		
-	# photon
-	effName = "photon"
-	numerator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECOHLTMATCHMUON_Photon_pT_" + configName)
-	denominator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECO_Photon_pT_" + configName)
-	plotEff(numerator, denominator, configName, effName, saveDir, eff_RECOHLTMATCHMUON)
-	
-	# photon x muon
-	effName = "2d"
-	numerator = effFile.Get(configName+"_EffAna").Get("h2_nEvtsRECOHLTMATCHMUON_" + configName)
-	denominator = effFile.Get(configName+"_EffAna").Get("h2_nEvtsRECO_" + configName)
-	plotEff(numerator, denominator, configName, effName, saveDir, eff_RECOHLTMATCHMUON)
+plotRateEff(ratesToPlot, effsToPlot, 0.4, 3, 0.1, 1.0)
 
 
-# RECOHLTMATCHPHOTON / RECO
-saveDir = "hltPlots/RECOHLTMATCHPHOTON" 
-os.system("mkdir -p "+saveDir)
-eff_RECOHLTMATCHPHOTON = open(saveDir+"/eff_RECOHLTMATCHPHOTON.txt","w") 
-for configName in configSets:
-	os.system("mkdir "+saveDir+"/"+configName)
-	print configName
-
-	# total
-	effName = "total"
-	numerator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECOHLTMATCHPHOTON_" + configName)
-	denominator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECO_" + configName)
-	plotEff(numerator, denominator, configName, effName, saveDir, eff_RECOHLTMATCHPHOTON)
-		
-	# muon
-	effName = "muon"
-	numerator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECOHLTMATCHPHOTON_Muon_pT_" + configName)
-	denominator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECO_Muon_pT_" + configName)
-	plotEff(numerator, denominator, configName, effName, saveDir, eff_RECOHLTMATCHPHOTON)
-		
-	# photon
-	effName = "photon"
-	numerator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECOHLTMATCHPHOTON_Photon_pT_" + configName)
-	denominator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECO_Photon_pT_" + configName)
-	plotEff(numerator, denominator, configName, effName, saveDir, eff_RECOHLTMATCHPHOTON)
-	
-	# photon x muon
-	effName = "2d"
-	numerator = effFile.Get(configName+"_EffAna").Get("h2_nEvtsRECOHLTMATCHPHOTON_" + configName)
-	denominator = effFile.Get(configName+"_EffAna").Get("h2_nEvtsRECO_" + configName)
-	plotEff(numerator, denominator, configName, effName, saveDir, eff_RECOHLTMATCHPHOTON)
 
 
-# RECOHLTMATCHMUONPHOTON / RECO
-saveDir = "hltPlots/RECOHLTMATCHMUONPHOTON" 
-os.system("mkdir -p "+saveDir)
-eff_RECOHLTMATCHMUONPHOTON = open(saveDir+"/eff_RECOHLTMATCHMUONPHOTON.txt","w") 
-for configName in configSets:
-	os.system("mkdir "+saveDir+"/"+configName)
-	print configName
-
-	# total
-	effName = "total"
-	numerator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECOHLTMATCHMUONPHOTON_" + configName)
-	denominator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECO_" + configName)
-	plotEff(numerator, denominator, configName, effName, saveDir, eff_RECOHLTMATCHMUONPHOTON)
-		
-	# muon
-	effName = "muon"
-	numerator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECOHLTMATCHMUONPHOTON_Muon_pT_" + configName)
-	denominator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECO_Muon_pT_" + configName)
-	plotEff(numerator, denominator, configName, effName, saveDir, eff_RECOHLTMATCHMUONPHOTON)
-		
-	# photon
-	effName = "photon"
-	numerator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECOHLTMATCHMUONPHOTON_Photon_pT_" + configName)
-	denominator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECO_Photon_pT_" + configName)
-	plotEff(numerator, denominator, configName, effName, saveDir, eff_RECOHLTMATCHMUONPHOTON)
-	
-	# photon x muon
-	effName = "2d"
-	numerator = effFile.Get(configName+"_EffAna").Get("h2_nEvtsRECOHLTMATCHMUONPHOTON_" + configName)
-	denominator = effFile.Get(configName+"_EffAna").Get("h2_nEvtsRECO_" + configName)
-	plotEff(numerator, denominator, configName, effName, saveDir, eff_RECOHLTMATCHMUONPHOTON)
-
-
-# PUR = RECOHLT / ORT
-saveDir = "hltPlots/PUR" 
-os.system("mkdir -p "+saveDir)
-eff_PUR = open(saveDir+"/eff_PUR.txt","w") 
-for configName in configSets:
-	os.system("mkdir "+saveDir+"/"+configName)
-	print configName
-
-	# total
-	effName = "purity"
-	numerator = effFile.Get(configName+"_EffAna").Get("h_nEvtsRECOHLT_" + configName)
-	denominator = effFile.Get(configName+"_EffAna").Get("h_nEvtsORTHLT_" + configName)
-	# print "numerator: " + str(numerator.GetBinContent(1))
-	# print "denominator: " + str(denominator.GetBinContent(1))
-	plotEff(numerator, denominator, configName, effName, saveDir, eff_PUR)
 
 
 
