@@ -27,7 +27,7 @@
 #include "DataFormats/HLTReco/interface/TriggerObject.h"
 #include "DataFormats/HLTReco/interface/TriggerEvent.h"
 
-// #include "TEfficiency.h"
+#include "TH2.h"
 // #include "TVectorD.h"
 // #include "RooInt.h"
 
@@ -36,9 +36,9 @@ class AODTriggerAnalyzer : public edm::EDAnalyzer {
 public:
   explicit AODTriggerAnalyzer(const edm::ParameterSet&);
   trigger::TriggerObjectCollection hltObjects(edm::EDGetTokenT<trigger::TriggerEvent> triggerSummaryLabel, edm::InputTag filterTag, const edm::Event &iEvent);
-  bool l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Handle< BXVector<l1t::EGamma> > l1EGammas, double muonPtCut, double egammaPtCut, const edm::Event &iEvent);
+  // bool l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Handle< BXVector<l1t::EGamma> > l1EGammas, const edm::Event &iEvent);
   bool recoFilter(edm::Handle< reco::MuonCollection > recoMuons, edm::Handle< reco::PhotonCollection > recoPhotons, const edm::Event &iEvent);
-  bool hltFilter(edm::Handle< edm::TriggerResults > triggerBits, std::string hltPath_, const edm::Event &iEvent);
+  bool hltFilter(edm::Handle< edm::TriggerResults > triggerBits, std::string Path, const edm::Event &iEvent);
   
 
 
@@ -53,10 +53,11 @@ private:
   bool verbose_; 
 
   std::string hltPath_;
+  // std::string ortPath_;
 
   edm::EDGetTokenT< edm::TriggerResults > triggerBits_;
-  edm::EDGetTokenT< BXVector<l1t::Muon> > l1Muons_;
-  edm::EDGetTokenT< BXVector<l1t::EGamma> > l1EGammas_;
+  // edm::EDGetTokenT< BXVector<l1t::Muon> > l1Muons_;
+  // edm::EDGetTokenT< BXVector<l1t::EGamma> > l1EGammas_;
   edm::EDGetTokenT< reco::MuonCollection > recoMuons_;
   edm::EDGetTokenT< reco::PhotonCollection > recoPhotons_;
   edm::EDGetTokenT< trigger::TriggerEvent > triggerSummaryLabel_;
@@ -96,24 +97,47 @@ private:
   // Evts Counters
   int nEvts;
   int nEvtsRECO;
-  int nEvtsHLT;
-  int nEvtsHLTRECO;
+  int nEvtsRECOHLT;
+  int nEvtsRECOHLTMATCHMUON;
+  int nEvtsRECOHLTMATCHPHOTON;
+  int nEvtsRECOHLTMATCHMUONPHOTON;
+  // int nEvtsORT;
+  int nEvtsORTHLT;
+
   TH1D* TnEvts;
   TH1D* TnEvtsRECO;
-  TH1D* TnEvtsHLT;
-  TH1D* TnEvtsHLTRECO;
-
+  TH1D* TnEvtsRECOHLT;
+  TH1D* TnEvtsRECOHLTMATCHMUON;
+  TH1D* TnEvtsRECOHLTMATCHPHOTON;
+  TH1D* TnEvtsRECOHLTMATCHMUONPHOTON;
+  // TH1D* TnEvtsORT;
+  TH1D* TnEvtsORTHLT;
 
   TH1D* TnEvtsRECO_Muon_pT;
-  TH1D* TnEvtsHLTRECO_Muon_pT;
-  TH1D* TnEvtsHLT_Muon_pT;
+  TH1D* TnEvtsRECOHLT_Muon_pT;
+  TH1D* TnEvtsRECOHLTMATCHMUON_Muon_pT;
+  TH1D* TnEvtsRECOHLTMATCHPHOTON_Muon_pT;
+  TH1D* TnEvtsRECOHLTMATCHMUONPHOTON_Muon_pT;
+  // TH1D* TnEvtsORT_Muon_pT;
+  TH1D* TnEvtsORTHLT_Muon_pT;
 
   TH1D* TnEvtsRECO_Photon_pT;
-  TH1D* TnEvtsHLTRECO_Photon_pT;
-  TH1D* TnEvtsHLT_Photon_pT;
+  TH1D* TnEvtsRECOHLT_Photon_pT;
+  TH1D* TnEvtsRECOHLTMATCHMUON_Photon_pT;
+  TH1D* TnEvtsRECOHLTMATCHPHOTON_Photon_pT;
+  TH1D* TnEvtsRECOHLTMATCHMUONPHOTON_Photon_pT;
+  // TH1D* TnEvtsORT_Photon_pT;
+  TH1D* TnEvtsORTHLT_Photon_pT;
 
-  // Histos map
-  std::map<std::string, TH1D*> nEvtsHistosMap;
+  TH2D* T2nEvtsRECO;
+  TH2D* T2nEvtsRECOHLT;
+  TH2D* T2nEvtsRECOHLTMATCHMUON;
+  TH2D* T2nEvtsRECOHLTMATCHPHOTON;
+  TH2D* T2nEvtsRECOHLTMATCHMUONPHOTON;
+  // TH2D* T2nEvtsORT;
+  TH2D* T2nEvtsORTHLT;
+
+
 
 
 };
@@ -121,9 +145,10 @@ private:
 AODTriggerAnalyzer::AODTriggerAnalyzer(const edm::ParameterSet& iConfig):
 verbose_ (iConfig.getParameter< bool > ("verbose")),
 hltPath_ (iConfig.getParameter< std::string > ("hltPath")),
+// ortPath_ (iConfig.getParameter< std::string > ("ortPath")),
 triggerBits_(consumes< edm::TriggerResults >(iConfig.getParameter<edm::InputTag>("bits"))),
-l1Muons_(consumes< BXVector<l1t::Muon> >(iConfig.getParameter<edm::InputTag>("l1MuonsLabel"))),
-l1EGammas_(consumes< BXVector<l1t::EGamma> >(iConfig.getParameter<edm::InputTag>("l1EGammasLabel"))),
+// l1Muons_(consumes< BXVector<l1t::Muon> >(iConfig.getParameter<edm::InputTag>("l1MuonsLabel"))),
+// l1EGammas_(consumes< BXVector<l1t::EGamma> >(iConfig.getParameter<edm::InputTag>("l1EGammasLabel"))),
 recoMuons_(consumes< reco::MuonCollection >(iConfig.getParameter<edm::InputTag>("recoMuonsLabel"))),
 recoPhotons_(consumes< reco::PhotonCollection >(iConfig.getParameter<edm::InputTag>("recoPhotonsLabel"))),
 triggerSummaryLabel_ (consumes<trigger::TriggerEvent>(iConfig.getParameter<edm::InputTag> ("triggerSummaryLabel"))),
@@ -170,74 +195,66 @@ configName_ (iConfig.getParameter< std::string > ("configName"))
   // Define Evts count
   nEvts = 0;
   nEvtsRECO = 0;
-  nEvtsHLT = 0;
-  nEvtsHLTRECO = 0;
+  nEvtsRECOHLT = 0;
+  nEvtsRECOHLTMATCHMUON = 0;
+  nEvtsRECOHLTMATCHPHOTON = 0;
+  nEvtsRECOHLTMATCHMUONPHOTON = 0;
+  // nEvtsORT = 0;
+  nEvtsORTHLT = 0;
+
 
   // Books evts counters
   TnEvts = fs->make<TH1D>( ("h_nEvts_"+configName_).c_str() , ("h_nEvts_"+configName_+";  x; NEvts").c_str(), 1, 0., 1.);
+
   TnEvtsRECO = fs->make<TH1D>( ("h_nEvtsRECO_"+configName_).c_str() , ("h_nEvtsRECO_"+configName_+";  x; nEvtsRECO").c_str(), 1, 0., 1.);
-  TnEvtsHLT = fs->make<TH1D>( ("h_nEvtsHLT_"+configName_).c_str() , ("h_nEvtsHLT_"+configName_+";  x; nEvtsHLT").c_str(), 1, 0., 1.);
-  TnEvtsHLTRECO = fs->make<TH1D>( ("h_nEvtsHLTRECO_"+configName_).c_str() , ("h_nEvtsHLTRECO_"+configName_+";  x; nEvtsHLTRECO").c_str(), 1, 0., 1.);
+  TnEvtsRECOHLT = fs->make<TH1D>( ("h_nEvtsRECOHLT_"+configName_).c_str() , ("h_nEvtsRECOHLT_"+configName_+";  x; nEvtsRECOHLT").c_str(), 1, 0., 1.);
+  TnEvtsRECOHLTMATCHMUON = fs->make<TH1D>( ("h_nEvtsRECOHLTMATCHMUON_"+configName_).c_str() , ("h_nEvtsRECOHLTMATCHMUON_"+configName_+";  x; nEvtsRECOHLTMATCHMUON").c_str(), 1, 0., 1.);
+  TnEvtsRECOHLTMATCHPHOTON = fs->make<TH1D>( ("h_nEvtsRECOHLTMATCHPHOTON_"+configName_).c_str() , ("h_nEvtsRECOHLTMATCHPHOTON_"+configName_+";  x; nEvtsRECOHLTMATCHPHOTON").c_str(), 1, 0., 1.);
+  TnEvtsRECOHLTMATCHMUONPHOTON = fs->make<TH1D>( ("h_nEvtsRECOHLTMATCHMUONPHOTON_"+configName_).c_str() , ("h_nEvtsRECOHLTMATCHMUONPHOTON_"+configName_+";  x; nEvtsRECOHLTMATCHMUONPHOTON").c_str(), 1, 0., 1.);
+  // TnEvtsORT = fs->make<TH1D>( ("h_nEvtsORT_"+configName_).c_str() , ("h_nEvtsORT_"+configName_+";  x; nEvtsORT").c_str(), 1, 0., 1.);
+  TnEvtsORTHLT = fs->make<TH1D>( ("h_nEvtsORTHLT_"+configName_).c_str() , ("h_nEvtsORTHLT_"+configName_+";  x; nEvtsORTHLT").c_str(), 1, 0., 1.);
 
   TnEvtsRECO_Muon_pT = fs->make<TH1D>( ("h_nEvtsRECO_Muon_pT_"+configName_).c_str() , ("h_nEvtsRECO_Muon_pT_"+configName_+";  x; nEvtsRECO").c_str(), 80, 0., 80.);
-  TnEvtsHLTRECO_Muon_pT = fs->make<TH1D>( ("h_nEvtsHLTRECO_Muon_pT_"+configName_).c_str() , ("h_nEvtsHLTRECO_Muon_pT_"+configName_+";  x; nEvtsHLTRECO").c_str(), 80, 0., 80.);
-  TnEvtsHLT_Muon_pT = fs->make<TH1D>( ("h_nEvtsHLT_Muon_pT_"+configName_).c_str() , ("h_nEvtsHLT_Muon_pT_"+configName_+";  x; nEvtsHLT").c_str(), 80, 0., 80.);
+  TnEvtsRECOHLT_Muon_pT = fs->make<TH1D>( ("h_nEvtsRECOHLT_Muon_pT_"+configName_).c_str() , ("h_nEvtsRECOHLT_Muon_pT_"+configName_+";  x; nEvtsRECOHLT").c_str(), 80, 0., 80.);
+  TnEvtsRECOHLTMATCHMUON_Muon_pT = fs->make<TH1D>( ("h_nEvtsRECOHLTMATCHMUON_Muon_pT_"+configName_).c_str() , ("h_nEvtsRECOHLTMATCHMUON_Muon_pT_"+configName_+";  x; nEvtsRECOHLTMATCHMUON").c_str(), 80, 0., 80.);
+  TnEvtsRECOHLTMATCHPHOTON_Muon_pT = fs->make<TH1D>( ("h_nEvtsRECOHLTMATCHPHOTON_Muon_pT_"+configName_).c_str() , ("h_nEvtsRECOHLTMATCHPHOTON_Muon_pT_"+configName_+";  x; nEvtsRECOHLTMATCHPHOTON").c_str(), 80, 0., 80.);
+  TnEvtsRECOHLTMATCHMUONPHOTON_Muon_pT = fs->make<TH1D>( ("h_nEvtsRECOHLTMATCHMUONPHOTON_Muon_pT_"+configName_).c_str() , ("h_nEvtsRECOHLTMATCHMUONPHOTON_Muon_pT_"+configName_+";  x; nEvtsRECOHLTMATCHMUONPHOTON").c_str(), 80, 0., 80.);
+  // TnEvtsORT_Muon_pT = fs->make<TH1D>( ("h_nEvtsORT_Muon_pT_"+configName_).c_str() , ("h_nEvtsORT_Muon_pT_"+configName_+";  x; nEvtsORT").c_str(), 80, 0., 80.);
+  TnEvtsORTHLT_Muon_pT = fs->make<TH1D>( ("h_nEvtsORTHLT_Muon_pT_"+configName_).c_str() , ("h_nEvtsORTHLT_Muon_pT_"+configName_+";  x; nEvtsORTHLT").c_str(), 80, 0., 80.);
 
   TnEvtsRECO_Photon_pT = fs->make<TH1D>( ("h_nEvtsRECO_Photon_pT_"+configName_).c_str() , ("h_nEvtsRECO_Photon_pT_"+configName_+";  x; nEvtsRECO").c_str(), 80, 0., 80.);
-  TnEvtsHLTRECO_Photon_pT = fs->make<TH1D>( ("h_nEvtsHLTRECO_Photon_pT_"+configName_).c_str() , ("h_nEvtsHLTRECO_Photon_pT_"+configName_+";  x; nEvtsHLTRECO").c_str(), 80, 0., 80.);
-  TnEvtsHLT_Photon_pT = fs->make<TH1D>( ("h_nEvtsHLT_Photon_pT_"+configName_).c_str() , ("h_nEvtsHLT_Photon_pT_"+configName_+";  x; nEvtsHLT").c_str(), 80, 0., 80.);
+  TnEvtsRECOHLT_Photon_pT = fs->make<TH1D>( ("h_nEvtsRECOHLT_Photon_pT_"+configName_).c_str() , ("h_nEvtsRECOHLT_Photon_pT_"+configName_+";  x; nEvtsRECOHLT").c_str(), 80, 0., 80.);
+  TnEvtsRECOHLTMATCHMUON_Photon_pT = fs->make<TH1D>( ("h_nEvtsRECOHLTMATCHMUON_Photon_pT_"+configName_).c_str() , ("h_nEvtsRECOHLTMATCHMUON_Photon_pT_"+configName_+";  x; nEvtsRECOHLTMATCHMUON").c_str(), 80, 0., 80.);
+  TnEvtsRECOHLTMATCHPHOTON_Photon_pT = fs->make<TH1D>( ("h_nEvtsRECOHLTMATCHPHOTON_Photon_pT_"+configName_).c_str() , ("h_nEvtsRECOHLTMATCHPHOTON_Photon_pT_"+configName_+";  x; nEvtsRECOHLTMATCHPHOTON").c_str(), 80, 0., 80.);
+  TnEvtsRECOHLTMATCHMUONPHOTON_Photon_pT = fs->make<TH1D>( ("h_nEvtsRECOHLTMATCHMUONPHOTON_Photon_pT_"+configName_).c_str() , ("h_nEvtsRECOHLTMATCHMUONPHOTON_Photon_pT_"+configName_+";  x; nEvtsRECOHLTMATCHMUONPHOTON").c_str(), 80, 0., 80.);
+  // TnEvtsORT_Photon_pT = fs->make<TH1D>( ("h_nEvtsORT_Photon_pT_"+configName_).c_str() , ("h_nEvtsORT_Photon_pT_"+configName_+";  x; nEvtsORT").c_str(), 80, 0., 80.);
+  TnEvtsORTHLT_Photon_pT = fs->make<TH1D>( ("h_nEvtsORTHLT_Photon_pT_"+configName_).c_str() , ("h_nEvtsORTHLT_Photon_pT_"+configName_+";  x; nEvtsORTHLT").c_str(), 80, 0., 80.);
 
-  // Define Histos
+
+  T2nEvtsRECO = fs->make<TH2D>( ("h2_nEvtsRECO_"+configName_).c_str() , ("h2_nEvtsRECO_"+configName_+";  Photon pT (GeV); Leading Muon pT (GeV").c_str(), 80, 0., 80., 80, 0., 80.);
+  T2nEvtsRECOHLT = fs->make<TH2D>( ("h2_nEvtsRECOHLT_"+configName_).c_str() , ("h2_nEvtsRECOHLT_"+configName_+";  Photon pT (GeV); Leading Muon pT (GeV").c_str(), 80, 0., 80., 80, 0., 80.);
+  T2nEvtsRECOHLTMATCHMUON = fs->make<TH2D>( ("h2_nEvtsRECOHLTMATCHMUON_"+configName_).c_str() , ("h2_nEvtsRECOHLTMATCHMUON_"+configName_+";  Photon pT (GeV); Leading Muon pT (GeV").c_str(), 80, 0., 80., 80, 0., 80.);
+  T2nEvtsRECOHLTMATCHPHOTON = fs->make<TH2D>( ("h2_nEvtsRECOHLTMATCHPHOTON_"+configName_).c_str() , ("h2_nEvtsRECOHLTMATCHPHOTON_"+configName_+";  Photon pT (GeV); Leading Muon pT (GeV").c_str(), 80, 0., 80., 80, 0., 80.);
+  T2nEvtsRECOHLTMATCHMUONPHOTON = fs->make<TH2D>( ("h2_nEvtsRECOHLTMATCHMUONPHOTON_"+configName_).c_str() , ("h2_nEvtsRECOHLTMATCHMUONPHOTON_"+configName_+";  Photon pT (GeV); Leading Muon pT (GeV").c_str(), 80, 0., 80., 80, 0., 80.);
+  // T2nEvtsORT = fs->make<TH2D>( ("h2_nEvtsORT_"+configName_).c_str() , ("h2_nEvtsORT_"+configName_+";  Photon pT (GeV); Leading Muon pT (GeV").c_str(), 80, 0., 80., 80, 0., 80.);
+  T2nEvtsORTHLT = fs->make<TH2D>( ("h2_nEvtsORTHLT_"+configName_).c_str() , ("h2_nEvtsORTHLT_"+configName_+";  Photon pT (GeV); Leading Muon pT (GeV").c_str(), 80, 0., 80., 80, 0., 80.);
+
+
   TH1D::SetDefaultSumw2(); 
-  // if (l1AsymmetricCut_ == false) {
-  // // mu histos
-  //   for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
-  //     std::string histoNameSufix = configName_+"_EG_"+std::to_string((int) *j);
-  //     nEvtsHistosMap["h_L1_"+histoNameSufix] = fs->make<TH1D>( ("h_L1_"+histoNameSufix).c_str() , ("h_L1_"+histoNameSufix+";  Double Mu Pt Cut (GeV); Efficiency").c_str(), 80, 0., 80.);
-  //     nEvtsHistosMap["h_L1RECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1RECO_"+histoNameSufix).c_str() , ("h_L1RECO_"+histoNameSufix+";  Double Mu Pt Cut (GeV); Efficiency").c_str(), 80, 0., 80.);
-  //     nEvtsHistosMap["h_L1HLT_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLT_"+histoNameSufix).c_str() , ("h_L1HLT_"+histoNameSufix+";  Double Mu Pt Cut (GeV); Efficiency").c_str(), 80, 0., 80.);
-  //     nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLTRECO_"+histoNameSufix).c_str() , ("h_L1HLTRECO_"+histoNameSufix+";  Double Mu Pt Cut (GeV); Efficiency").c_str(), 80, 0., 80.);
-  //   }
-  // // eg histos
-  //   for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
-  //     std::string histoNameSufix = configName_+"_DoubleMu_"+std::to_string((int) *i);
-  //     nEvtsHistosMap["h_L1_"+histoNameSufix] = fs->make<TH1D>( ("h_L1_"+histoNameSufix).c_str() , ("h_L1_"+histoNameSufix+";  EGamma Pt Cut (GeV); Efficiency").c_str(), 50, 0., 50.);
-  //     nEvtsHistosMap["h_L1RECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1RECO_"+histoNameSufix).c_str() , ("h_L1RECO_"+histoNameSufix+";  EGamma Pt Cut (GeV); Efficiency").c_str(), 50, 0., 50.);
-  //     nEvtsHistosMap["h_L1HLT_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLT_"+histoNameSufix).c_str() , ("h_L1HLT_"+histoNameSufix+";  EGamma Pt Cut (GeV); Efficiency").c_str(), 50, 0., 50.);
-  //     nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLTRECO_"+histoNameSufix).c_str() , ("h_L1HLTRECO_"+histoNameSufix+";  EGamma Pt Cut (GeV); Efficiency").c_str(), 50, 0., 50.);
-  //   }    
-  // } else { // l1AsymmetricCut_ == true
-  // // mu histos
-  //   for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
-  //     std::string histoNameSufix = configName_+"_EG_"+std::to_string((int) *j);
-  //     nEvtsHistosMap["h_L1_"+histoNameSufix] = fs->make<TH1D>( ("h_L1_"+histoNameSufix).c_str() , ("h_L1_"+histoNameSufix+";  Trailing Muon Pt Cut (GeV); Efficiency").c_str(), int (l1AsymmetricLeadingMuonCut_), 0., l1AsymmetricLeadingMuonCut_);
-  //     nEvtsHistosMap["h_L1RECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1RECO_"+histoNameSufix).c_str() , ("h_L1RECO_"+histoNameSufix+";  Trailing Muon Pt Cut (GeV); Efficiency").c_str(), int (l1AsymmetricLeadingMuonCut_), 0., l1AsymmetricLeadingMuonCut_);
-  //     nEvtsHistosMap["h_L1HLT_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLT_"+histoNameSufix).c_str() , ("h_L1HLT_"+histoNameSufix+";  Trailing Muon Pt Cut (GeV); Efficiency").c_str(), int (l1AsymmetricLeadingMuonCut_), 0., l1AsymmetricLeadingMuonCut_);
-  //     nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLTRECO_"+histoNameSufix).c_str() , ("h_L1HLTRECO_"+histoNameSufix+";  Trailing Muon Pt Cut (GeV); Efficiency").c_str(), int (l1AsymmetricLeadingMuonCut_), 0., l1AsymmetricLeadingMuonCut_);
-  //   }
-  // // eg histos
-  //   for (std::vector<double>::const_iterator i = l1AsymmetricTrailingMuonCut_.begin(); i != l1AsymmetricTrailingMuonCut_.end(); i++ ){
-  //     std::string histoNameSufix = configName_+"_TrailingMu_"+std::to_string((int) *i);
-  //     nEvtsHistosMap["h_L1_"+histoNameSufix] = fs->make<TH1D>( ("h_L1_"+histoNameSufix).c_str() , ("h_L1_"+histoNameSufix+";  EGamma Pt Cut (GeV); Efficiency").c_str(), 50, 0., 50.);
-  //     nEvtsHistosMap["h_L1RECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1RECO_"+histoNameSufix).c_str() , ("h_L1RECO_"+histoNameSufix+";  EGamma Pt Cut (GeV); Efficiency").c_str(), 50, 0., 50.);
-  //     nEvtsHistosMap["h_L1HLT_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLT_"+histoNameSufix).c_str() , ("h_L1HLT_"+histoNameSufix+";  EGamma Pt Cut (GeV); Efficiency").c_str(), 50, 0., 50.);
-  //     nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix] = fs->make<TH1D>( ("h_L1HLTRECO_"+histoNameSufix).c_str() , ("h_L1HLTRECO_"+histoNameSufix+";  EGamma Pt Cut (GeV); Efficiency").c_str(), 50, 0., 50.);
-  //   }    
-  // }
 
 }
 
 void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
   edm::Handle< edm::TriggerResults > triggerBits;
-  edm::Handle< BXVector<l1t::Muon> > l1Muons;
-  edm::Handle< BXVector<l1t::EGamma> > l1EGammas;
+  // edm::Handle< BXVector<l1t::Muon> > l1Muons;
+  // edm::Handle< BXVector<l1t::EGamma> > l1EGammas;
   edm::Handle< reco::MuonCollection > recoMuons;
   edm::Handle< reco::PhotonCollection > recoPhotons;
 
   iEvent.getByToken(triggerBits_, triggerBits);
-  iEvent.getByToken(l1Muons_, l1Muons);
-  iEvent.getByToken(l1EGammas_, l1EGammas);
+  // iEvent.getByToken(l1Muons_, l1Muons);
+  // iEvent.getByToken(l1EGammas_, l1EGammas);
   iEvent.getByToken(recoMuons_, recoMuons);
   iEvent.getByToken(recoPhotons_, recoPhotons);
 
@@ -245,8 +262,16 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
   trigger::TriggerObjectCollection muonL3Objects = hltObjects(triggerSummaryLabel_, muonFilterTag_, iEvent);
   trigger::TriggerObjectCollection photonL3Objects = hltObjects(triggerSummaryLabel_, photonFilterTag_, iEvent);
 
+    // L1 Test
+  // bool l1Test = l1Filter(l1Muons, l1EGammas, iEvent);
+    // std::cout << "oi: " << std::endl;
+
     // HLT Test
   bool hltTest = hltFilter(triggerBits, hltPath_, iEvent);
+    // std::cout << "hltTest: " << hltTest << std::endl;
+
+    // ORT Test
+  // bool ortTest = hltFilter(triggerBits, ortPath_, iEvent);
     // std::cout << "hltTest: " << hltTest << std::endl;
 
     // RECO Test
@@ -289,63 +314,72 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
   // double drTrailPhoton = deltaRPhoton(trailingMuon,Gamma);
 
   nEvts++;
+
+// // ORT
+//   if (ortTest == true) {
+//     nEvtsORT++;
+//     TnEvtsORT_Muon_pT->Fill(myLeptons[0].pt());
+//     TnEvtsORT_Photon_pT->Fill(myPhotons[0].pt());
+//     T2nEvtsORT->Fill(myPhotons[0].pt(),myLeptons[0].pt());
+//   };
+
+// ORTHLT
+  // if (ortTest == true && hltTest == true) {
+  if (hltTest == true) {
+    nEvtsORTHLT++;
+    TnEvtsORTHLT_Muon_pT->Fill(myLeptons[0].pt());
+    TnEvtsORTHLT_Photon_pT->Fill(myPhotons[0].pt());
+    T2nEvtsORTHLT->Fill(myPhotons[0].pt(),myLeptons[0].pt());
+  };
+
+// RECO
   if (recoTest == true) {
     nEvtsRECO++;
     TnEvtsRECO_Muon_pT->Fill(myLeptons[0].pt());
     TnEvtsRECO_Photon_pT->Fill(myPhotons[0].pt());
+    T2nEvtsRECO->Fill(myPhotons[0].pt(),myLeptons[0].pt());
   };
 
+// RECOHLT
+  if (hltTest == true && recoTest == true) {
+    nEvtsRECOHLT++;  
+    TnEvtsRECOHLT_Muon_pT->Fill(myLeptons[0].pt());
+    TnEvtsRECOHLT_Photon_pT->Fill(myPhotons[0].pt());
+    T2nEvtsRECOHLT->Fill(myPhotons[0].pt(),myLeptons[0].pt());
+  }
+
+// RECOHLTMATCHPHOTON
+  if (hltTest == true && recoTest == true) {
+    if (deltaRPhoton(myPhotons[0],photonL3Objects[0]) <= 0.2) {
+      nEvtsRECOHLTMATCHPHOTON++;  
+      TnEvtsRECOHLTMATCHPHOTON_Muon_pT->Fill(myLeptons[0].pt());
+      TnEvtsRECOHLTMATCHPHOTON_Photon_pT->Fill(myPhotons[0].pt());
+      T2nEvtsRECOHLTMATCHPHOTON->Fill(myPhotons[0].pt(),myLeptons[0].pt());
+    }
+  }
+
+// RECOHLTMATCHMUON
+  if (hltTest == true && recoTest == true) {
+    if (deltaRMuon(myLeptons[0],muonL3Objects[0]) <= 0.2) {
+      nEvtsRECOHLTMATCHMUON++;  
+      TnEvtsRECOHLTMATCHMUON_Muon_pT->Fill(myLeptons[0].pt());
+      TnEvtsRECOHLTMATCHMUON_Photon_pT->Fill(myPhotons[0].pt());
+      T2nEvtsRECOHLTMATCHMUON->Fill(myPhotons[0].pt(),myLeptons[0].pt());
+    }
+  }
+
+// RECOHLTMATCHMUONPHOTON
   if (hltTest == true && recoTest == true) {
     if (deltaRMuon(myLeptons[0],muonL3Objects[0]) <= 0.2 && deltaRPhoton(myPhotons[0],photonL3Objects[0]) <= 0.2) {
-      nEvtsHLTRECO++;  
-      TnEvtsHLTRECO_Muon_pT->Fill(myLeptons[0].pt());
-      TnEvtsHLTRECO_Photon_pT->Fill(myPhotons[0].pt());
+      nEvtsRECOHLTMATCHMUONPHOTON++;  
+      TnEvtsRECOHLTMATCHMUONPHOTON_Muon_pT->Fill(myLeptons[0].pt());
+      TnEvtsRECOHLTMATCHMUONPHOTON_Photon_pT->Fill(myPhotons[0].pt());
+      T2nEvtsRECOHLTMATCHMUONPHOTON->Fill(myPhotons[0].pt(),myLeptons[0].pt());
     }
-  };
+  }
+  
 
-  if (hltTest == true && recoTest == true) {
-    nEvtsHLT++;
-    TnEvtsHLT_Muon_pT->Fill(myLeptons[0].pt());
-    TnEvtsHLT_Photon_pT->Fill(myPhotons[0].pt());
-  };
 
-  // if (l1AsymmetricCut_ == false) {
-  //   for (std::vector<double>::const_iterator i = l1MuonPt_.begin(); i != l1MuonPt_.end(); i++ ){
-  //     for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
-  //       bool l1Test = l1Filter(l1Muons, l1EGammas, *i, *j, iEvent);
-  //     // EG histos
-  //       std::string histoNameSufix = configName_+"_EG_"+std::to_string((int) *j);
-  //       if (l1Test == true) nEvtsHistosMap["h_L1_"+histoNameSufix]->Fill(*i);
-  //       if (recoTest == true && l1Test == true) nEvtsHistosMap["h_L1RECO_"+histoNameSufix]->Fill(*i);
-  //       if (hltTest == true && l1Test == true) nEvtsHistosMap["h_L1HLT_"+histoNameSufix]->Fill(*i);
-  //       if (hltTest == true && recoTest == true && l1Test == true) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Fill(*i);
-  //     // DoubleMu histos
-  //       histoNameSufix = configName_+"_DoubleMu_"+std::to_string((int) *i);
-  //       if (l1Test == true) nEvtsHistosMap["h_L1_"+histoNameSufix]->Fill(*j);
-  //       if (recoTest == true && l1Test == true) nEvtsHistosMap["h_L1RECO_"+histoNameSufix]->Fill(*j);
-  //       if (hltTest == true && l1Test == true) nEvtsHistosMap["h_L1HLT_"+histoNameSufix]->Fill(*j);
-  //       if (hltTest == true && recoTest == true && l1Test == true) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Fill(*j);
-  //     }
-  //   }    
-  // } else {  //l1AsymmetricCut_ == false
-  //   for (std::vector<double>::const_iterator i = l1AsymmetricTrailingMuonCut_.begin(); i != l1AsymmetricTrailingMuonCut_.end(); i++ ){
-  //     for (std::vector<double>::const_iterator j = l1EGammaPt_.begin(); j != l1EGammaPt_.end(); j++ ){
-  //       bool l1Test = l1Filter(l1Muons, l1EGammas, *i, *j, iEvent);
-  //     // EG histos
-  //       std::string histoNameSufix = configName_+"_EG_"+std::to_string((int) *j);
-  //       if (l1Test == true) nEvtsHistosMap["h_L1_"+histoNameSufix]->Fill(*i);
-  //       if (recoTest == true && l1Test == true) nEvtsHistosMap["h_L1RECO_"+histoNameSufix]->Fill(*i);
-  //       if (hltTest == true && l1Test == true) nEvtsHistosMap["h_L1HLT_"+histoNameSufix]->Fill(*i);
-  //       if (hltTest == true && recoTest == true && l1Test == true) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Fill(*i);
-  //     // Asymmetric Mu histos
-  //       histoNameSufix = configName_+"_TrailingMu_"+std::to_string((int) *i);
-  //       if (l1Test == true) nEvtsHistosMap["h_L1_"+histoNameSufix]->Fill(*j);
-  //       if (recoTest == true && l1Test == true) nEvtsHistosMap["h_L1RECO_"+histoNameSufix]->Fill(*j);
-  //       if (hltTest == true && l1Test == true) nEvtsHistosMap["h_L1HLT_"+histoNameSufix]->Fill(*j);
-  //       if (hltTest == true && recoTest == true && l1Test == true) nEvtsHistosMap["h_L1HLTRECO_"+histoNameSufix]->Fill(*j);
-  //     }
-  //   }    
-  // }
 }
 
 //find the filters
@@ -378,7 +412,7 @@ AODTriggerAnalyzer::hltObjects(edm::EDGetTokenT<trigger::TriggerEvent> triggerSu
 }
 
 bool 
-AODTriggerAnalyzer::hltFilter(edm::Handle< edm::TriggerResults > triggerBits, std::string hltPath_, const edm::Event &iEvent)
+AODTriggerAnalyzer::hltFilter(edm::Handle< edm::TriggerResults > triggerBits, std::string Path, const edm::Event &iEvent)
 {
 
   bool hltFilter_ = false;
@@ -391,7 +425,7 @@ AODTriggerAnalyzer::hltFilter(edm::Handle< edm::TriggerResults > triggerBits, st
     for( int i_Trig = 0; i_Trig < N_Triggers; ++i_Trig ) {
       if (triggerBits.product()->accept(i_Trig)) {
         // cout << "passed path: " << trigName.triggerName(i_Trig) <<endl;
-        if (trigName.triggerName(i_Trig) == hltPath_){
+        if (trigName.triggerName(i_Trig) == Path){
           return true;
         }
       }
@@ -506,13 +540,13 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
     double Mlleta = (leadingMuon.p4() + trailingMuon.p4()).eta();
     double Mllphi = (leadingMuon.p4() + trailingMuon.p4()).phi();
     if(verbose_) std::cout<< "Dimuons Invariant Mass Mll, pT, eta, phi: " << Mll << " " << MllpT << " " << Mlleta << " " << Mllphi << std::endl;
-    if (leadingMuon.pt() >= muonLeadPt_ || trailingMuon.pt() >= muonTrailPt_ ) {
+    if (leadingMuon.pt() >= muonLeadPt_ && trailingMuon.pt() >= muonTrailPt_ && leadingMuon.charge() != trailingMuon.charge() ) {
 
       // ***
       //   // jpsi peak
       //     // ***
       //
-      if (Mll > minJPsiMass_ && Mll < maxJPsiMass_){
+      if (Mll >= minJPsiMass_ && Mll <= maxJPsiMass_){
         nJpsi++;                           
         if(verbose_) std::cout<<" Invariant Mass in JPsi peak, pT, eta, phi " << Mll << " " << MllpT << " " << Mlleta << " " << Mllphi << std::endl;
         // if(verbose_) std::cout<<" Jpsi Multiplicity:  " <<  nJpsi << std::endl;
@@ -535,7 +569,11 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
     if (  myPhotons.size() >= 1 ) {
       nPhoton++;
       if(verbose_) std::cout<<" Photon Multiplicity:  " <<  nPhoton << std::endl;
-      reco::Photon Gamma = myPhotons[0];         
+      reco::Photon Gamma = myPhotons[0];
+      // if(Gamma.pt() <= 0.1){
+      if(Gamma.pt() < 12.0){
+        return false;
+      }        
       DeltaR<reco::Muon, reco::Photon> deltaR;
       double drLeadMuPhoton = deltaR(leadingMuon,Gamma);
       double drTrailPhoton = deltaR(trailingMuon,Gamma);
@@ -558,175 +596,175 @@ AODTriggerAnalyzer::recoFilter(edm::Handle< reco::MuonCollection > recoMuons, ed
 
 
 
-bool 
-AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Handle< BXVector<l1t::EGamma> > l1EGammas, double muonPtCut, double egammaPtCut, const edm::Event &iEvent)
-{
-  // bool l1Filter_ = false;
+// bool 
+// AODTriggerAnalyzer::l1Filter(edm::Handle< BXVector<l1t::Muon> > l1Muons, edm::Handle< BXVector<l1t::EGamma> > l1EGammas, const edm::Event &iEvent)
+// {
+//   bool l1Filter_ = false;
 
-  // // L1 Muons
-  // // ref: https://github.com/cms-sw/cmssw/blob/master/L1Trigger/L1TNtuples/src/L1AnalysisL1Upgrade.cc
-  // std::vector<l1t::Muon> l1MuonsVec;
-  // for (int ibx = l1Muons->getFirstBX(); ibx <= l1Muons->getLastBX(); ++ibx) {
-  //   for (BXVector<l1t::Muon>::const_iterator it=l1Muons->begin(); it!=l1Muons->end(); it++){
-  //     if (it->pt() >= 0){
-  //       l1MuonsVec.push_back(*it);
-  //       // std::cout << "L1 Muon: " << it->pt() << std::endl;
-  //       // l1upgrade_.muonEt .push_back(it->et());
-  //       // l1upgrade_.muonEta.push_back(it->eta());
-  //       // l1upgrade_.muonPhi.push_back(it->phi());
-  //       // l1upgrade_.muonEtaAtVtx.push_back(l1t::MicroGMTConfiguration::calcMuonEtaExtra(*it));
-  //       // l1upgrade_.muonPhiAtVtx.push_back(l1t::MicroGMTConfiguration::calcMuonPhiExtra(*it));
-  //       // l1upgrade_.muonIEt .push_back(it->hwPt());
-  //       // l1upgrade_.muonIEta.push_back(it->hwEta());
-  //       // l1upgrade_.muonIPhi.push_back(it->hwPhi());
-  //       // l1upgrade_.muonIDEta.push_back(it->hwDEtaExtra());
-  //       // l1upgrade_.muonIDPhi.push_back(it->hwDPhiExtra());
-  //       // l1upgrade_.muonChg.push_back(it->charge());
-  //       // l1upgrade_.muonIso.push_back(it->hwIso());
-  //       // l1upgrade_.muonQual.push_back(it->hwQual());
-  //       // l1upgrade_.muonTfMuonIdx.push_back(it->tfMuonIndex());
-  //       // l1upgrade_.muonBx .push_back(ibx);
-  //       // l1upgrade_.nMuons++;
-  //     }
-  //   }
-  // }
-  // // bool sortL1MuonsReverse(l1t::Muon &a, l1t::Muon &b) { 
-  // //   return a.pt() > b.pt(); 
-  // // }
-  // std::sort(l1MuonsVec.begin(),l1MuonsVec.end(), [](const l1t::Muon &a, const l1t::Muon &b){
-  //   return a.pt() > b.pt();
-  // });
+//   // L1 Muons
+//   // ref: https://github.com/cms-sw/cmssw/blob/master/L1Trigger/L1TNtuples/src/L1AnalysisL1Upgrade.cc
+//   std::vector<l1t::Muon> l1MuonsVec;
+//   for (int ibx = l1Muons->getFirstBX(); ibx <= l1Muons->getLastBX(); ++ibx) {
+//     for (BXVector<l1t::Muon>::const_iterator it=l1Muons->begin(); it!=l1Muons->end(); it++){
+//       if (it->pt() >= 0){
+//         l1MuonsVec.push_back(*it);
+//         // std::cout << "L1 Muon: " << it->pt() << std::endl;
+//         // l1upgrade_.muonEt .push_back(it->et());
+//         // l1upgrade_.muonEta.push_back(it->eta());
+//         // l1upgrade_.muonPhi.push_back(it->phi());
+//         // l1upgrade_.muonEtaAtVtx.push_back(l1t::MicroGMTConfiguration::calcMuonEtaExtra(*it));
+//         // l1upgrade_.muonPhiAtVtx.push_back(l1t::MicroGMTConfiguration::calcMuonPhiExtra(*it));
+//         // l1upgrade_.muonIEt .push_back(it->hwPt());
+//         // l1upgrade_.muonIEta.push_back(it->hwEta());
+//         // l1upgrade_.muonIPhi.push_back(it->hwPhi());
+//         // l1upgrade_.muonIDEta.push_back(it->hwDEtaExtra());
+//         // l1upgrade_.muonIDPhi.push_back(it->hwDPhiExtra());
+//         // l1upgrade_.muonChg.push_back(it->charge());
+//         // l1upgrade_.muonIso.push_back(it->hwIso());
+//         // l1upgrade_.muonQual.push_back(it->hwQual());
+//         // l1upgrade_.muonTfMuonIdx.push_back(it->tfMuonIndex());
+//         // l1upgrade_.muonBx .push_back(ibx);
+//         // l1upgrade_.nMuons++;
+//       }
+//     }
+//   }
+//   // bool sortL1MuonsReverse(l1t::Muon &a, l1t::Muon &b) { 
+//   //   return a.pt() > b.pt(); 
+//   // }
+//   std::sort(l1MuonsVec.begin(),l1MuonsVec.end(), [](const l1t::Muon &a, const l1t::Muon &b){
+//     return a.pt() > b.pt();
+//   });
 
 
-  // // L1 EGammas
-  // // ref: https://github.com/cms-sw/cmssw/blob/master/L1Trigger/L1TNtuples/src/L1AnalysisL1Upgrade.cc
-  // std::vector<l1t::EGamma> l1EGammasVec;
-  // for (int ibx = l1EGammas->getFirstBX(); ibx <= l1EGammas->getLastBX(); ++ibx) {
-  //   for (BXVector<l1t::EGamma>::const_iterator it=l1EGammas->begin(); it!=l1EGammas->end(); it++){
-  //     if (it->pt() >= 0){
-  //       l1EGammasVec.push_back(*it);
-  //       // std::cout << "EGamaa Iso: " << it->hwIso() << std::endl;
-  //       // std::cout << "L1 EGamma: " << it->pt() << std::endl;
-  //       // l1upgrade_.egEt.push_back(it->pt());
-  //       // l1upgrade_.egEta.push_back(it->eta());
-  //       // l1upgrade_.egPhi.push_back(it->phi());
-  //       // l1upgrade_.egIEt.push_back(it->hwPt());
-  //       // l1upgrade_.egIEta.push_back(it->hwEta());
-  //       // l1upgrade_.egIPhi.push_back(it->hwPhi());
-  //       // l1upgrade_.egIso.push_back(it->hwIso());
-  //       // l1upgrade_.egBx.push_back(ibx);
-  //       // l1upgrade_.egTowerIPhi.push_back(it->towerIPhi());
-  //       // l1upgrade_.egTowerIEta.push_back(it->towerIEta());
-  //       // l1upgrade_.egRawEt.push_back(it->rawEt());
-  //       // l1upgrade_.egIsoEt.push_back(it->isoEt());
-  //       // l1upgrade_.egFootprintEt.push_back(it->footprintEt());
-  //       // l1upgrade_.egNTT.push_back(it->nTT());
-  //       // l1upgrade_.egShape.push_back(it->shape());
-  //       // l1upgrade_.egTowerHoE.push_back(it->towerHoE());
-  //       // l1upgrade_.nEGs++;
-  //     }
-  //   }
-  // }
-  // std::sort(l1EGammasVec.begin(),l1EGammasVec.end(), [](const l1t::EGamma &a, const l1t::EGamma &b){
-  //   return a.pt() > b.pt();
-  // });
+//   // L1 EGammas
+//   // ref: https://github.com/cms-sw/cmssw/blob/master/L1Trigger/L1TNtuples/src/L1AnalysisL1Upgrade.cc
+//   std::vector<l1t::EGamma> l1EGammasVec;
+//   for (int ibx = l1EGammas->getFirstBX(); ibx <= l1EGammas->getLastBX(); ++ibx) {
+//     for (BXVector<l1t::EGamma>::const_iterator it=l1EGammas->begin(); it!=l1EGammas->end(); it++){
+//       if (it->pt() >= 0){
+//         l1EGammasVec.push_back(*it);
+//         // std::cout << "EGamaa Iso: " << it->hwIso() << std::endl;
+//         // std::cout << "L1 EGamma: " << it->pt() << std::endl;
+//         // l1upgrade_.egEt.push_back(it->pt());
+//         // l1upgrade_.egEta.push_back(it->eta());
+//         // l1upgrade_.egPhi.push_back(it->phi());
+//         // l1upgrade_.egIEt.push_back(it->hwPt());
+//         // l1upgrade_.egIEta.push_back(it->hwEta());
+//         // l1upgrade_.egIPhi.push_back(it->hwPhi());
+//         // l1upgrade_.egIso.push_back(it->hwIso());
+//         // l1upgrade_.egBx.push_back(ibx);
+//         // l1upgrade_.egTowerIPhi.push_back(it->towerIPhi());
+//         // l1upgrade_.egTowerIEta.push_back(it->towerIEta());
+//         // l1upgrade_.egRawEt.push_back(it->rawEt());
+//         // l1upgrade_.egIsoEt.push_back(it->isoEt());
+//         // l1upgrade_.egFootprintEt.push_back(it->footprintEt());
+//         // l1upgrade_.egNTT.push_back(it->nTT());
+//         // l1upgrade_.egShape.push_back(it->shape());
+//         // l1upgrade_.egTowerHoE.push_back(it->towerHoE());
+//         // l1upgrade_.nEGs++;
+//       }
+//     }
+//   }
+//   std::sort(l1EGammasVec.begin(),l1EGammasVec.end(), [](const l1t::EGamma &a, const l1t::EGamma &b){
+//     return a.pt() > b.pt();
+//   });
 
-  // // does the actual filtering
-  // // configName_
-  // // l1MuonN_
-  // // l1MuonOS_
-  // // l1MuonIso_
-  // // l1MuonQltMin_
-  // // l1MuonQltMax_
-  // // l1MuonPt_
-  // // l1EGammaIso_
-  // // l1EGammaPt_
+//   // does the actual filtering
+//   // configName_
+//   // l1MuonN_
+//   // l1MuonOS_
+//   // l1MuonIso_
+//   // l1MuonQltMin_
+//   // l1MuonQltMax_
+//   // l1MuonPt_
+//   // l1EGammaIso_
+//   // l1EGammaPt_
 
-  // // ZB condition
-  // if (configName_ == "Zerobias") return true;
+//   // ZB condition
+//   // if (configName_ == "Zerobias") return true;
 
-  // // N muons
-  // if (l1MuonsVec.size() >= 2 && l1MuonsVec.size() >= l1MuonN_) {
-  //   l1Filter_ = true;
-  // } else {
-  //   return false;
-  // }
+//   // N muons
+//   if (l1MuonsVec.size() >= 2 && l1MuonsVec.size() >= 2) {
+//     l1Filter_ = true;
+//   } else {
+//     return false;
+//   }
 
-  // l1t::Muon leadingMuon = l1MuonsVec.at(0);
-  // l1t::Muon trailingMuon = l1MuonsVec.at(1);
+//   l1t::Muon leadingMuon = l1MuonsVec.at(0);
+//   l1t::Muon trailingMuon = l1MuonsVec.at(1);
 
-  // // Muons OS
-  // if (l1MuonOS_ == true && (leadingMuon.charge() == trailingMuon.charge()) ) {
-  //   return false;
-  // } else {
-  //   l1Filter_ = true;
-  // }
+//   // Muons OS
+//   if (leadingMuon.charge() == trailingMuon.charge())  {
+//     return false;
+//   } else {
+//     l1Filter_ = true;
+//   }
 
-  // // Muons Iso
-  // if (l1MuonIso_ == true && leadingMuon.hwIso() != 1 && trailingMuon.hwIso() != 1) {
-  //   return false;
-  // } else {
-  //   l1Filter_ = true;
-  // }
+//   // // Muons Iso
+//   // if (false == true && leadingMuon.hwIso() != 1 && trailingMuon.hwIso() != 1) {
+//   //   return false;
+//   // } else {
+//   //   l1Filter_ = true;
+//   // }
 
-  // // Muon Qlt
-  // if ((leadingMuon.hwQual() >= l1MuonQltMin_ && leadingMuon.hwQual() <= l1MuonQltMax_) && (trailingMuon.hwQual() >= l1MuonQltMin_ && trailingMuon.hwQual() <= l1MuonQltMax_) ) {
-  //   l1Filter_ = true;
-  // } else {
-  //   return false;
-  // }
+//   // Muon Qlt
+//   if ((leadingMuon.hwQual() >= 8 && leadingMuon.hwQual() <= 15) && (trailingMuon.hwQual() >= 8 && trailingMuon.hwQual() <= 15) ) {
+//     l1Filter_ = true;
+//   } else {
+//     return false;
+//   }
 
-  // // Muon Pt
-  // if (l1AsymmetricCut_ == false) {
-  //   if (leadingMuon.pt() >= muonPtCut && trailingMuon.pt() >= muonPtCut) {
-  //     l1Filter_ = true;
-  //   } else {
-  //     return false;
-  //   }
-  // } else { //l1AsymmetricCut_ == true
-  //   if (leadingMuon.pt() >= l1AsymmetricLeadingMuonCut_ && trailingMuon.pt() >= muonPtCut) {
-  //     l1Filter_ = true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
+//   // Muon Pt
+ 
+//     if (leadingMuon.pt() >= 4.0 && trailingMuon.pt() >= 4.0) {
+//       l1Filter_ = true;
+//     } else {
+//       return false;
+//     }
+//   // } else { //l1AsymmetricCut_ == true
+//   //   if (leadingMuon.pt() >= l1AsymmetricLeadingMuonCut_ && trailingMuon.pt() >= muonPtCut) {
+//   //     l1Filter_ = true;
+//   //   } else {
+//   //     return false;
+//   //   }
+//   // }
 
-  // // EGamma
-  // if (l1EGammaN_ != 0) {
-  //   if (l1EGammasVec.size() >= l1EGammaN_) {
-  //     // std::cout << "Temos um photon!" << std::endl;
-  //     l1t::EGamma leadingEGamma = l1EGammasVec.at(0);
-  //     // std::cout << leadingEGamma.pt() << std::endl;
-  //     // std::cout << leadingEGamma.hwIso() << std::endl;
-  //     // EGamma Iso
-  //     if (l1EGammaIso_ == true && leadingEGamma.hwIso() != 1) {
-  //       // l1Filter_ = true;
-  //       return false;
-  //     } else  {
-  //       l1Filter_ = true;
-  //     }
-  //     // EGamma Pt
-  //     if (leadingEGamma.pt() >= egammaPtCut) {
-  //       // std::cout << "Passou no corte de Pt!" << std::endl;
-  //       l1Filter_ = true;
-  //     } else {
-  //       return false;
-  //     }
-  //   } else {
-  //     // std::cout << "Não Temos um photon!" << std::endl;
-  //     return false;
-  //   }
-  // } else {
-  //   // std::cout << "Vetor vazio" << std::endl;
-  //   l1Filter_ = true;
-  //   // return false;
-  // }
+//   // EGamma
+//   if (1 != 0) {
+//     if (l1EGammasVec.size() >= 1) {
+//       // std::cout << "Temos um photon!" << std::endl;
+//       l1t::EGamma leadingEGamma = l1EGammasVec.at(0);
+//       // std::cout << leadingEGamma.pt() << std::endl;
+//       // std::cout << leadingEGamma.hwIso() << std::endl;
+//       // EGamma Iso
+//       // if (l1EGammaIso_ == true && leadingEGamma.hwIso() != 1) {
+//       //   // l1Filter_ = true;
+//       //   return false;
+//       // } else  {
+//       //   l1Filter_ = true;
+//       // }
+//       // EGamma Pt
+//       if (leadingEGamma.pt() >= 12) {
+//         // std::cout << "Passou no corte de Pt!" << std::endl;
+//         l1Filter_ = true;
+//       } else {
+//         return false;
+//       }
+//     } else {
+//       // std::cout << "Não Temos um photon!" << std::endl;
+//       return false;
+//     }
+//   } else {
+//     // std::cout << "Vetor vazio" << std::endl;
+//     l1Filter_ = true;
+//     // return false;
+//   }
 
-  // // return filtering result
-  // return l1Filter_;
+//   // return filtering result
+//   return l1Filter_;
 
-  return true;
-}
+//   // return true;
+// }
 
 // ------------ method called once each job just after ending the event loop  ------------
 void 
@@ -734,11 +772,15 @@ AODTriggerAnalyzer::endJob()
 {
 
 
-    // set evts counters
+  // set evts counters
   TnEvts->SetBinContent(1, nEvts);
   TnEvtsRECO->SetBinContent(1, nEvtsRECO);
-  TnEvtsHLT->SetBinContent(1, nEvtsHLT);
-  TnEvtsHLTRECO->SetBinContent(1, nEvtsHLTRECO);
+  TnEvtsRECOHLT->SetBinContent(1, nEvtsRECOHLT);
+  TnEvtsRECOHLTMATCHMUON->SetBinContent(1, nEvtsRECOHLTMATCHMUON);
+  TnEvtsRECOHLTMATCHPHOTON->SetBinContent(1, nEvtsRECOHLTMATCHPHOTON);
+  TnEvtsRECOHLTMATCHMUONPHOTON->SetBinContent(1, nEvtsRECOHLTMATCHMUONPHOTON);
+  // TnEvtsORT->SetBinContent(1, nEvtsORT);
+  TnEvtsORTHLT->SetBinContent(1, nEvtsORTHLT);
 
 }
 
