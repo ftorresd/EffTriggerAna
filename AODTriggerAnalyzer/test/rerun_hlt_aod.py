@@ -11,7 +11,7 @@ from hlt_MC import *
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
 
-process.maxEvents.input = cms.untracked.int32(10)
+process.maxEvents.input = cms.untracked.int32(3000)
 
 process.source = cms.Source ("PoolSource",
                 fileNames=cms.untracked.vstring(

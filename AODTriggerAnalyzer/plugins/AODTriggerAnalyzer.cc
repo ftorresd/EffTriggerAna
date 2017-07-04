@@ -145,8 +145,14 @@ private:
   TTree* RECOL1HLTTree;
 
   double leadingMuonPt = -1.0;
+  double leadingMuonEta = -9999999.0;
+  double leadingMuonPhi = -9999999.0;
   double trailingMuonPt = -1.0;
+  double trailingMuonEta = -9999999.0;
+  double trailingMuonPhi = -9999999.0;
   double photonPt = -1.0;
+  double photonEta = -9999999.0;
+  double photonPhi = -9999999.0;
   bool l1Trigger = false;
   TBits hlTrigger;
   bool recoTrigger = false;
@@ -220,8 +226,14 @@ configName_ (iConfig.getParameter< std::string > ("configName"))
 
   RECOL1HLTTree = fs->make<TTree>("RECOL1HLTTree", "RECOL1HLTTree");
   RECOL1HLTTree->Branch("leadingMuonPt",&leadingMuonPt);
+  RECOL1HLTTree->Branch("leadingMuonEta",&leadingMuonEta);
+  RECOL1HLTTree->Branch("leadingMuonPhi",&leadingMuonPhi);
   RECOL1HLTTree->Branch("trailingMuonPt",&trailingMuonPt);
+  RECOL1HLTTree->Branch("trailingMuonEta",&trailingMuonEta);
+  RECOL1HLTTree->Branch("trailingMuonPhi",&trailingMuonPhi);
   RECOL1HLTTree->Branch("photonPt",&photonPt);
+  RECOL1HLTTree->Branch("photonEta",&photonEta);
+  RECOL1HLTTree->Branch("photonPhi",&photonPhi);
   RECOL1HLTTree->Branch("l1Trigger",&l1Trigger);
   RECOL1HLTTree->Branch("hlTrigger",&hlTrigger);
   RECOL1HLTTree->Branch("recoTrigger",&recoTrigger);
@@ -359,13 +371,20 @@ void AODTriggerAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
 
   if (myLeptons.size() >= 1) {
     leadingMuonPt = myLeptons[0].pt();
+    leadingMuonEta = myLeptons[0].eta();
+    leadingMuonPhi = myLeptons[0].phi();
   }
   if (myLeptons.size() >= 2) {
     trailingMuonPt = myLeptons[1].pt();
+    trailingMuonEta = myLeptons[1].eta();
+    trailingMuonPhi = myLeptons[1].phi();
   }
   if (myPhotons.size() >= 1) {
     photonPt = myPhotons[0].pt();
+    photonEta = myPhotons[0].eta();
+    photonPhi = myPhotons[0].phi();
   }
+
   l1Trigger = l1Test;
   hlTrigger = hltTest;
   recoTrigger = recoTest;
@@ -493,7 +512,7 @@ AODTriggerAnalyzer::hltFilter(edm::Handle< edm::TriggerResults > triggerBits, st
       // TString* pathName = trigName.triggerName(i_Trig);
       // hltBitsMap->Add(pathName, i_Trig);
       // if (triggerBits.product()->accept(i_Trig)) {
-      //   // cout << "passed path: " << trigName.triggerName(i_Trig) <<endl;
+        // cout << "passed path: " << trigName.triggerName(i_Trig) <<endl;
       //   if (trigName.triggerName(i_Trig) == Path){
       //     return true;
       //   }
